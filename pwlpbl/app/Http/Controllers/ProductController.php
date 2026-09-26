@@ -17,7 +17,8 @@ class ProductController extends Controller
     // Menampilkan form tambah produk
     public function create()
     {
-        return view('products.create');
+         $kategoris = \App\Models\Kategori::all();
+        return view('products.create', compact('kategoris'));
     }
 
     // 2. Menyimpan data baru ke database
@@ -39,7 +40,9 @@ class ProductController extends Controller
     // 3. EDIT: Mengambil data spesifik berdasarkan ID dari database
     public function edit(Product $product) // Menggunakan Route Model Bindinh
     {
-        return view('products.edit', compact('product'));
+        $kategoris = \App\Models\Kategori::all();
+
+        return view('products.edit', compact('product', 'kategoris'));
     }
 
     // 4. EDIT: Memperbarui record di database

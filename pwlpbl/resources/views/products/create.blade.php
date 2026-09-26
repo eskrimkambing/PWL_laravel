@@ -17,14 +17,18 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">Kategori Menu</label>
-                            <select name="category" class="form-select" required>
-                                <option value="Pizza">Pizza</option>
-                                <option value="Tape Bakar">Tape Bakar</option>
-                                <option value="Singkong Keju">Singkong Keju</option>
-                                <option value="Minuman">Minuman</option>
-                            </select>
-                        </div>
+    <label class="form-label fw-semibold">Kategori Menu</label>
+
+    <select name="category" class="form-select" required>
+        <option value="">-- Pilih Kategori --</option>
+
+        @foreach ($kategoris as $kategori)
+            <option value="{{ $kategori->nama_kategori }}">
+                {{ $kategori->nama_kategori }}
+            </option>
+        @endforeach
+    </select>
+</div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Porsi / Ukuran</label>
                             <input type="text" name="portion" class="form-control" placeholder="Contoh: Large (4 Orang)" required>
