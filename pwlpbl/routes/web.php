@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\DashboardController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -17,10 +18,8 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.pr
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Placeholder dashboard (nanti diganti sesuai penjelasanmu)
-Route::middleware('role:admin')->group(function () {
-    Route::get('/admin/dashboard', fn () => view('dashboard.admin'))->name('dashboard.admin');
-});
+Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
+    ->name('dashboard.admin');
 
 Route::middleware('role:pembeli')->group(function () {
     Route::get('/pembeli/dashboard', fn () => view('dashboard.pembeli'))->name('dashboard.pembeli');
