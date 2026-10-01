@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class KategoriController extends Controller
 {
-    // Menampilkan semua kategori
     public function index()
     {
         $kategoris = Kategori::latest()->get();
@@ -15,17 +14,15 @@ class KategoriController extends Controller
         return view('kategoris.index', compact('kategoris'));
     }
 
-    // Menampilkan form tambah kategori
     public function create()
     {
         return view('kategoris.create');
     }
 
-    // Menyimpan kategori baru
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_kategori' => 'required|string|max:100',
+            'nama_kategori' => 'required|string|max:100|unique:kategoris,nama_kategori',
         ]);
 
         Kategori::create($validated);
@@ -35,22 +32,17 @@ class KategoriController extends Controller
             ->with('success', 'Kategori berhasil ditambahkan!');
     }
 
-    // Menampilkan form edit kategori
-    public function edit($id)
+    public function edit(Kategori $kategori)
     {
-        $kategori = Kategori::findOrFail($id);
-
         return view('kategoris.edit', compact('kategori'));
     }
 
-    // Memperbarui kategori
-    public function update(Request $request, $id)
+    public function update(Request $request, Kategori $kategori)
     {
         $validated = $request->validate([
-            'nama_kategori' => 'required|string|max:100',
+            'nama_kategori' => 'required|string|max:100|unique:kategoris,nama_kategori,' . $kategori->id_kategori . ',id_kategori',
         ]);
 
-        $kategori = Kategori::findOrFail($id);
         $kategori->update($validated);
 
         return redirect()
@@ -58,10 +50,8 @@ class KategoriController extends Controller
             ->with('success', 'Kategori berhasil diperbarui!');
     }
 
-    // Menghapus kategori
-    public function destroy($id)
+    public function destroy(Kategori $kategori)
     {
-        $kategori = Kategori::findOrFail($id);
         $kategori->delete();
 
         return redirect()
