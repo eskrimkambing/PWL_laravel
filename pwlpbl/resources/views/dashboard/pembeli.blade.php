@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Dashboard Pembeli - Pizza Moza</title>
 
@@ -12,98 +12,211 @@
         }
 
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
-            background: #f5f6f8;
-            color: #222;
+
+            background-image: url('/images/pizza.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+            min-height: 100vh;
+            margin: 0;
+
+            position: relative;
         }
+
+        /* OVERLAY BACKGROUND */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background: rgba(0, 0, 0, 0.35);
+
+            z-index: -1;
+        }
+
+        /* NAVBAR */
 
         .navbar {
-            background: #212529;
-            color: white;
-            padding: 18px 8%;
+            background: rgba(58, 48, 45, 0.96);
+
+            height: 70px;
+
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+
+            padding: 0 8%;
+
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
         }
 
-        .navbar h2 {
-            margin: 0;
+        .brand {
+            color: #ffffff;
+
+            font-size: 24px;
+            font-weight: bold;
+
+            text-decoration: none;
         }
 
-        .navbar span {
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .email {
+            color: #ffffff;
+
             font-size: 14px;
-            margin-right: 15px;
         }
+
+        /* LOGOUT */
 
         .logout {
-            background: #dc3545;
-            border: none;
-            color: white;
-            padding: 9px 16px;
-            border-radius: 5px;
-            cursor: pointer;
+            background: #000000;
+
+            color: #ffffff;
+
+            text-decoration: none;
+
+            padding: 10px 20px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+
+            display: inline-block;
         }
+
+        .logout:hover {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        /* CONTAINER */
 
         .container {
-            width: 84%;
-            margin: 35px auto;
+            width: 85%;
+            max-width: 1150px;
+
+            margin: 50px auto;
         }
 
-        .header {
-            margin-bottom: 25px;
+        /* JUDUL */
+
+        h1 {
+            margin: 0 0 10px;
+
+            color: #ffffff;
+
+            font-size: 34px;
         }
 
-        .header h1 {
-            margin-bottom: 8px;
+        .welcome {
+            color: #ffffff;
+
+            font-size: 16px;
+
+            margin-bottom: 28px;
         }
 
-        .header p {
-            color: #666;
-        }
+        /* CARD */
 
-        .menu {
+        .cards {
             display: grid;
+
             grid-template-columns: repeat(2, 1fr);
+
             gap: 20px;
         }
 
         .card {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: rgba(58, 48, 45, 0.94);
+
+            padding: 28px;
+
+            border-radius: 15px;
+
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+            color: #ffffff;
         }
 
-        .card h3 {
-            margin-top: 0;
+        .card h2 {
+            margin: 0 0 15px;
+
+            font-size: 21px;
+
+            color: #ffffff;
         }
 
         .card p {
-            color: #666;
+            margin: 0 0 22px;
+
+            color: #eeeeee;
+
+            font-size: 15px;
+
+            line-height: 1.5;
         }
 
-        .button {
+        /* TOMBOL */
+
+        .btn {
             display: inline-block;
-            padding: 10px 18px;
-            background: #212529;
-            color: white;
+
+            padding: 11px 20px;
+
+            background: #000000;
+
+            color: #ffffff;
+
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 8px;
+
+            border-radius: 7px;
+
+            font-size: 14px;
         }
 
-        .button:hover {
-            background: #343a40;
+        .btn:hover {
+            background: #000000;
+
+            color: #ffffff;
         }
 
-        @media (max-width: 768px) {
-            .menu {
-                grid-template-columns: 1fr;
+        /* RESPONSIVE */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .navbar-right {
+                gap: 10px;
+            }
+
+            .email {
+                display: none;
             }
 
             .container {
-                width: 92%;
+                width: 90%;
+
+                margin: 35px auto;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -111,61 +224,102 @@
 
 <body>
 
-    <div class="navbar">
-        <h2>Pizza Moza</h2>
+    <!-- NAVBAR -->
 
-        <div>
-            <span>{{ session('email') }}</span>
+    <nav class="navbar">
 
-            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+        <a href="{{ route('dashboard.pembeli') }}" class="brand">
+            Pizza Moza
+        </a>
+
+        <div class="navbar-right">
+
+            <span class="email">
+                {{ session('email') }}
+            </span>
+
+            <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="logout">
+
+                <button
+                    type="submit"
+                    class="logout"
+                    style="border: none; cursor: pointer;"
+                >
                     Logout
                 </button>
             </form>
-        </div>
-    </div>
 
-    <div class="container">
-
-        <div class="header">
-            <h1>Dashboard Pembeli</h1>
-
-            <p>
-                Selamat datang di Pizza Moza.
-                Silakan pilih menu yang ingin kamu lihat.
-            </p>
         </div>
 
-        <div class="menu">
+    </nav>
+
+
+    <!-- CONTENT -->
+
+    <main class="container">
+
+        <h1>
+            Dashboard Pembeli
+        </h1>
+
+        <p class="welcome">
+            Selamat datang di Pizza Moza. Silakan pilih menu yang ingin kamu lihat.
+        </p>
+
+
+        <!-- CARDS -->
+
+        <div class="cards">
+
+            <!-- PRODUK -->
 
             <div class="card">
-                <h3>🍕 Lihat Produk</h3>
+
+                <h2>
+                    🍕 Lihat Produk
+                </h2>
 
                 <p>
                     Lihat berbagai menu Pizza Moza yang tersedia.
                 </p>
 
                 <a href="{{ route('pembeli.products') }}" class="button">
+
+                <a
+                    href="{{ route('products.index') }}"
+                    class="btn"
+                >
                     Lihat Produk
                 </a>
+
             </div>
 
+
+            <!-- KATEGORI -->
+
             <div class="card">
-                <h3>📂 Kategori Menu</h3>
+
+                <h2>
+                    📁 Kategori Menu
+                </h2>
 
                 <p>
                     Lihat kategori menu yang tersedia.
                 </p>
 
-                <a href="{{ route('kategoris.index') }}" class="button">
+                <a
+                    href="{{ route('kategoris.index') }}"
+                    class="btn"
+                >
                     Lihat Kategori
                 </a>
+
             </div>
 
         </div>
 
-    </div>
+    </main>
 
 </body>
 </html>
