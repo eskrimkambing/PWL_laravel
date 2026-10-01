@@ -146,7 +146,7 @@
                     Lihat berbagai menu Pizza Moza yang tersedia.
                 </p>
 
-                <a href="{{ route('products.index') }}" class="button">
+                <a href="{{ route('pembeli.products') }}" class="button">
                     Lihat Produk
                 </a>
             </div>
