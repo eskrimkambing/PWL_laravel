@@ -211,6 +211,17 @@
                     Kelola Kategori
                 </a>
             </div>
+                 <div class="menu-card">
+                 <h3>📦 Kelola Stok</h3>
+
+                <p>
+                 Kelola stok produk yang tersedia di Pizza Moza.
+                </p>
+
+                <a href="{{ route('stoks.index') }}" class="button">
+                 Kelola Stok
+                 </a>
+             </div>
 
         </div>
 

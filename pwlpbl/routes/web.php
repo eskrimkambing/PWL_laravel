@@ -7,6 +7,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\StokController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect()->route('login'));
@@ -34,6 +35,8 @@ Route::middleware('role:admin')->group(function () {
     Route::resource('products', ProductController::class);
 
     Route::resource('kategoris', KategoriController::class);
+
+     Route::resource('stoks', StokController::class);
 });
 
 Route::middleware('role:pembeli')->group(function () {

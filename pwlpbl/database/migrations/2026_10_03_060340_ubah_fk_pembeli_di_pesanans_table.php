@@ -9,25 +9,32 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pesanans', function (Blueprint $table) {
-            $table->dropForeign('pesanans_pembeli_id_foreign');
 
-            $table->unsignedBigInteger('pembeli_id')->nullable()->change();
+            $table->unsignedBigInteger('pembeli_id')
+                ->nullable()
+                ->change();
 
             $table->foreign('pembeli_id')
-                  ->references('id_pembeli')->on('pembeli')
-                  ->onDelete('set null');
+                ->references('id_pembeli')
+                ->on('pembeli')
+                ->nullOnDelete();
         });
     }
 
     public function down(): void
     {
         Schema::table('pesanans', function (Blueprint $table) {
+
             $table->dropForeign(['pembeli_id']);
-            $table->unsignedBigInteger('pembeli_id')->nullable(false)->change();
+
+            $table->unsignedBigInteger('pembeli_id')
+                ->nullable(false)
+                ->change();
 
             $table->foreign('pembeli_id')
-                  ->references('id_pembeli')->on('pembeli')
-                  ->onDelete('cascade');
+                ->references('id_pembeli')
+                ->on('pembeli')
+                ->cascadeOnDelete();
         });
     }
 };

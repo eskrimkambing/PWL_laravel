@@ -14,8 +14,9 @@ class Product extends Model
         'portion',
         'description',
     ];
-    public function detailPesanans(): HasMany
+
+    public function stoks(): HasMany
     {
-        return $this->hasMany(DetailPesanan::class, 'product_id');
+        return $this->hasMany(Stok::class, 'product_id', 'id');
     }
 }
