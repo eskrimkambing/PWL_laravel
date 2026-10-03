@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\StokController;
+use App\Http\Controllers\PembeliController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect()->route('login'));
@@ -36,7 +37,9 @@ Route::middleware('role:admin')->group(function () {
 
     Route::resource('kategoris', KategoriController::class);
 
-     Route::resource('stoks', StokController::class);
+    Route::resource('stoks', StokController::class);
+
+    Route::resource('pembelis', PembeliController::class);
 });
 
 Route::middleware('role:pembeli')->group(function () {
@@ -68,13 +71,13 @@ Route::middleware('role:pembeli')->group(function () {
 });
 
 Route::get('/profil', [ProfilController::class, 'show'])
-        ->name('profil.show');
+    ->name('profil.show');
 
-    Route::get('/profil/edit', [ProfilController::class, 'edit'])
-        ->name('profil.edit');
+Route::get('/profil/edit', [ProfilController::class, 'edit'])
+    ->name('profil.edit');
 
-    Route::put('/profil', [ProfilController::class, 'update'])
-        ->name('profil.update');
+Route::put('/profil', [ProfilController::class, 'update'])
+    ->name('profil.update');
 
-    Route::delete('/profil', [ProfilController::class, 'destroy'])
-        ->name('profil.destroy');
+Route::delete('/profil', [ProfilController::class, 'destroy'])
+    ->name('profil.destroy');
