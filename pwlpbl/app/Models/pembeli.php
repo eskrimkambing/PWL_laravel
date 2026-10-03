@@ -11,6 +11,6 @@ class Pembeli extends Model
     protected $primaryKey = 'id_pembeli';   // sesuaikan, mis. 'id_pembeli'
     public $timestamps = false;
 
-    protected $fillable = ['email', 'password'];
+    protected $fillable = ['email', 'password', 'nama', 'no_telp', 'alamat'];
     protected $hidden = ['password'];
 }
