@@ -35,7 +35,7 @@ class CheckoutController extends Controller
                 ->with('error', 'Silakan pilih minimal satu produk.');
         }
 
-        DB::transaction(function () use ($produkDipilih, $request) {
+        $pesanan = DB::transaction(function () use ($produkDipilih, $request) {
 
             $totalHarga = 0;
 
@@ -70,10 +70,12 @@ class CheckoutController extends Controller
                     'subtotal' => $subtotal,
                 ]);
             }
+
+            return $pesanan;
         });
 
         return redirect()
-            ->route('checkout.index')
+            ->route('pesanans.show', $pesanan->id_pesanan)
             ->with('success', 'Pesanan berhasil dibuat!');
     }
 }

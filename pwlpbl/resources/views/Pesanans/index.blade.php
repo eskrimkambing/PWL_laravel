@@ -58,7 +58,7 @@
                                     </td>
 
                                     <td>
-                                        {{ $pesanan->user->name ?? 'Data pengguna tidak ditemukan' }}
+                                        {{ $pesanan->pembeli->email ?? 'Data pembeli tidak ditemukan' }}
                                     </td>
 
                                     <td>

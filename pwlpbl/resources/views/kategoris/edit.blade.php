@@ -1,47 +1,74 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Kategori</title>
-</head>
-<body>
+@extends('layouts.app')
 
-    <h1>Edit Kategori</h1>
+@section('content')
 
-    @if($errors->any())
-        <div>
-            @foreach($errors->all() as $error)
-                <p>{{ $error }}</p>
-            @endforeach
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        Edit Kategori
+                    </h5>
+                </div>
+
+                <div class="card-body">
+
+                    <form action="{{ route('kategoris.update', $kategori->id_kategori) }}" method="POST">
+
+                        @csrf
+                        @method('PUT')
+
+                        <div class="mb-3">
+
+                            <label for="nama_kategori" class="form-label fw-semibold">
+                                Nama Kategori
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nama_kategori"
+                                id="nama_kategori"
+                                class="form-control @error('nama_kategori') is-invalid @enderror"
+                                value="{{ old('nama_kategori', $kategori->nama_kategori) }}"
+                                placeholder="Masukkan nama kategori"
+                                required
+                            >
+
+                            @error('nama_kategori')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit" class="btn btn-dark">
+                                Update
+                            </button>
+
+                            <a href="{{ route('kategoris.index') }}" class="btn btn-secondary">
+                                Batal
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
         </div>
-    @endif
 
-    <form
-        action="{{ route('kategoris.update', $kategori->id_kategori) }}"
-        method="POST"
-    >
-        @csrf
-        @method('PUT')
+    </div>
 
-        <label>Nama Kategori</label>
-        <br>
+</div>
 
-        <input
-            type="text"
-            name="nama_kategori"
-            value="{{ old('nama_kategori', $kategori->nama_kategori) }}"
-            required
-        >
-
-        <br><br>
-
-        <button type="submit">Update</button>
-
-        <a href="{{ route('kategoris.index') }}">
-            Batal
-        </a>
-    </form>
-
-</body>
-</html>
+@endsection
