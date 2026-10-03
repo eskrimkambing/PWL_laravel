@@ -34,6 +34,8 @@ Route::middleware('role:admin')->group(function () {
     Route::resource('products', ProductController::class);
 
     Route::resource('kategoris', KategoriController::class);
+
+    Route::resource('pembelis', PembeliController::class);
 });
 
 Route::middleware('role:pembeli')->group(function () {
