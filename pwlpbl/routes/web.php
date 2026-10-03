@@ -6,6 +6,7 @@ use App\Http\Controllers\PesananController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect()->route('login'));
@@ -62,3 +63,15 @@ Route::middleware('role:pembeli')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store'])
         ->name('checkout.store');
 });
+
+Route::get('/profil', [ProfilController::class, 'show'])
+        ->name('profil.show');
+
+    Route::get('/profil/edit', [ProfilController::class, 'edit'])
+        ->name('profil.edit');
+
+    Route::put('/profil', [ProfilController::class, 'update'])
+        ->name('profil.update');
+
+    Route::delete('/profil', [ProfilController::class, 'destroy'])
+        ->name('profil.destroy');
