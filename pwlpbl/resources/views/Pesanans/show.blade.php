@@ -4,174 +4,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Pesanan - Pizza Moza</title>
 
-    <title>Detail Pesanan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    @if (session('role') === 'pembeli')
+        <script
+            src="https://app.sandbox.midtrans.com/snap/snap.js"
+            data-client-key="{{ config('services.midtrans.client_key') }}">
+        </script>
+    @endif
 </head>
 
-<body>
+<body class="bg-light">
 
-    <div class="container mt-5">
+<div class="container py-5">
 
-        <h2 class="mb-4">Detail Pesanan</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Detail Pesanan</h2>
+        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
+            Kembali
+        </a>
+    </div>
 
-        <div class="card shadow-sm">
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-            <div class="card-body">
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
-                <div class="mb-3">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            @foreach ($errors->all() as $error)
+                <div>{{ $error }}</div>
+            @endforeach
+        </div>
+    @endif
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Nomor Pesanan</strong>
+                    <p>#{{ $pesanan->id_pesanan }}</p>
+                </div>
+
+                <div class="col-md-6">
                     <strong>Nama Pelanggan</strong>
-                    <p class="mb-0">
-                        {{ $pesanan->user->name ?? 'Data pengguna tidak ditemukan' }}
+                    <p>
+                        {{ $pesanan->pembeli->nama ?? 'Data pembeli tidak ditemukan' }}
                     </p>
                 </div>
+            </div>
 
-                <div class="mb-3">
-                    <strong>Jenis Pesanan</strong>
-                    <p class="mb-0">
-                        {{ $pesanan->jenis_pesanan }}
-                    </p>
-                </div>
+            <div class="mb-3">
+                <strong>Jenis Pesanan</strong>
+                <p>{{ $pesanan->jenis_pesanan }}</p>
+            </div>
 
-                <hr>
+            <hr>
 
-                <h5 class="mb-3">Daftar Produk</h5>
+            <h5 class="mb-3">Daftar Produk</h5>
 
-                <div class="table-responsive">
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>No</th>
+                            <th>Produk</th>
+                            <th>Harga</th>
+                            <th>Jumlah</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
 
-                    <table class="table table-bordered align-middle">
-
-                        <thead class="table-dark">
+                    <tbody>
+                        @forelse ($pesanan->detailPesanans as $detail)
                             <tr>
-                                <th>No</th>
-                                <th>Produk</th>
-                                <th>Harga</th>
-                                <th>Jumlah</th>
-                                <th>Subtotal</th>
+                                <td>{{ $loop->iteration }}</td>
+
+                                <td>
+                                    {{ $detail->product->name
+                                        ?? $detail->product->nama_produk
+                                        ?? 'Produk tidak ditemukan' }}
+                                </td>
+
+                                <td>
+                                    Rp {{ number_format($detail->harga, 0, ',', '.') }}
+                                </td>
+
+                                <td>{{ $detail->jumlah }}</td>
+
+                                <td>
+                                    Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
+                                </td>
                             </tr>
-                        </thead>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    Tidak ada produk dalam pesanan.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
 
-                        <tbody>
+            <div class="text-end mb-4">
+                <strong>Total Harga:</strong>
+                <span class="fs-5 fw-bold">
+                    Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
+                </span>
+            </div>
 
-                            @forelse($pesanan->detailPesanans as $detail)
-                                <tr>
+            <div class="mb-3">
+                <strong>Status Pesanan</strong>
+                <p class="mt-2">
+                    @if ($pesanan->status === 'Menunggu')
+                        <span class="badge bg-warning text-dark">Menunggu</span>
+                    @elseif ($pesanan->status === 'Diproses')
+                        <span class="badge bg-info text-dark">Diproses</span>
+                    @elseif ($pesanan->status === 'Selesai')
+                        <span class="badge bg-success">Selesai</span>
+                    @else
+                        <span class="badge bg-danger">{{ $pesanan->status }}</span>
+                    @endif
+                </p>
+            </div>
 
-                                    <td>
-                                        {{ $loop->iteration }}
-                                    </td>
+            <div class="mb-4">
+                <strong>Status Pembayaran</strong>
+                <p class="mt-2">
+                    @if ($pesanan->status_pembayaran === 'Dibayar')
+                        <span class="badge bg-success">Sudah Dibayar</span>
+                    @else
+                        <span class="badge bg-warning text-dark">
+                            {{ $pesanan->status_pembayaran ?? 'Belum Dibayar' }}
+                        </span>
+                    @endif
+                </p>
+            </div>
 
-                                    <td>
-                                        {{ $detail->product->name ?? 'Produk tidak ditemukan' }}
-                                    </td>
+            {{-- Tombol pembayaran khusus pembeli --}}
+            @if (session('role') === 'pembeli')
+                @if ($pesanan->status_pembayaran !== 'Dibayar'
+                    && $pesanan->status !== 'Dibatalkan')
 
-                                    <td>
-                                        Rp {{ number_format($detail->harga, 0, ',', '.') }}
-                                    </td>
+                    <form
+                        action="{{ route('pesanans.bayar', $pesanan->id_pesanan) }}"
+                        method="POST"
+                        class="mb-4">
 
-                                    <td>
-                                        {{ $detail->jumlah }}
-                                    </td>
+                        @csrf
 
-                                    <td>
-                                        Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
-                                    </td>
+                        <button type="submit" class="btn btn-success btn-lg w-100">
+                            Bayar dengan Midtrans
+                        </button>
+                    </form>
 
-                                </tr>
+                @elseif ($pesanan->status_pembayaran === 'Dibayar')
+                    <div class="alert alert-success">
+                        Pembayaran pesanan ini sudah berhasil.
+                    </div>
+                @endif
+            @endif
 
-                            @empty
-
-                                <tr>
-                                    <td colspan="5" class="text-center">
-                                        Tidak ada produk dalam pesanan.
-                                    </td>
-                                </tr>
-                            @endforelse
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-                <div class="text-end mb-4">
-                    <strong>Total Harga:</strong>
-                    <span class="fs-5">
-                        Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
-                    </span>
-                </div>
-
-                <div class="mb-4">
-                    <strong>Status Pesanan</strong>
-
-                    <p class="mt-2">
-
-                        @if ($pesanan->status == 'Menunggu')
-                            <span class="badge bg-warning text-dark">
-                                Menunggu
-                            </span>
-                        @elseif($pesanan->status == 'Diproses')
-                            <span class="badge bg-info">
-                                Diproses
-                            </span>
-                        @elseif($pesanan->status == 'Selesai')
-                            <span class="badge bg-success">
-                                Selesai
-                            </span>
-                        @else
-                            <span class="badge bg-danger">
-                                Dibatalkan
-                            </span>
-                        @endif
-
-                    </p>
-                </div>
-
+            {{-- Ubah status pesanan hanya untuk admin --}}
+            @if (session('role') === 'admin')
                 <hr>
 
                 <h5 class="mb-3">Ubah Status Pesanan</h5>
 
-                <form action="{{ route('pesanans.update', $pesanan->id_pesanan) }}" method="POST">
+                <form
+                    action="{{ route('pesanans.update', $pesanan->id_pesanan) }}"
+                    method="POST">
 
                     @csrf
                     @method('PUT')
 
-                    <select name="status" class="form-select mb-3">
-
-                        <option value="Menunggu" {{ $pesanan->status == 'Menunggu' ? 'selected' : '' }}>
+                    <select name="status" class="form-select mb-3" required>
+                        <option value="Menunggu"
+                            {{ $pesanan->status === 'Menunggu' ? 'selected' : '' }}>
                             Menunggu
                         </option>
 
-                        <option value="Diproses" {{ $pesanan->status == 'Diproses' ? 'selected' : '' }}>
+                        <option value="Diproses"
+                            {{ $pesanan->status === 'Diproses' ? 'selected' : '' }}>
                             Diproses
                         </option>
 
-                        <option value="Selesai" {{ $pesanan->status == 'Selesai' ? 'selected' : '' }}>
+                        <option value="Selesai"
+                            {{ $pesanan->status === 'Selesai' ? 'selected' : '' }}>
                             Selesai
                         </option>
 
-                        <option value="Dibatalkan" {{ $pesanan->status == 'Dibatalkan' ? 'selected' : '' }}>
+                        <option value="Dibatalkan"
+                            {{ $pesanan->status === 'Dibatalkan' ? 'selected' : '' }}>
                             Dibatalkan
                         </option>
-
                     </select>
 
                     <button type="submit" class="btn btn-primary">
                         Simpan Status
                     </button>
-
-                    <a href="{{ route('pesanans.index') }}" class="btn btn-secondary">
-                        Kembali
-                    </a>
-
                 </form>
-
-            </div>
+            @endif
 
         </div>
-
     </div>
+</div>
+
+{{-- Membuka jendela pembayaran jika token baru saja dibuat --}}
+@if (session('role') === 'pembeli' && session('snap_token'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const snapToken = @json(session('snap_token'));
+
+            if (snapToken && window.snap) {
+                window.snap.pay(snapToken, {
+                    onSuccess: function () {
+                        alert('Pembayaran berhasil diproses. Status akan diperbarui setelah dikonfirmasi.');
+                        window.location.reload();
+                    },
+                    onPending: function () {
+                        alert('Pembayaran masih menunggu penyelesaian.');
+                    },
+                    onError: function () {
+                        alert('Pembayaran gagal. Silakan coba kembali.');
+                    },
+                    onClose: function () {
+                        console.log('Jendela pembayaran ditutup.');
+                    }
+                });
+            } else {
+                alert('Jendela pembayaran belum dapat dibuka. Periksa Client Key Midtrans dan koneksi internet.');
+            }
+        });
+    </script>
+@endif
 
 </body>
-
 </html>

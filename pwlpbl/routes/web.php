@@ -28,6 +28,7 @@ Route::post('/register', [AuthController::class, 'register'])
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
+// ROUTE ADMIN
 Route::middleware('role:admin')->group(function () {
 
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
@@ -40,8 +41,17 @@ Route::middleware('role:admin')->group(function () {
     Route::resource('stoks', StokController::class);
 
     Route::resource('pembelis', PembeliController::class);
+
+    // Admin melihat daftar pesanan
+    Route::get('/pesanans', [PesananController::class, 'index'])
+        ->name('pesanans.index');
+
+    // Admin mengubah status pesanan
+    Route::put('/pesanans/{id}', [PesananController::class, 'update'])
+        ->name('pesanans.update');
 });
 
+// ROUTE PEMBELI
 Route::middleware('role:pembeli')->group(function () {
 
     Route::get('/pembeli/dashboard', function () {
@@ -54,15 +64,15 @@ Route::middleware('role:pembeli')->group(function () {
     Route::get('/pembeli/kategoris', [KategoriController::class, 'index'])
         ->name('pembeli.kategoris');
 
-    Route::get('/pesanans', [PesananController::class, 'index'])
-        ->name('pesanans.index');
-
+    // Melihat detail pesanan
     Route::get('/pesanans/{id}', [PesananController::class, 'show'])
         ->name('pesanans.show');
 
-    Route::put('/pesanans/{id}', [PesananController::class, 'update'])
-        ->name('pesanans.update');
+    // Membuat pembayaran Midtrans
+    Route::post('/pesanans/{id}/bayar', [PesananController::class, 'bayar'])
+        ->name('pesanans.bayar');
 
+    // Checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])
         ->name('checkout.index');
 
@@ -70,6 +80,7 @@ Route::middleware('role:pembeli')->group(function () {
         ->name('checkout.store');
 });
 
+// PROFIL
 Route::get('/profil', [ProfilController::class, 'show'])
     ->name('profil.show');
 
