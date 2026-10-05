@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\StokController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect()->route('login'));
@@ -42,6 +43,13 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/pengguna/{role}/{id}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
     Route::put('/pengguna/{role}/{id}', [PenggunaController::class, 'update'])->name('pengguna.update');
     Route::delete('/pengguna/{role}/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+
+    Route::get('/stoks', [StokController::class, 'index'])->name('stoks.index');
+    Route::get('/stoks/create', [StokController::class, 'create'])->name('stoks.create');
+    Route::post('/stoks', [StokController::class, 'store'])->name('stoks.store');
+    Route::get('/stoks/{id}/edit', [StokController::class, 'edit'])->name('stoks.edit');
+    Route::put('/stoks/{id}', [StokController::class, 'update'])->name('stoks.update');
+    Route::delete('/stoks/{id}', [StokController::class, 'destroy'])->name('stoks.destroy');
 });
 
 Route::middleware('role:pembeli')->group(function () {
