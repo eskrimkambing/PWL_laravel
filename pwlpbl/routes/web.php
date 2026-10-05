@@ -7,8 +7,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfilController;
-use App\Http\Controllers\StokController;
-use App\Http\Controllers\PembeliController;
+use App\Http\Controllers\PenggunaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect()->route('login'));
@@ -28,7 +27,6 @@ Route::post('/register', [AuthController::class, 'register'])
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
-// ROUTE ADMIN
 Route::middleware('role:admin')->group(function () {
 
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
@@ -38,20 +36,14 @@ Route::middleware('role:admin')->group(function () {
 
     Route::resource('kategoris', KategoriController::class);
 
-    Route::resource('stoks', StokController::class);
-
-    Route::resource('pembelis', PembeliController::class);
-
-    // Admin melihat daftar pesanan
-    Route::get('/pesanans', [PesananController::class, 'index'])
-        ->name('pesanans.index');
-
-    // Admin mengubah status pesanan
-    Route::put('/pesanans/{id}', [PesananController::class, 'update'])
-        ->name('pesanans.update');
+    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
+    Route::get('/pengguna/create', [PenggunaController::class, 'create'])->name('pengguna.create');
+    Route::post('/pengguna', [PenggunaController::class, 'store'])->name('pengguna.store');
+    Route::get('/pengguna/{role}/{id}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
+    Route::put('/pengguna/{role}/{id}', [PenggunaController::class, 'update'])->name('pengguna.update');
+    Route::delete('/pengguna/{role}/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
 });
 
-// ROUTE PEMBELI
 Route::middleware('role:pembeli')->group(function () {
 
     Route::get('/pembeli/dashboard', function () {
@@ -64,31 +56,30 @@ Route::middleware('role:pembeli')->group(function () {
     Route::get('/pembeli/kategoris', [KategoriController::class, 'index'])
         ->name('pembeli.kategoris');
 
-    // Melihat detail pesanan
+    Route::get('/pesanans', [PesananController::class, 'index'])
+        ->name('pesanans.index');
+
     Route::get('/pesanans/{id}', [PesananController::class, 'show'])
         ->name('pesanans.show');
 
-    // Membuat pembayaran Midtrans
-    Route::post('/pesanans/{id}/bayar', [PesananController::class, 'bayar'])
-        ->name('pesanans.bayar');
+    Route::put('/pesanans/{id}', [PesananController::class, 'update'])
+        ->name('pesanans.update');
 
-    // Checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])
         ->name('checkout.index');
 
     Route::post('/checkout', [CheckoutController::class, 'store'])
         ->name('checkout.store');
+
+    Route::get('/profil', [ProfilController::class, 'show'])
+        ->name('profil.show');
+
+    Route::get('/profil/edit', [ProfilController::class, 'edit'])
+        ->name('profil.edit');
+
+    Route::put('/profil', [ProfilController::class, 'update'])
+        ->name('profil.update');
+
+    Route::delete('/profil', [ProfilController::class, 'destroy'])
+        ->name('profil.destroy');
 });
-
-// PROFIL
-Route::get('/profil', [ProfilController::class, 'show'])
-    ->name('profil.show');
-
-Route::get('/profil/edit', [ProfilController::class, 'edit'])
-    ->name('profil.edit');
-
-Route::put('/profil', [ProfilController::class, 'update'])
-    ->name('profil.update');
-
-Route::delete('/profil', [ProfilController::class, 'destroy'])
-    ->name('profil.destroy');

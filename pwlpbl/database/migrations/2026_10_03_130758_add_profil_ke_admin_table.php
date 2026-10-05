@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('admin', function (Blueprint $table) {
+            $table->string('nama', 100)->nullable()->after('password');
+            $table->string('no_telp', 20)->nullable()->after('nama');
+            $table->text('alamat')->nullable()->after('no_telp');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('admin', function (Blueprint $table) {
+            $table->dropColumn(['nama', 'no_telp', 'alamat']);
+        });
+    }
+};
