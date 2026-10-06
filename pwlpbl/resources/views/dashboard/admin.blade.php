@@ -221,7 +221,19 @@
                 <a href="{{ route('stoks.index') }}" class="button">
                  Kelola Stok
                  </a>
-             </div>
+            </div>
+
+            <div class="menu-card">
+                <h3>👤 Kelola Pengguna</h3>
+
+                <p>
+                    Tambah, lihat, edit, dan hapus akun admin maupun pembeli.
+                </p>
+
+                <a href="{{ route('pengguna.index') }}" class="button">
+                    Kelola Pengguna
+                </a>
+            </div>
 
         </div>
 
