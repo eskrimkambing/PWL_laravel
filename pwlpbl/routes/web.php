@@ -37,19 +37,41 @@ Route::middleware('role:admin')->group(function () {
 
     Route::resource('kategoris', KategoriController::class);
 
-    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
-    Route::get('/pengguna/create', [PenggunaController::class, 'create'])->name('pengguna.create');
-    Route::post('/pengguna', [PenggunaController::class, 'store'])->name('pengguna.store');
-    Route::get('/pengguna/{role}/{id}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
-    Route::put('/pengguna/{role}/{id}', [PenggunaController::class, 'update'])->name('pengguna.update');
-    Route::delete('/pengguna/{role}/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+    Route::get('/pengguna', [PenggunaController::class, 'index'])
+        ->name('pengguna.index');
 
-    Route::get('/stoks', [StokController::class, 'index'])->name('stoks.index');
-    Route::get('/stoks/create', [StokController::class, 'create'])->name('stoks.create');
-    Route::post('/stoks', [StokController::class, 'store'])->name('stoks.store');
-    Route::get('/stoks/{id}/edit', [StokController::class, 'edit'])->name('stoks.edit');
-    Route::put('/stoks/{id}', [StokController::class, 'update'])->name('stoks.update');
-    Route::delete('/stoks/{id}', [StokController::class, 'destroy'])->name('stoks.destroy');
+    Route::get('/pengguna/create', [PenggunaController::class, 'create'])
+        ->name('pengguna.create');
+
+    Route::post('/pengguna', [PenggunaController::class, 'store'])
+        ->name('pengguna.store');
+
+    Route::get('/pengguna/{role}/{id}/edit', [PenggunaController::class, 'edit'])
+        ->name('pengguna.edit');
+
+    Route::put('/pengguna/{role}/{id}', [PenggunaController::class, 'update'])
+        ->name('pengguna.update');
+
+    Route::delete('/pengguna/{role}/{id}', [PenggunaController::class, 'destroy'])
+        ->name('pengguna.destroy');
+
+    Route::get('/stoks', [StokController::class, 'index'])
+        ->name('stoks.index');
+
+    Route::get('/stoks/create', [StokController::class, 'create'])
+        ->name('stoks.create');
+
+    Route::post('/stoks', [StokController::class, 'store'])
+        ->name('stoks.store');
+
+    Route::get('/stoks/{id}/edit', [StokController::class, 'edit'])
+        ->name('stoks.edit');
+
+    Route::put('/stoks/{id}', [StokController::class, 'update'])
+        ->name('stoks.update');
+
+    Route::delete('/stoks/{id}', [StokController::class, 'destroy'])
+        ->name('stoks.destroy');
 });
 
 Route::middleware('role:pembeli')->group(function () {
@@ -69,6 +91,9 @@ Route::middleware('role:pembeli')->group(function () {
 
     Route::get('/pesanans/{id}', [PesananController::class, 'show'])
         ->name('pesanans.show');
+
+    Route::post('/pesanans/{id}/bayar', [PesananController::class, 'bayar'])
+        ->name('pesanans.bayar');
 
     Route::put('/pesanans/{id}', [PesananController::class, 'update'])
         ->name('pesanans.update');
