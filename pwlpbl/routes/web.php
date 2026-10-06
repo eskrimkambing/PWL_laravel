@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\StokController;
+use App\Http\Controllers\PembeliController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect()->route('login'));
@@ -28,15 +29,28 @@ Route::post('/register', [AuthController::class, 'register'])
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
+
+/*
+|--------------------------------------------------------------------------
+| ROUTE ADMIN
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('role:admin')->group(function () {
 
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
         ->name('dashboard.admin');
 
+    // CRUD Produk
     Route::resource('products', ProductController::class);
 
+    // CRUD Kategori
     Route::resource('kategoris', KategoriController::class);
 
+    // CRUD Pembeli
+    Route::resource('pembelis', PembeliController::class);
+
+    // Pengguna
     Route::get('/pengguna', [PenggunaController::class, 'index'])
         ->name('pengguna.index');
 
@@ -55,6 +69,7 @@ Route::middleware('role:admin')->group(function () {
     Route::delete('/pengguna/{role}/{id}', [PenggunaController::class, 'destroy'])
         ->name('pengguna.destroy');
 
+    // Stok
     Route::get('/stoks', [StokController::class, 'index'])
         ->name('stoks.index');
 
@@ -73,6 +88,13 @@ Route::middleware('role:admin')->group(function () {
     Route::delete('/stoks/{id}', [StokController::class, 'destroy'])
         ->name('stoks.destroy');
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| ROUTE PEMBELI
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('role:pembeli')->group(function () {
 
