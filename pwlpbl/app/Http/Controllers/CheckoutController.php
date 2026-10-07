@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Pesanan;
+use App\Models\Pembeli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,6 +27,8 @@ class CheckoutController extends Controller
             'metode_pembayaran' => 'required|in:Cash,Midtrans',
         ]);
 
+        $pembeli = Pembeli::findOrFail(session('user_id'));
+
         $produkDipilih = collect($request->products)
             ->filter(function ($jumlah) {
                 return is_numeric($jumlah) && (int) $jumlah > 0;
@@ -37,7 +40,7 @@ class CheckoutController extends Controller
                 ->with('error', 'Silakan pilih minimal satu produk.');
         }
 
-        $pesanan = DB::transaction(function () use ($produkDipilih, $request) {
+        $pesanan = DB::transaction(function () use ($produkDipilih, $request, $pembeli) {
 
             $totalHarga = 0;
             $daftarProduk = [];
@@ -57,7 +60,10 @@ class CheckoutController extends Controller
             }
 
             $pesanan = Pesanan::create([
-                'pembeli_id' => session('user_id'),
+                'pembeli_id' => $pembeli->id_pembeli,
+                'nama_penerima' => $pembeli->nama,
+                'alamat' => $pembeli->alamat,
+                'no_telp' => $pembeli->no_telp,
                 'total_harga' => $totalHarga,
                 'jenis_pesanan' => $request->jenis_pesanan,
                 'status' => 'Menunggu',
