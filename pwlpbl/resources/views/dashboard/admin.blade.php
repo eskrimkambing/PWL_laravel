@@ -1,243 +1,192 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@yield('title', 'Dashboard Admin') - Pizza Moza</title>
 
-    <title>Dashboard Admin - Pizza Moza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        * {
-            box-sizing: border-box;
+        :root,
+        [data-bs-theme="dark"] {
+            --bs-body-bg: #1c1512;
+            --bs-body-color: #f3e9e1;
+            --bs-secondary-color: #a89485;
+            --bs-border-color: rgba(255, 255, 255, 0.08);
+            --bs-tertiary-bg: #33261f;
+            --bs-secondary-bg: #261c17;
+            --bs-card-bg: #261c17;
+            --bs-table-bg: transparent;
+            --bs-table-color: #f3e9e1;
+            --bs-link-color-rgb: 234, 220, 207;
+            --bs-link-hover-color-rgb: 255, 255, 255;
+            --moza-accent: #eadccf;
+            --moza-accent-text: #2a1e17;
         }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f6f8;
-            color: #222;
+        .sidebar {
+            --bs-offcanvas-width: 250px;
+            --bs-offcanvas-bg: #261c17;
+            --bs-offcanvas-color: #f3e9e1;
+            width: 250px;
+            flex-shrink: 0;
+            border-right: 1px solid var(--bs-border-color);
         }
 
-        .navbar {
-            background: #212529;
-            color: white;
-            padding: 18px 8%;
+        .sidebar .nav-link {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-        }
-
-        .navbar h2 {
-            margin: 0;
-        }
-
-        .navbar span {
-            font-size: 14px;
-        }
-
-        .container {
-            width: 84%;
-            margin: 35px auto;
-        }
-
-        .header {
-            margin-bottom: 25px;
-        }
-
-        .header h1 {
-            margin-bottom: 8px;
-        }
-
-        .header p {
-            color: #666;
-            margin: 0;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .card h3 {
-            margin: 0 0 12px;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 6px;
+            border-radius: 12px;
+            color: var(--bs-secondary-color);
             font-size: 16px;
-            color: #555;
         }
 
-        .card .number {
-            font-size: 32px;
+        .sidebar .nav-link:hover {
+            background: #33261f;
+            color: #fff;
+        }
+
+        .sidebar .nav-link.active {
+            background: #3d2e26;
+            color: #fff;
+            box-shadow: inset 0 0 0 1px var(--bs-border-color);
+        }
+
+        .btn-moza {
+            background: var(--moza-accent);
+            color: var(--moza-accent-text);
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-moza:hover {
+            background: #fff;
+            color: var(--moza-accent-text);
+        }
+
+        .topbar {
+            border-bottom: 1px solid var(--bs-border-color);
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--moza-accent);
+            color: var(--moza-accent-text);
             font-weight: bold;
         }
 
-        .menu {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .menu-card {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .menu-card h3 {
-            margin-top: 0;
-        }
-
-        .menu-card p {
-            color: #666;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 10px 18px;
-            background: #212529;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 8px;
-        }
-
-        .button:hover {
-            background: #343a40;
-        }
-
-        .logout {
-            background: #dc3545;
-            border: none;
-            color: white;
-            padding: 9px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .cards,
-            .menu {
-                grid-template-columns: 1fr;
-            }
-
-            .container {
-                width: 92%;
-            }
+        .card {
+            border-color: var(--bs-border-color);
+            border-radius: 16px;
         }
     </style>
+
+    @stack('styles')
 </head>
 
 <body>
 
-    <div class="navbar">
-        <h2>Pizza Moza</h2>
+<div class="d-flex min-vh-100">
 
-        <div>
-            <span>
-                {{ session('email') }}
-            </span>
+    {{-- ========== SIDEBAR ========== --}}
+    <aside class="sidebar offcanvas-lg offcanvas-start p-3 d-flex flex-column" tabindex="-1" id="sidebarMenu">
 
-            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
-                @csrf
-                <button type="submit" class="logout">
-                    Logout
-                </button>
-            </form>
+        <div class="d-flex align-items-center justify-content-between px-2 pb-4">
+            <div class="d-flex align-items-center gap-2">
+                <span class="fs-2">🍕</span>
+                <div>
+                    <div class="fw-bold" style="letter-spacing:1px;">PIZZA MOZA</div>
+                    <small class="text-secondary" style="letter-spacing:2px; font-size:11px;">ADMIN PANEL</small>
+                </div>
+            </div>
+            <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"></button>
         </div>
+
+        <nav class="nav flex-column">
+            <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
+               href="{{ url('/admin/dashboard') }}">
+                <span>🏠</span> Beranda
+            </a>
+
+            <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}"
+               href="{{ route('products.index') }}">
+                <span>🍕</span> Kelola Produk
+            </a>
+
+            <a class="nav-link {{ request()->routeIs('kategoris.*') ? 'active' : '' }}"
+               href="{{ route('kategoris.index') }}">
+                <span>📂</span> Kelola Kategori
+            </a>
+
+            <a class="nav-link {{ request()->routeIs('stoks.*') ? 'active' : '' }}"
+               href="{{ route('stoks.index') }}">
+                <span>📦</span> Kelola Stok
+            </a>
+
+            <a class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}"
+               href="{{ route('pengguna.index') }}">
+                <span>👤</span> Kelola Pengguna
+            </a>
+        </nav>
+
+        <form action="{{ route('logout') }}" method="POST" class="mt-auto">
+            @csrf
+            <button type="submit" class="btn btn-outline-danger w-100 py-2">
+                ⏻ Logout
+            </button>
+        </form>
+    </aside>
+
+    {{-- ========== AREA KANAN: TOPBAR + ISI TENGAH ========== --}}
+    <div class="flex-grow-1 d-flex flex-column" style="min-width:0;">
+
+        <header class="topbar d-flex align-items-center gap-3 px-3 px-lg-4 py-3">
+            <button class="btn btn-outline-secondary d-lg-none" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+                ☰
+            </button>
+
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <div class="text-end d-none d-sm-block">
+                    <div class="fw-semibold">Admin</div>
+                    <small class="text-secondary">{{ session('email') }}</small>
+                </div>
+                <div class="avatar d-flex align-items-center justify-content-center">
+                    {{ strtoupper(substr(session('email') ?? 'A', 0, 1)) }}
+                </div>
+                <div class="text-end border-start ps-3">
+                    <div class="fs-5" id="jam">--:--</div>
+                    <small class="text-secondary" id="tanggal">-</small>
+                </div>
+            </div>
+        </header>
+
+        {{-- ISI HALAMAN MASUK DI SINI --}}
+        <main class="p-3 p-lg-4">
+            @yield('content')
+        </main>
     </div>
+</div>
 
-    <div class="container">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function updateWaktu() {
+        const now = new Date();
+        document.getElementById('jam').textContent =
+            now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace('.', ':');
+        document.getElementById('tanggal').textContent =
+            now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+    updateWaktu();
+    setInterval(updateWaktu, 30000);
+</script>
 
-        <div class="header">
-            <h1>Dashboard Admin</h1>
-            <p>Selamat datang di halaman pengelolaan Pizza Moza.</p>
-        </div>
-
-        <div class="cards">
-
-            <div class="card">
-                <h3>Total Produk</h3>
-                <div class="number">
-                    {{ $totalProduk }}
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Total Kategori</h3>
-                <div class="number">
-                    {{ $totalKategori }}
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Total Pembeli</h3>
-                <div class="number">
-                    {{ $totalPembeli }}
-                </div>
-            </div>
-
-        </div>
-
-        <div class="menu">
-
-            <div class="menu-card">
-                <h3>🍕 Kelola Produk</h3>
-
-                <p>
-                    Tambah, lihat, edit, dan hapus menu Pizza Moza.
-                </p>
-
-                <a href="{{ route('products.index') }}" class="button">
-                    Kelola Produk
-                </a>
-            </div>
-
-            <div class="menu-card">
-                <h3>📂 Kelola Kategori</h3>
-
-                <p>
-                    Kelola kategori menu yang tersedia di Pizza Moza.
-                </p>
-
-                <a href="{{ route('kategoris.index') }}" class="button">
-                    Kelola Kategori
-                </a>
-            </div>
-                 <div class="menu-card">
-                 <h3>📦 Kelola Stok</h3>
-
-                <p>
-                 Kelola stok produk yang tersedia di Pizza Moza.
-                </p>
-
-                <a href="{{ route('stoks.index') }}" class="button">
-                 Kelola Stok
-                 </a>
-            </div>
-
-            <div class="menu-card">
-                <h3>👤 Kelola Pengguna</h3>
-
-                <p>
-                    Tambah, lihat, edit, dan hapus akun admin maupun pembeli.
-                </p>
-
-                <a href="{{ route('pengguna.index') }}" class="button">
-                    Kelola Pengguna
-                </a>
-            </div>
-
-        </div>
-
-    </div>
-
+@stack('scripts')
 </body>
 </html>
