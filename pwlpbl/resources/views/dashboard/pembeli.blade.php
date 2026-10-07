@@ -340,7 +340,7 @@
 
         <button type="submit"
                 class="nav-link logout border-0 bg-transparent w-100 text-start">
-            🚪 Logout
+            ⏻ Logout
         </button>
     </form>
 
@@ -390,7 +390,7 @@
             <h2>Mau makan apa hari ini? 🍕</h2>
 
             <p>
-                Pilih pizza favorit kamu dan langsung pesan.
+                Pilih menu favorit kamu dan langsung pesan.
             </p>
 
         </div>
@@ -399,24 +399,32 @@
         <!-- CATEGORY -->
         <div class="category-list">
 
-            <button class="category-btn active">
+            <button
+                class="category-btn active"
+                onclick="filterCategory('all', this)"
+            >
                 Semua
             </button>
 
-            <button class="category-btn">
+            <button
+                class="category-btn"
+                onclick="filterCategory('Pizza', this)"
+            >
                 Pizza
             </button>
 
-            <button class="category-btn">
-                Cheese
+            <button
+                class="category-btn"
+                onclick="filterCategory('Cemilan', this)"
+            >
+                Cemilan
             </button>
 
-            <button class="category-btn">
-                Beef
-            </button>
-
-            <button class="category-btn">
-                Chicken
+            <button
+                class="category-btn"
+                onclick="filterCategory('Minuman', this)"
+            >
+                Minuman
             </button>
 
         </div>
@@ -499,8 +507,11 @@
                 @endphp
 
 
-                <div class="col-xl-4 col-lg-6 col-md-6 product-item"
-                     data-name="{{ strtolower($namaProduk) }}">
+                <div
+                    class="col-xl-4 col-lg-6 col-md-6 product-item"
+                    data-name="{{ strtolower($namaProduk) }}"
+                    data-category="{{ $product->category }}"
+                >
 
                     <div class="product-card">
 
@@ -534,7 +545,7 @@
                             </div>
 
                             <div class="product-description">
-                                {{ $product->description ?? 'Pizza lezat khas Pizza Moza.' }}
+                                {{ $product->description ?? 'Menu lezat khas Pizza Moza.' }}
                             </div>
 
 
@@ -602,6 +613,7 @@
 
 <script>
 
+    // GANTI HARGA SAAT UKURAN DIPILIH
     function changePrice(button) {
 
         const card = button.closest('.product-card');
@@ -625,7 +637,7 @@
     }
 
 
-    // SEARCH
+    // SEARCH PRODUK
     const searchInput =
         document.getElementById('searchProduct');
 
@@ -651,6 +663,51 @@
         });
 
     });
+
+
+    // FILTER KATEGORI
+    function filterCategory(category, button) {
+
+        const products =
+            document.querySelectorAll('.product-item');
+
+        const buttons =
+            document.querySelectorAll('.category-btn');
+
+
+        // Hapus active dari semua tombol
+        buttons.forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+
+
+        // Aktifkan tombol yang dipilih
+        button.classList.add('active');
+
+
+        // Tampilkan produk sesuai kategori
+        products.forEach(function(product) {
+
+            const productCategory =
+                product.getAttribute('data-category');
+
+
+            if (
+                category === 'all' ||
+                productCategory === category
+            ) {
+
+                product.style.display = '';
+
+            } else {
+
+                product.style.display = 'none';
+
+            }
+
+        });
+
+    }
 
 </script>
 
