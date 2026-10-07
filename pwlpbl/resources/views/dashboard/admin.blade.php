@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="id" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>@yield('title', 'Dashboard Admin') - Pizza Moza</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
     <style>
         :root,
@@ -29,6 +34,7 @@
             --bs-offcanvas-width: 250px;
             --bs-offcanvas-bg: #261c17;
             --bs-offcanvas-color: #f3e9e1;
+
             width: 250px;
             flex-shrink: 0;
             border-right: 1px solid var(--bs-border-color);
@@ -94,116 +100,209 @@
 
 <div class="d-flex min-vh-100">
 
-    {{-- ========== SIDEBAR ========== --}}
-    <aside class="sidebar offcanvas-lg offcanvas-start p-3 d-flex flex-column" tabindex="-1" id="sidebarMenu">
+    {{-- SIDEBAR --}}
+    <aside
+        class="sidebar offcanvas-lg offcanvas-start p-3 d-flex flex-column"
+        tabindex="-1"
+        id="sidebarMenu"
+    >
 
         <div class="d-flex align-items-center justify-content-between px-2 pb-4">
+
             <div class="d-flex align-items-center gap-2">
+
                 <span class="fs-2">🍕</span>
+
                 <div>
-                    <div class="fw-bold" style="letter-spacing:1px;">PIZZA MOZA</div>
-                    <small class="text-secondary" style="letter-spacing:2px; font-size:11px;">ADMIN PANEL</small>
+
+                    <div
+                        class="fw-bold"
+                        style="letter-spacing:1px;"
+                    >
+                        PIZZA MOZA
+                    </div>
+
+                    <small
+                        class="text-secondary"
+                        style="letter-spacing:2px; font-size:11px;"
+                    >
+                        ADMIN PANEL
+                    </small>
+
                 </div>
+
             </div>
 
-            <button type="button"
-                    class="btn-close d-lg-none"
-                    data-bs-dismiss="offcanvas"
-                    data-bs-target="#sidebarMenu">
-            </button>
+            <button
+                type="button"
+                class="btn-close d-lg-none"
+                data-bs-dismiss="offcanvas"
+                data-bs-target="#sidebarMenu"
+            ></button>
+
         </div>
+
 
         <nav class="nav flex-column">
 
-            <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
-               href="{{ url('/admin/dashboard') }}">
-                <span>🏠</span> Beranda
+            <a
+                class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
+                href="{{ url('/admin/dashboard') }}"
+            >
+                <span>🏠</span>
+                Beranda
             </a>
 
-            <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}"
-               href="{{ route('products.index') }}">
-                <span>🍕</span> Kelola Produk
+            <a
+                class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}"
+                href="{{ route('products.index') }}"
+            >
+                <span>🍕</span>
+                Kelola Produk
             </a>
 
-            <a class="nav-link {{ request()->routeIs('kategoris.*') ? 'active' : '' }}"
-               href="{{ route('kategoris.index') }}">
-                <span>📂</span> Kelola Kategori
+            <a
+                class="nav-link {{ request()->routeIs('kategoris.*') ? 'active' : '' }}"
+                href="{{ route('kategoris.index') }}"
+            >
+                <span>📂</span>
+                Kelola Kategori
             </a>
 
-            <a class="nav-link {{ request()->routeIs('stoks.*') ? 'active' : '' }}"
-               href="{{ route('stoks.index') }}">
-                <span>📦</span> Kelola Stok
+            <a
+                class="nav-link {{ request()->routeIs('stoks.*') ? 'active' : '' }}"
+                href="{{ route('stoks.index') }}"
+            >
+                <span>📦</span>
+                Kelola Stok
             </a>
 
-            <a class="nav-link {{ request()->routeIs('pembayaran.*') ? 'active' : '' }}"
-               href="{{ route('pembayaran.index') }}">
-                <span>💳</span> Kelola Pembayaran
+            <a
+                class="nav-link {{ request()->routeIs('pembayaran.*') ? 'active' : '' }}"
+                href="{{ route('pembayaran.index') }}"
+            >
+                <span>💳</span>
+                Kelola Pembayaran
             </a>
 
-            <a class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}"
-               href="{{ route('pengguna.index') }}">
-                <span>👤</span> Kelola Pengguna
+            <a
+                class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}"
+                href="{{ route('pengguna.index') }}"
+            >
+                <span>👤</span>
+                Kelola Pengguna
             </a>
 
         </nav>
 
-        <form action="{{ route('logout') }}" method="POST" class="mt-auto">
+
+        <form
+            action="{{ route('logout') }}"
+            method="POST"
+            class="mt-auto"
+        >
+
             @csrf
 
-            <button type="submit" class="btn btn-outline-danger w-100 py-2">
+            <button
+                type="submit"
+                class="btn btn-outline-danger w-100 py-2"
+            >
                 ⏻ Logout
             </button>
+
         </form>
 
     </aside>
 
-    {{-- ========== AREA KANAN: TOPBAR + ISI TENGAH ========== --}}
-    <div class="flex-grow-1 d-flex flex-column" style="min-width:0;">
 
-        <header class="topbar d-flex align-items-center gap-3 px-3 px-lg-4 py-3">
+    {{-- AREA KANAN --}}
+    <div
+        class="flex-grow-1 d-flex flex-column"
+        style="min-width:0;"
+    >
 
-            <button class="btn btn-outline-secondary d-lg-none"
-                    type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#sidebarMenu">
+
+        {{-- TOPBAR --}}
+        <header
+            class="topbar d-flex align-items-center gap-3 px-3 px-lg-4 py-3"
+        >
+
+            <button
+                class="btn btn-outline-secondary d-lg-none"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#sidebarMenu"
+            >
                 ☰
             </button>
+
 
             <div class="ms-auto d-flex align-items-center gap-3">
 
                 <div class="text-end d-none d-sm-block">
-                    <div class="fw-semibold">Admin</div>
+
+                    <div class="fw-semibold">
+                        Admin
+                    </div>
+
                     <small class="text-secondary">
                         {{ session('email') }}
                     </small>
+
                 </div>
+
 
                 <div class="avatar d-flex align-items-center justify-content-center">
+
                     {{ strtoupper(substr(session('email') ?? 'A', 0, 1)) }}
+
                 </div>
 
+
                 <div class="text-end border-start ps-3">
-                    <div class="fs-5" id="jam">--:--</div>
-                    <small class="text-secondary" id="tanggal">-</small>
+
+                    <div
+                        class="fs-5"
+                        id="jam"
+                    >
+                        --:--
+                    </div>
+
+                    <small
+                        class="text-secondary"
+                        id="tanggal"
+                    >
+                        -
+                    </small>
+
                 </div>
 
             </div>
 
         </header>
 
-        {{-- ISI HALAMAN MASUK DI SINI --}}
+
+        {{-- ISI HALAMAN --}}
         <main class="p-3 p-lg-4">
+
             @yield('content')
+
         </main>
+
 
     </div>
 
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+
 <script>
+
     function updateWaktu() {
+
         const now = new Date();
 
         document.getElementById('jam').textContent =
@@ -223,6 +322,7 @@
     updateWaktu();
 
     setInterval(updateWaktu, 30000);
+
 </script>
 
 @stack('scripts')

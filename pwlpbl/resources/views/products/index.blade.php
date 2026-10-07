@@ -1,4 +1,3 @@
-
 @extends('dashboard.admin')
 
 @section('title', 'Kelola Produk')
@@ -53,6 +52,13 @@
                                 No
                             </th>
 
+                            <th
+                                class="text-center"
+                                style="width: 100px"
+                            >
+                                Foto
+                            </th>
+
                             <th>
                                 Nama Menu
                             </th>
@@ -85,11 +91,86 @@
 
                         @forelse ($products as $index => $item)
 
+                            @php
+
+                                /*
+                                |--------------------------------------------------------------------------
+                                | FOTO PIZZA
+                                |--------------------------------------------------------------------------
+                                */
+
+                                $fotoPizza = [
+
+                                    'Extra Chicken' => 'extra-chicken.jpeg',
+                                    'Cheese Volcano' => 'cheese-volcano.jpeg',
+                                    'Ekstra Beef' => 'ekstra-beef.jpeg',
+                                    'Original Mozza' => 'original-mozza.jpeg',
+                                    'Original Cheese Volcano' => 'original-cheese-volcano.jpeg',
+                                    'Long Pizza' => 'long-pizza.jpeg',
+
+                                ];
+
+
+                                /*
+                                |--------------------------------------------------------------------------
+                                | FOTO CEMILAN
+                                |--------------------------------------------------------------------------
+                                */
+
+                                $fotoCemilan = [
+
+                                    'Tape Bakar Original' => 'tape-bakar-original.jpeg',
+                                    'Singkong Keju' => 'singkong-keju.jpeg',
+                                    'Tape Bakar Topping Keju' => 'tape-bakar-topping-keju.jpeg',
+
+                                ];
+
+
+                                /*
+                                |--------------------------------------------------------------------------
+                                | MENENTUKAN FOTO
+                                |--------------------------------------------------------------------------
+                                */
+
+                                if (isset($fotoPizza[$item->name])) {
+
+                                    $pathFoto = 'images/pizza/' . $fotoPizza[$item->name];
+
+                                } elseif (isset($fotoCemilan[$item->name])) {
+
+                                    $pathFoto = 'images/cemilan/' . $fotoCemilan[$item->name];
+
+                                } else {
+
+                                    $pathFoto = 'images/pizza.jpg';
+
+                                }
+
+                            @endphp
+
+
                             <tr>
 
                                 {{-- Nomor --}}
                                 <td class="text-center fw-bold">
                                     {{ $index + 1 }}
+                                </td>
+
+
+                                {{-- Foto Produk --}}
+                                <td class="text-center">
+
+                                    <img
+                                        src="{{ asset($pathFoto) }}"
+                                        alt="{{ $item->name }}"
+                                        style="
+                                            width: 70px;
+                                            height: 55px;
+                                            object-fit: cover;
+                                            border-radius: 8px;
+                                        "
+                                    >
+
                                 </td>
 
 
@@ -188,7 +269,7 @@
                             <tr>
 
                                 <td
-                                    colspan="6"
+                                    colspan="7"
                                     class="text-center py-4 text-muted"
                                 >
                                     Belum ada menu produk dalam database.
@@ -211,4 +292,3 @@
 </div>
 
 @endsection
-
