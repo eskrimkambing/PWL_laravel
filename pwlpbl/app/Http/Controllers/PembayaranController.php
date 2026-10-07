@@ -102,7 +102,7 @@ class PembayaranController extends Controller
 
         $pembayaran->update([
             'metode_pembayaran' => null,
-            'status_pembayaran' => null,
+            'status_pembayaran' => 'Belum Dibayar',
             'dibayar_pada' => null,
             'snap_token' => null,
         ]);

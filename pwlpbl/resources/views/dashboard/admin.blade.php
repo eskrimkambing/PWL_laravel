@@ -105,10 +105,16 @@
                     <small class="text-secondary" style="letter-spacing:2px; font-size:11px;">ADMIN PANEL</small>
                 </div>
             </div>
-            <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"></button>
+
+            <button type="button"
+                    class="btn-close d-lg-none"
+                    data-bs-dismiss="offcanvas"
+                    data-bs-target="#sidebarMenu">
+            </button>
         </div>
 
         <nav class="nav flex-column">
+
             <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
                href="{{ url('/admin/dashboard') }}">
                 <span>🏠</span> Beranda
@@ -129,64 +135,97 @@
                 <span>📦</span> Kelola Stok
             </a>
 
+            <a class="nav-link {{ request()->routeIs('pembayaran.*') ? 'active' : '' }}"
+               href="{{ route('pembayaran.index') }}">
+                <span>💳</span> Kelola Pembayaran
+            </a>
+
             <a class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}"
                href="{{ route('pengguna.index') }}">
                 <span>👤</span> Kelola Pengguna
             </a>
+
         </nav>
 
         <form action="{{ route('logout') }}" method="POST" class="mt-auto">
             @csrf
+
             <button type="submit" class="btn btn-outline-danger w-100 py-2">
                 ⏻ Logout
             </button>
         </form>
+
     </aside>
 
     {{-- ========== AREA KANAN: TOPBAR + ISI TENGAH ========== --}}
     <div class="flex-grow-1 d-flex flex-column" style="min-width:0;">
 
         <header class="topbar d-flex align-items-center gap-3 px-3 px-lg-4 py-3">
-            <button class="btn btn-outline-secondary d-lg-none" type="button"
-                    data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+
+            <button class="btn btn-outline-secondary d-lg-none"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebarMenu">
                 ☰
             </button>
 
             <div class="ms-auto d-flex align-items-center gap-3">
+
                 <div class="text-end d-none d-sm-block">
                     <div class="fw-semibold">Admin</div>
-                    <small class="text-secondary">{{ session('email') }}</small>
+                    <small class="text-secondary">
+                        {{ session('email') }}
+                    </small>
                 </div>
+
                 <div class="avatar d-flex align-items-center justify-content-center">
                     {{ strtoupper(substr(session('email') ?? 'A', 0, 1)) }}
                 </div>
+
                 <div class="text-end border-start ps-3">
                     <div class="fs-5" id="jam">--:--</div>
                     <small class="text-secondary" id="tanggal">-</small>
                 </div>
+
             </div>
+
         </header>
 
         {{-- ISI HALAMAN MASUK DI SINI --}}
         <main class="p-3 p-lg-4">
             @yield('content')
         </main>
+
     </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     function updateWaktu() {
         const now = new Date();
+
         document.getElementById('jam').textContent =
-            now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace('.', ':');
+            now.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit'
+            }).replace('.', ':');
+
         document.getElementById('tanggal').textContent =
-            now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            now.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
     }
+
     updateWaktu();
+
     setInterval(updateWaktu, 30000);
 </script>
 
 @stack('scripts')
+
 </body>
 </html>

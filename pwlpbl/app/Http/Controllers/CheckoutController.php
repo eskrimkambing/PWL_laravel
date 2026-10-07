@@ -40,16 +40,23 @@ class CheckoutController extends Controller
                 ->with('error', 'Silakan pilih minimal satu produk.');
         }
 
-        $pesanan = DB::transaction(function () use ($produkDipilih, $request, $pembeli) {
+        $pesanan = DB::transaction(function () use (
+            $produkDipilih,
+            $request,
+            $pembeli
+        ) {
 
             $totalHarga = 0;
             $daftarProduk = [];
 
             foreach ($produkDipilih as $productId => $jumlah) {
+
                 $product = Product::findOrFail($productId);
+
                 $jumlah = (int) $jumlah;
 
                 $subtotal = $product->price * $jumlah;
+
                 $totalHarga += $subtotal;
 
                 $daftarProduk[] = [
@@ -61,9 +68,6 @@ class CheckoutController extends Controller
 
             $pesanan = Pesanan::create([
                 'pembeli_id' => $pembeli->id_pembeli,
-                'nama_penerima' => $pembeli->nama,
-                'alamat' => $pembeli->alamat,
-                'no_telp' => $pembeli->no_telp,
                 'total_harga' => $totalHarga,
                 'jenis_pesanan' => $request->jenis_pesanan,
                 'status' => 'Menunggu',
@@ -75,12 +79,14 @@ class CheckoutController extends Controller
             ]);
 
             foreach ($daftarProduk as $item) {
+
                 $pesanan->detailPesanans()->create([
                     'product_id' => $item['product']->getKey(),
                     'jumlah' => $item['jumlah'],
                     'harga' => $item['product']->price,
                     'subtotal' => $item['subtotal'],
                 ]);
+
             }
 
             return $pesanan;
