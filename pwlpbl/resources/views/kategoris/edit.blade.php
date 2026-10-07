@@ -1,31 +1,41 @@
-@extends('layouts.app')
+
+@extends('dashboard.admin')
+
+@section('title', 'Edit Kategori')
 
 @section('content')
 
-<div class="container">
+<div class="container-fluid">
 
     <div class="row justify-content-center">
 
-        <div class="col-md-6">
+        <div class="col-12 col-md-8 col-lg-6">
 
             <div class="card shadow-sm border-0">
 
-                <div class="card-header bg-dark text-white">
+                <div class="card-header bg-transparent py-3">
                     <h5 class="mb-0">
                         Edit Kategori
                     </h5>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body p-4">
 
-                    <form action="{{ route('kategoris.update', $kategori->id_kategori) }}" method="POST">
+                    <form
+                        action="{{ route('kategoris.update', $kategori->id_kategori) }}"
+                        method="POST"
+                    >
 
                         @csrf
                         @method('PUT')
 
-                        <div class="mb-3">
+                        {{-- Nama Kategori --}}
+                        <div class="mb-4">
 
-                            <label for="nama_kategori" class="form-label fw-semibold">
+                            <label
+                                for="nama_kategori"
+                                class="form-label fw-semibold"
+                            >
                                 Nama Kategori
                             </label>
 
@@ -47,15 +57,22 @@
 
                         </div>
 
-                        <div class="d-flex gap-2">
+                        {{-- Tombol --}}
+                        <div class="d-flex gap-2 justify-content-end">
 
-                            <button type="submit" class="btn btn-dark">
-                                Update
-                            </button>
-
-                            <a href="{{ route('kategoris.index') }}" class="btn btn-secondary">
+                            <a
+                                href="{{ route('kategoris.index') }}"
+                                class="btn btn-secondary"
+                            >
                                 Batal
                             </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Update
+                            </button>
 
                         </div>
 
@@ -72,3 +89,4 @@
 </div>
 
 @endsection
+

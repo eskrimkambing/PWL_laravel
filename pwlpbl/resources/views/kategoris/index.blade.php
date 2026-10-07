@@ -1,259 +1,43 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Kategori | Pizza Moza</title>
+@extends('dashboard.admin')
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+@section('title', 'Kategori')
 
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f5f7;
-            color: #333;
-        }
+@section('content')
 
-        .container {
-            width: 92%;
-            max-width: 1000px;
-            margin: 35px auto;
-        }
-
-        /* Header */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .page-header h1 {
-            margin: 0;
-            font-size: 28px;
-            font-weight: 600;
-        }
-
-        .page-header p {
-            margin: 6px 0 0;
-            color: #777;
-            font-size: 14px;
-        }
-
-        /* Tombol */
-        .btn {
-            display: inline-block;
-            padding: 9px 15px;
-            border-radius: 6px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-back {
-            background: #fff;
-            color: #555;
-            border: 1px solid #ddd;
-        }
-
-        .btn-back:hover {
-            background: #f0f0f0;
-        }
-
-        .btn-add {
-            background: #e85d04;
-            color: white;
-        }
-
-        .btn-add:hover {
-            background: #d45103;
-        }
-
-        .btn-edit {
-            background: #f1f3f5;
-            color: #333;
-            border: 1px solid #ddd;
-        }
-
-        .btn-edit:hover {
-            background: #e2e6ea;
-        }
-
-        .btn-delete {
-            background: #fff;
-            color: #dc3545;
-            border: 1px solid #dc3545;
-        }
-
-        .btn-delete:hover {
-            background: #dc3545;
-            color: white;
-        }
-
-        /* Toolbar */
-        .toolbar {
-            background: white;
-            padding: 15px;
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            gap: 15px;
-        }
-
-        .search {
-            width: 280px;
-            padding: 9px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .search:focus {
-            border-color: #e85d04;
-        }
-
-        .total {
-            font-size: 14px;
-            color: #777;
-        }
-
-        .total strong {
-            color: #333;
-        }
-
-        /* Alert */
-        .alert {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border: 1px solid #c8e6c9;
-            padding: 11px 14px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-
-        /* Table */
-        .table-box {
-            background: white;
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: #fafafa;
-            color: #555;
-            font-size: 13px;
-            font-weight: 600;
-            text-align: left;
-            padding: 14px 16px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        td {
-            padding: 14px 16px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover {
-            background: #fafafa;
-        }
-
-        .number {
-            width: 70px;
-            color: #777;
-        }
-
-        .category-name {
-            font-weight: 500;
-        }
-
-        .actions {
-            display: flex;
-            gap: 7px;
-        }
-
-        /* Kosong */
-        .empty {
-            text-align: center;
-            padding: 40px 20px;
-            color: #888;
-        }
-
-        /* Responsive */
-        @media (max-width: 650px) {
-
-            .page-header {
-                align-items: flex-start;
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .toolbar {
-                align-items: stretch;
-                flex-direction: column;
-            }
-
-            .search {
-                width: 100%;
-            }
-
-            .table-box {
-                overflow-x: auto;
-            }
-
-            table {
-                min-width: 600px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container">
+<div class="container-fluid">
 
     {{-- Header --}}
-    <div class="page-header">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
 
         <div>
-            <h1>Kategori Menu</h1>
-            <p>Daftar kategori produk Pizza Moza</p>
+            <h2 class="mb-1">Kategori Menu</h2>
+
+            <p class="text-muted mb-0">
+                Daftar kategori produk Pizza Moza
+            </p>
         </div>
 
-        <div>
-            <a href="{{ session('role') === 'admin'
-                ? route('dashboard.admin')
-                : route('dashboard.pembeli') }}"
-               class="btn btn-back">
+        <div class="d-flex gap-2">
+
+            <a
+                href="{{ session('role') === 'admin'
+                    ? route('dashboard.admin')
+                    : route('dashboard.pembeli') }}"
+                class="btn btn-secondary"
+            >
                 Kembali
             </a>
 
             @if(session('role') === 'admin')
-                <a href="{{ route('kategoris.create') }}"
-                   class="btn btn-add">
+                <a
+                    href="{{ route('kategoris.create') }}"
+                    class="btn btn-primary"
+                >
                     + Tambah Kategori
                 </a>
             @endif
+
         </div>
 
     </div>
@@ -261,118 +45,181 @@
 
     {{-- Pesan berhasil --}}
     @if(session('success'))
-        <div class="alert">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+
             {{ session('success') }}
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+            ></button>
+
         </div>
     @endif
 
 
     {{-- Toolbar --}}
-    <div class="toolbar">
+    <div class="card shadow-sm border-0 mb-3">
 
-        <input
-            type="text"
-            id="searchKategori"
-            class="search"
-            placeholder="Cari kategori..."
-        >
+        <div class="card-body">
 
-        <div class="total">
-            Total kategori:
-            <strong>{{ $kategoris->count() }}</strong>
+            <div class="row align-items-center g-3">
+
+                <div class="col-12 col-md-6">
+
+                    <input
+                        type="text"
+                        id="searchKategori"
+                        class="form-control"
+                        placeholder="Cari kategori..."
+                    >
+
+                </div>
+
+                <div class="col-12 col-md-6 text-md-end">
+
+                    <span class="text-muted">
+                        Total kategori:
+                        <strong>{{ $kategoris->count() }}</strong>
+                    </span>
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
 
 
-    {{-- Tabel --}}
-    <div class="table-box">
+    {{-- Tabel Kategori --}}
+    <div class="card shadow-sm border-0">
 
-        <table id="tabelKategori">
+        <div class="card-body p-0">
 
-            <thead>
-                <tr>
-                    <th class="number">No</th>
-                    <th>Nama Kategori</th>
+            <div class="table-responsive">
 
-                    @if(session('role') === 'admin')
-                        <th width="180">Aksi</th>
-                    @endif
-                </tr>
-            </thead>
+                <table
+                    id="tabelKategori"
+                    class="table table-hover align-middle mb-0"
+                >
 
-            <tbody>
+                    <thead>
+                        <tr>
 
-                @forelse($kategoris as $index => $kategori)
+                            <th
+                                style="width: 80px;"
+                                class="ps-4"
+                            >
+                                No
+                            </th>
 
-                    <tr>
+                            <th>
+                                Nama Kategori
+                            </th>
 
-                        <td class="number">
-                            {{ $index + 1 }}
-                        </td>
+                            @if(session('role') === 'admin')
+                                <th
+                                    style="width: 180px;"
+                                >
+                                    Aksi
+                                </th>
+                            @endif
 
-                        <td class="category-name">
-                            {{ $kategori->nama_kategori }}
-                        </td>
+                        </tr>
+                    </thead>
 
-                        @if(session('role') === 'admin')
 
-                            <td>
+                    <tbody>
 
-                                <div class="actions">
+                        @forelse($kategoris as $index => $kategori)
 
-                                    <a href="{{ route('kategoris.edit', $kategori->id_kategori) }}"
-                                       class="btn btn-edit">
-                                        Edit
-                                    </a>
+                            <tr>
 
-                                    <form
-                                        action="{{ route('kategoris.destroy', $kategori->id_kategori) }}"
-                                        method="POST"
-                                        onsubmit="return confirm('Yakin ingin menghapus kategori ini?')"
-                                    >
+                                <td class="ps-4 text-muted">
+                                    {{ $index + 1 }}
+                                </td>
 
-                                        @csrf
-                                        @method('DELETE')
+                                <td class="category-name fw-semibold">
+                                    {{ $kategori->nama_kategori }}
+                                </td>
 
-                                        <button type="submit"
-                                                class="btn btn-delete">
-                                            Hapus
-                                        </button>
 
-                                    </form>
+                                @if(session('role') === 'admin')
 
-                                </div>
+                                    <td>
 
-                            </td>
+                                        <div class="d-flex gap-2">
 
-                        @endif
+                                            {{-- Edit --}}
+                                            <a
+                                                href="{{ route('kategoris.edit', $kategori->id_kategori) }}"
+                                                class="btn btn-sm btn-outline-primary"
+                                            >
+                                                Edit
+                                            </a>
 
-                    </tr>
 
-                @empty
+                                            {{-- Hapus --}}
+                                            <form
+                                                action="{{ route('kategoris.destroy', $kategori->id_kategori) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Yakin ingin menghapus kategori ini?')"
+                                            >
 
-                    <tr>
+                                                @csrf
+                                                @method('DELETE')
 
-                        <td
-                            colspan="{{ session('role') === 'admin' ? 3 : 2 }}"
-                            class="empty"
-                        >
-                            Belum ada kategori.
-                        </td>
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                >
+                                                    Hapus
+                                                </button>
 
-                    </tr>
+                                            </form>
 
-                @endforelse
+                                        </div>
 
-            </tbody>
+                                    </td>
 
-        </table>
+                                @endif
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td
+                                    colspan="{{ session('role') === 'admin' ? 3 : 2 }}"
+                                    class="text-center text-muted py-5"
+                                >
+                                    Belum ada kategori.
+                                </td>
+
+                            </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
+@endsection
+
+
+@push('scripts')
 
 <script>
 
@@ -406,5 +253,5 @@
 
 </script>
 
-</body>
-</html>
+@endpush
+
