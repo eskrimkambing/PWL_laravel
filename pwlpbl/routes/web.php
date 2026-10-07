@@ -117,8 +117,8 @@ Route::middleware('role:pembeli')->group(function () {
     })->name('dashboard.pembeli');
 
 
-    // Produk
-    Route::get('/pembeli/products', [ProductController::class, 'index'])
+    // Produk Pembeli
+    Route::get('/pembeli/products', [ProductController::class, 'pembeli'])
         ->name('pembeli.products');
 
 

@@ -14,10 +14,19 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
+    // Menampilkan produk khusus pembeli
+    public function pembeli()
+    {
+        $products = Product::latest()->get();
+
+        return view('pembelis.products', compact('products'));
+    }
+
     // Menampilkan form tambah produk
     public function create()
     {
-         $kategoris = \App\Models\Kategori::all();
+        $kategoris = \App\Models\Kategori::all();
+
         return view('products.create', compact('kategoris'));
     }
 
@@ -34,11 +43,13 @@ class ProductController extends Controller
 
         Product::create($validated);
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan ke database!');
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Produk berhasil ditambahkan ke database!');
     }
 
     // 3. EDIT: Mengambil data spesifik berdasarkan ID dari database
-    public function edit(Product $product) // Menggunakan Route Model Bindinh
+    public function edit(Product $product)
     {
         $kategoris = \App\Models\Kategori::all();
 
@@ -58,7 +69,9 @@ class ProductController extends Controller
 
         $product->update($validated);
 
-        return redirect()->route('products.index')->with('success', 'Data produk berhasil diperbarui!');
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Data produk berhasil diperbarui!');
     }
 
     // 5. DELETE: Menghapus data dari database
@@ -66,6 +79,8 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus!');
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Produk berhasil dihapus!');
     }
 }
