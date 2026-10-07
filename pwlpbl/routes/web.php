@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\PembeliController;
+use App\Http\Controllers\PembayaranController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect()->route('login'));
@@ -41,14 +42,22 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
         ->name('dashboard.admin');
 
+
     // CRUD Produk
     Route::resource('products', ProductController::class);
+
 
     // CRUD Kategori
     Route::resource('kategoris', KategoriController::class);
 
+
     // CRUD Pembeli
     Route::resource('pembelis', PembeliController::class);
+
+
+    // CRUD Pembayaran
+    Route::resource('pembayaran', PembayaranController::class);
+
 
     // Pengguna
     Route::get('/pengguna', [PenggunaController::class, 'index'])
@@ -68,6 +77,7 @@ Route::middleware('role:admin')->group(function () {
 
     Route::delete('/pengguna/{role}/{id}', [PenggunaController::class, 'destroy'])
         ->name('pengguna.destroy');
+
 
     // Stok
     Route::get('/stoks', [StokController::class, 'index'])
@@ -99,15 +109,25 @@ Route::middleware('role:admin')->group(function () {
 Route::middleware('role:pembeli')->group(function () {
 
     Route::get('/pembeli/dashboard', function () {
-        return view('dashboard.pembeli');
+
+        $products = \App\Models\Product::latest()->get();
+
+        return view('dashboard.pembeli', compact('products'));
+
     })->name('dashboard.pembeli');
 
+
+    // Produk
     Route::get('/pembeli/products', [ProductController::class, 'index'])
         ->name('pembeli.products');
 
+
+    // Kategori
     Route::get('/pembeli/kategoris', [KategoriController::class, 'index'])
         ->name('pembeli.kategoris');
 
+
+    // Pesanan
     Route::get('/pesanans', [PesananController::class, 'index'])
         ->name('pesanans.index');
 
@@ -120,12 +140,16 @@ Route::middleware('role:pembeli')->group(function () {
     Route::put('/pesanans/{id}', [PesananController::class, 'update'])
         ->name('pesanans.update');
 
+
+    // Checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])
         ->name('checkout.index');
 
     Route::post('/checkout', [CheckoutController::class, 'store'])
         ->name('checkout.store');
 
+
+    // Profil
     Route::get('/profil', [ProfilController::class, 'show'])
         ->name('profil.show');
 

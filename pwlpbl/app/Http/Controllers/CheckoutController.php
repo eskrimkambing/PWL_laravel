@@ -24,42 +24,30 @@ class CheckoutController extends Controller
         $request->validate([
             'products' => 'required|array',
             'jenis_pesanan' => 'required|in:Makan di tempat,Dibungkus',
+            'metode_pembayaran' => 'required|in:Cash,Midtrans',
         ]);
 
         $pembeli = Pembeli::findOrFail(session('user_id'));
 
         $produkDipilih = collect($request->products)
             ->filter(function ($jumlah) {
-                return (int) $jumlah > 0;
+                return is_numeric($jumlah) && (int) $jumlah > 0;
             });
 
         if ($produkDipilih->isEmpty()) {
             return back()
+                ->withInput()
                 ->with('error', 'Silakan pilih minimal satu produk.');
         }
 
-        $pesanan = DB::transaction(function () use ($produkDipilih, $request, $pembeli) {
+        $pesanan = DB::transaction(function () use (
+            $produkDipilih,
+            $request,
+            $pembeli
+        ) {
 
             $totalHarga = 0;
-
-            foreach ($produkDipilih as $productId => $jumlah) {
-
-                $product = Product::findOrFail($productId);
-
-                $subtotal = $product->price * (int) $jumlah;
-
-                $totalHarga += $subtotal;
-            }
-
-            $pesanan = Pesanan::create([
-                'pembeli_id' => $pembeli->id_pembeli,
-                'nama_penerima' => $pembeli->nama,
-                'alamat' => $pembeli->alamat,
-                'no_telp' => $pembeli->no_telp,
-                'total_harga' => $totalHarga,
-                'jenis_pesanan' => $request->jenis_pesanan,
-                'status' => 'Menunggu',
-            ]);
+            $daftarProduk = [];
 
             foreach ($produkDipilih as $productId => $jumlah) {
 
@@ -69,12 +57,36 @@ class CheckoutController extends Controller
 
                 $subtotal = $product->price * $jumlah;
 
-                $pesanan->detailPesanans()->create([
-                    'product_id' => $product->getKey(),
+                $totalHarga += $subtotal;
+
+                $daftarProduk[] = [
+                    'product' => $product,
                     'jumlah' => $jumlah,
-                    'harga' => $product->price,
                     'subtotal' => $subtotal,
+                ];
+            }
+
+            $pesanan = Pesanan::create([
+                'pembeli_id' => $pembeli->id_pembeli,
+                'total_harga' => $totalHarga,
+                'jenis_pesanan' => $request->jenis_pesanan,
+                'status' => 'Menunggu',
+                'metode_pembayaran' => $request->metode_pembayaran,
+                'status_pembayaran' => $request->metode_pembayaran === 'Cash'
+                    ? 'Belum Dibayar'
+                    : 'Menunggu Pembayaran',
+                'dibayar_pada' => null,
+            ]);
+
+            foreach ($daftarProduk as $item) {
+
+                $pesanan->detailPesanans()->create([
+                    'product_id' => $item['product']->getKey(),
+                    'jumlah' => $item['jumlah'],
+                    'harga' => $item['product']->price,
+                    'subtotal' => $item['subtotal'],
                 ]);
+
             }
 
             return $pesanan;

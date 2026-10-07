@@ -2,9 +2,11 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard Pembeli - Pizza Moza</title>
+    <title>Beranda - Pizza Moza</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         * {
@@ -12,211 +14,329 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-
-            background-image: url('/images/pizza.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-
-            min-height: 100vh;
             margin: 0;
-
-            position: relative;
+            background: #1c1512;
+            color: #f3e9e1;
+            font-family: Arial, sans-serif;
         }
 
-        /* OVERLAY BACKGROUND */
-
-        body::before {
-            content: "";
+        /* SIDEBAR */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
             position: fixed;
-            inset: 0;
-
-            background: rgba(0, 0, 0, 0.35);
-
-            z-index: -1;
-        }
-
-        /* NAVBAR */
-
-        .navbar {
-            background: rgba(58, 48, 45, 0.96);
-
-            height: 70px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            padding: 0 8%;
-
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+            left: 0;
+            top: 0;
+            background: #261c17;
+            border-right: 1px solid rgba(255,255,255,.08);
+            padding: 24px 16px;
         }
 
         .brand {
-            color: #ffffff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-            font-size: 24px;
-            font-weight: bold;
+        .brand h4 {
+            margin: 0;
+            color: #eadccf;
+            font-weight: 700;
+        }
 
+        .brand small {
+            color: #a89485;
+        }
+
+        .nav-link {
+            color: #cdbeb3;
+            padding: 12px 14px;
+            margin-bottom: 6px;
+            border-radius: 10px;
             text-decoration: none;
+            display: block;
         }
 
-        .navbar-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+        .nav-link:hover,
+        .nav-link.active {
+            background: #3d2e26;
+            color: #fff;
         }
-
-        .email {
-            color: #ffffff;
-
-            font-size: 14px;
-        }
-
-        /* LOGOUT */
 
         .logout {
-            background: #000000;
+            position: absolute;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+        }
 
-            color: #ffffff;
-
-            text-decoration: none;
-
-            padding: 10px 20px;
-
-            border-radius: 20px;
-
+        .logout-btn {
+            width: 100%;
+            padding: 11px 15px;
+            border: 1px solid #dc3545;
+            border-radius: 6px;
+            background: transparent;
+            color: #dc3545;
             font-size: 14px;
-
-            display: inline-block;
+            cursor: pointer;
         }
 
-        .logout:hover {
-            background: #000000;
-            color: #ffffff;
+        .logout-btn:hover {
+            background: #dc3545;
+            color: white;
         }
 
-        /* CONTAINER */
-
-        .container {
-            width: 85%;
-            max-width: 1150px;
-
-            margin: 50px auto;
+        /* MAIN */
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
         }
 
-        /* JUDUL */
+        .topbar {
+            height: 75px;
+            padding: 0 30px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-        h1 {
-            margin: 0 0 10px;
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-            color: #ffffff;
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #eadccf;
+            color: #2a1e17;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
 
-            font-size: 34px;
+        /* CONTENT */
+        .content {
+            padding: 30px;
         }
 
         .welcome {
-            color: #ffffff;
-
-            font-size: 16px;
-
-            margin-bottom: 28px;
+            margin-bottom: 25px;
         }
 
-        /* CARD */
+        .welcome h2 {
+            margin-bottom: 5px;
+        }
 
-        .cards {
+        .welcome p {
+            color: #a89485;
+            margin: 0;
+        }
+
+        /* SEARCH */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: #261c17;
+            border: 1px solid rgba(255,255,255,.1);
+            color: white;
+            border-radius: 10px;
+            padding: 12px 15px;
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: #8f7e72;
+        }
+
+        .filter-btn {
+            background: #eadccf;
+            color: #2a1e17;
+            border: none;
+            border-radius: 10px;
+            padding: 0 20px;
+            font-weight: 600;
+        }
+
+        /* LAYOUT MENU */
+        .menu-layout {
             display: grid;
-
-            grid-template-columns: repeat(2, 1fr);
-
-            gap: 20px;
+            grid-template-columns: 1fr 300px;
+            gap: 25px;
         }
 
-        .card {
-            background: rgba(58, 48, 45, 0.94);
-
-            padding: 28px;
-
-            border-radius: 15px;
-
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-
-            color: #ffffff;
+        .menu-title {
+            margin-bottom: 18px;
         }
 
-        .card h2 {
-            margin: 0 0 15px;
-
-            font-size: 21px;
-
-            color: #ffffff;
+        .category {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
-        .card p {
-            margin: 0 0 22px;
-
-            color: #eeeeee;
-
-            font-size: 15px;
-
-            line-height: 1.5;
-        }
-
-        /* TOMBOL */
-
-        .btn {
-            display: inline-block;
-
-            padding: 11px 20px;
-
-            background: #000000;
-
-            color: #ffffff;
-
-            text-decoration: none;
-
-            border-radius: 7px;
-
+        .category span {
+            padding: 8px 16px;
+            background: #33261f;
+            border-radius: 20px;
+            color: #cdbeb3;
             font-size: 14px;
+            cursor: pointer;
         }
 
-        .btn:hover {
-            background: #000000;
-
-            color: #ffffff;
+        .category span.active {
+            background: #eadccf;
+            color: #2a1e17;
         }
 
-        /* RESPONSIVE */
+        /* PRODUCTS */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
 
-        @media (max-width: 700px) {
+        .product-card {
+            background: #261c17;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 14px;
+            padding: 12px;
+        }
 
-            .navbar {
-                padding: 0 5%;
-            }
+        .product-image {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #33261f;
+            margin-bottom: 12px;
+        }
 
-            .navbar-right {
-                gap: 10px;
-            }
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-            .email {
-                display: none;
-            }
+        .product-name {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
 
-            .container {
-                width: 90%;
+        .product-description {
+            color: #a89485;
+            font-size: 12px;
+            min-height: 35px;
+            margin-bottom: 10px;
+        }
 
-                margin: 35px auto;
-            }
+        .product-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-            h1 {
-                font-size: 28px;
-            }
+        .price {
+            font-weight: 700;
+            color: #eadccf;
+        }
 
-            .cards {
+        .btn-order {
+            border: none;
+            background: #eadccf;
+            color: #2a1e17;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-order:hover {
+            background: white;
+        }
+
+        /* CART */
+        .cart {
+            background: #261c17;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 16px;
+            padding: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .cart h4 {
+            margin-bottom: 20px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 35px 10px;
+            color: #a89485;
+        }
+
+        .cart-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .cart-info {
+            background: #33261f;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .cart-info p {
+            color: #a89485;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,.1);
+            font-weight: bold;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            border: none;
+            border-radius: 9px;
+            background: #eadccf;
+            color: #2a1e17;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1100px) {
+            .menu-layout {
                 grid-template-columns: 1fr;
+            }
+
+            .cart {
+                position: static;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -224,93 +344,320 @@
 
 <body>
 
-    <!-- NAVBAR -->
+    <!-- SIDEBAR -->
+    <div class="sidebar">
 
-    <nav class="navbar">
+        <div class="brand">
+            <h4>🍕 PIZZA MOZA</h4>
+            <small>PEMBELI PANEL</small>
+        </div>
 
-        <a href="{{ route('dashboard.pembeli') }}" class="brand">
-            Pizza Moza
-        </a>
+        <nav>
 
-        <div class="navbar-right">
+            <a href="{{ route('dashboard.pembeli') }}"
+               class="nav-link active">
+                🏠 Beranda
+            </a>
 
-            <span class="email">
-                {{ session('email') }}
-            </span>
+            <a href="{{ route('pembeli.products') }}"
+               class="nav-link">
+                🍕 Menu Produk
+            </a>
+
+            <a href="{{ route('pembeli.kategoris') }}"
+               class="nav-link">
+                📂 Kategori
+            </a>
+
+            <a href="{{ route('pesanans.index') }}"
+               class="nav-link">
+                📋 Pesanan Saya
+            </a>
+
+            <a href="{{ route('checkout.index') }}"
+               class="nav-link">
+                🛒 Checkout
+            </a>
+
+            <a href="{{ route('profil.show') }}"
+               class="nav-link">
+                👤 Profil
+            </a>
+
+        </nav>
+
+        <div class="logout">
 
             <form action="{{ route('logout') }}" method="POST">
+
                 @csrf
 
-                <button
-                    type="submit"
-                    class="logout"
-                    style="border: none; cursor: pointer;"
-                >
-                    Logout
+                <button type="submit" class="logout-btn">
+                    ⏻ Logout
                 </button>
+
             </form>
 
         </div>
 
-    </nav>
+    </div>
 
 
-    <!-- CONTENT -->
+    <!-- MAIN -->
+    <div class="main">
 
-    <main class="container">
+        <!-- TOPBAR -->
+        <div class="topbar">
 
-        <h1>
-            Dashboard Pembeli
-        </h1>
-
-        <p class="welcome">
-            Selamat datang di Pizza Moza. Silakan pilih menu yang ingin kamu lihat.
-        </p>
-
-
-        <!-- CARDS -->
-
-        <div class="cards">
-
-            <!-- PRODUK -->
-
-            <div class="card">
-
-                <h2>
-                    🍕 Lihat Produk
-                </h2>
-
-                <p>
-                    Lihat berbagai menu Pizza Moza yang tersedia.
-                </p>
-
-                <a href="{{ route('pembeli.products') }}" class="btn">
-                Lihat Produk
-                </a>
-
+            <div>
+                <strong>Beranda</strong>
             </div>
 
+            <div class="user-info">
 
-            <!-- KATEGORI -->
+                <div class="text-end">
 
-            <div class="card">
+                    <div style="font-size:14px;">
+                        {{ session('nama') ?? 'Pembeli' }}
+                    </div>
 
-                <h2>
-                    📁 Kategori Menu
-                </h2>
+                    <small style="color:#a89485;">
+                        {{ session('email') ?? '' }}
+                    </small>
 
-                <p>
-                    Lihat kategori menu yang tersedia.
-                </p>
+                </div>
 
-               <a href="{{ route('pembeli.kategoris') }}" class="btn">
-                Lihat Kategori
-                </a>
+                <div class="avatar">
+                    {{ strtoupper(substr(session('nama') ?? 'P', 0, 1)) }}
+                </div>
+
             </div>
 
         </div>
 
-    </main>
+
+        <!-- CONTENT -->
+        <div class="content">
+
+            <div class="welcome">
+
+                <h2>
+                    Halo, {{ session('nama') ?? 'Pembeli' }} 👋
+                </h2>
+
+                <p>
+                    Mau makan pizza apa hari ini?
+                </p>
+
+            </div>
+
+
+            <!-- SEARCH -->
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="searchProduct"
+                    placeholder="🔍 Cari pizza atau produk..."
+                >
+
+                <button class="filter-btn">
+                    ☰ Filter
+                </button>
+
+            </div>
+
+
+            <div class="menu-layout">
+
+                <!-- MENU -->
+                <div>
+
+                    <h4 class="menu-title">
+                        Pizza Menu
+                    </h4>
+
+                    <div class="category">
+
+                        <span class="active">
+                            Semua
+                        </span>
+
+                        <span>
+                            Pizza
+                        </span>
+
+                        <span>
+                            Minuman
+                        </span>
+
+                        <span>
+                            Snack
+                        </span>
+
+                    </div>
+
+
+                    <div class="product-grid">
+
+                        @forelse ($products as $product)
+
+                            <div class="product-card">
+
+                                <div class="product-image">
+
+                                    @if ($product->image)
+                                        <img
+                                            src="{{ asset('storage/' . $product->image) }}"
+                                            alt="{{ $product->name }}"
+                                        >
+                                    @else
+                                        <img
+                                            src="{{ asset('images/pizza.jpg') }}"
+                                            alt="Pizza"
+                                        >
+                                    @endif
+
+                                </div>
+
+                                <div class="product-name">
+                                    {{ $product->name }}
+                                </div>
+
+                                <div class="product-description">
+                                    {{ Str::limit($product->description ?? 'Pizza lezat khas Pizza Moza.', 65) }}
+                                </div>
+
+                                <div class="product-bottom">
+
+                                    <div class="price">
+                                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                                    </div>
+
+                                    <a
+                                        href="{{ route('checkout.index') }}"
+                                        class="btn-order"
+                                    >
+                                        Pesan
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        @empty
+
+                            <div class="col-12">
+
+                                <div class="cart-empty">
+
+                                    <div class="cart-icon">
+                                        🍕
+                                    </div>
+
+                                    <h5>
+                                        Belum ada produk
+                                    </h5>
+
+                                    <p>
+                                        Produk pizza belum tersedia.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        @endforelse
+
+                    </div>
+
+                </div>
+
+
+                <!-- CART -->
+                <div class="cart">
+
+                    <h4>
+                        🛒 Ringkasan Pesanan
+                    </h4>
+
+                    <div class="cart-empty">
+
+                        <div class="cart-icon">
+                            🍕
+                        </div>
+
+                        <strong>
+                            Belum ada pesanan
+                        </strong>
+
+                        <p>
+                            Pilih pizza yang kamu mau.
+                        </p>
+
+                    </div>
+
+                    <div class="cart-info">
+
+                        <p>
+                            Untuk melakukan pemesanan,
+                            pilih produk terlebih dahulu.
+                        </p>
+
+                        <a
+                            href="{{ route('checkout.index') }}"
+                            class="btn-checkout d-block text-center text-decoration-none"
+                        >
+                            Buat Pesanan
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const searchInput =
+            document.getElementById('searchProduct');
+
+        searchInput.addEventListener('keyup', function () {
+
+            const keyword =
+                this.value.toLowerCase();
+
+            const products =
+                document.querySelectorAll('.product-card');
+
+            products.forEach(function (product) {
+
+                const name =
+                    product.querySelector('.product-name')
+                    .textContent
+                    .toLowerCase();
+
+                if (name.includes(keyword)) {
+
+                    product.style.display = '';
+
+                } else {
+
+                    product.style.display = 'none';
+
+                }
+
+            });
+
+        });
+
+    </script>
 
 </body>
 </html>
+
