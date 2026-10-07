@@ -1,4 +1,3 @@
-
 @extends('dashboard.admin')
 
 @section('title', 'Edit Menu')
@@ -28,13 +27,8 @@
                                 Nama Menu
                             </label>
 
-                            <input
-                                type="text"
-                                name="name"
-                                class="form-control @error('name') is-invalid @enderror"
-                                value="{{ old('name', $product->name) }}"
-                                required
-                            >
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                value="{{ old('name', $product->name) }}" required>
 
                             @error('name')
                                 <div class="invalid-feedback">
@@ -51,20 +45,15 @@
                                     Kategori Menu
                                 </label>
 
-                                <select
-                                    name="category"
-                                    class="form-select @error('category') is-invalid @enderror"
-                                    required
-                                >
+                                <select name="category" class="form-select @error('category') is-invalid @enderror"
+                                    required>
                                     <option value="">
                                         -- Pilih Kategori --
                                     </option>
 
                                     @foreach ($kategoris as $kategori)
-                                        <option
-                                            value="{{ $kategori->nama_kategori }}"
-                                            {{ old('category', $product->category) == $kategori->nama_kategori ? 'selected' : '' }}
-                                        >
+                                        <option value="{{ $kategori->nama_kategori }}"
+                                            {{ old('category', $product->category) == $kategori->nama_kategori ? 'selected' : '' }}>
                                             {{ $kategori->nama_kategori }}
                                         </option>
                                     @endforeach
@@ -82,13 +71,9 @@
                                     Porsi / Ukuran
                                 </label>
 
-                                <input
-                                    type="text"
-                                    name="portion"
+                                <input type="text" name="portion"
                                     class="form-control @error('portion') is-invalid @enderror"
-                                    value="{{ old('portion', $product->portion) }}"
-                                    required
-                                >
+                                    value="{{ old('portion', $product->portion) }}" required>
 
                                 @error('portion')
                                     <div class="invalid-feedback">
@@ -105,13 +90,8 @@
                                 Harga (Rp)
                             </label>
 
-                            <input
-                                type="number"
-                                name="price"
-                                class="form-control @error('price') is-invalid @enderror"
-                                value="{{ old('price', (int) $product->price) }}"
-                                required
-                            >
+                            <input type="number" name="price" class="form-control @error('price') is-invalid @enderror"
+                                value="{{ old('price', (int) $product->price) }}" required>
 
                             @error('price')
                                 <div class="invalid-feedback">
@@ -126,11 +106,7 @@
                                 Deskripsi Menu
                             </label>
 
-                            <textarea
-                                name="description"
-                                rows="3"
-                                class="form-control @error('description') is-invalid @enderror"
-                            >{{ old('description', $product->description) }}</textarea>
+                            <textarea name="description" rows="3" class="form-control @error('description') is-invalid @enderror">{{ old('description', $product->description) }}</textarea>
 
                             @error('description')
                                 <div class="invalid-feedback">
@@ -142,17 +118,11 @@
                         {{-- Tombol --}}
                         <div class="d-flex justify-content-end gap-2">
 
-                            <a
-                                href="{{ route('products.index') }}"
-                                class="btn btn-secondary"
-                            >
+                            <a href="{{ route('products.index') }}" class="btn btn-secondary">
                                 Batal
                             </a>
 
-                            <button
-                                type="submit"
-                                class="btn btn-warning text-dark fw-semibold"
-                            >
+                            <button type="submit" class="btn btn-warning text-dark fw-semibold">
                                 Simpan Perubahan
                             </button>
 
@@ -167,4 +137,3 @@
     </div>
 
 @endsection
-

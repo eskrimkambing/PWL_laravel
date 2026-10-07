@@ -92,10 +92,10 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/stoks/{id}/edit', [StokController::class, 'edit'])
         ->name('stoks.edit');
 
-    Route::put('/stoks/{id}', [StokController::class, 'update'])
+    Route::put('/stoks/{stok}', [StokController::class, 'update'])
         ->name('stoks.update');
 
-    Route::delete('/stoks/{id}', [StokController::class, 'destroy'])
+    Route::delete('/stoks/{stok}', [StokController::class, 'destroy'])
         ->name('stoks.destroy');
 });
 
