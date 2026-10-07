@@ -44,8 +44,9 @@ class StokController extends Controller
     }
 
     // Menampilkan form edit stok
-    public function edit(Stok $stok)
+    public function edit($id)
     {
+        $stok = Stok::findOrFail($id);
         $products = Product::all();
 
         return view('stoks.edit', compact('stok', 'products'));
