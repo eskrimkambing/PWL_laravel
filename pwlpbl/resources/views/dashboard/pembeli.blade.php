@@ -1,247 +1,342 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard Pembeli - Pizza Moza</title>
+    <title>Beranda - Pizza Moza</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
         }
 
         body {
-            background: #1c1412;
-            color: #ffffff;
-            min-height: 100vh;
+            margin: 0;
+            background: #1c1512;
+            color: #f3e9e1;
+            font-family: Arial, sans-serif;
         }
 
+        /* SIDEBAR */
         .sidebar {
+            width: 250px;
+            height: 100vh;
             position: fixed;
             left: 0;
             top: 0;
-            width: 250px;
-            height: 100vh;
-            background: #191210;
-            border-right: 1px solid #342724;
-            padding: 20px 16px;
+            background: #261c17;
+            border-right: 1px solid rgba(255,255,255,.08);
+            padding: 24px 16px;
         }
 
         .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0 12px 22px;
-            border-bottom: 1px solid #342724;
-        }
-
-        .brand-icon {
-            font-size: 32px;
-        }
-
-        .brand h2 {
-            font-size: 17px;
-            letter-spacing: 1px;
-            margin-bottom: 7px;
-        }
-
-        .brand span {
-            color: #92766a;
-            font-size: 11px;
-            letter-spacing: 3px;
-        }
-
-        .menu {
-            margin-top: 20px;
-        }
-
-        .menu a {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-            color: #c9aaa0;
-            padding: 14px 18px;
-            margin-bottom: 6px;
-            border-radius: 12px;
-            font-size: 15px;
-        }
-
-        .menu a:hover,
-        .menu a.active {
-            background: #403027;
-            color: #ffffff;
-        }
-
-        .menu-icon {
-            width: 22px;
             text-align: center;
-            font-size: 17px;
+            margin-bottom: 30px;
+        }
+
+        .brand h4 {
+            margin: 0;
+            color: #eadccf;
+            font-weight: 700;
+        }
+
+        .brand small {
+            color: #a89485;
+        }
+
+        .nav-link {
+            color: #cdbeb3;
+            padding: 12px 14px;
+            margin-bottom: 6px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #3d2e26;
+            color: #fff;
         }
 
         .logout {
             position: absolute;
-            bottom: 16px;
+            bottom: 20px;
             left: 16px;
             right: 16px;
         }
 
-        .logout button {
+        .logout-btn {
             width: 100%;
-            padding: 11px;
-            background: transparent;
+            padding: 11px 15px;
             border: 1px solid #dc3545;
             border-radius: 6px;
-            color: #ff3347;
+            background: transparent;
+            color: #dc3545;
             font-size: 14px;
             cursor: pointer;
         }
 
-        .logout button:hover {
+        .logout-btn:hover {
             background: #dc3545;
             color: white;
         }
 
+        /* MAIN */
         .main {
             margin-left: 250px;
             min-height: 100vh;
         }
 
         .topbar {
-            height: 84px;
-            border-bottom: 1px solid #342724;
+            height: 75px;
+            padding: 0 30px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
             display: flex;
-            justify-content: flex-end;
             align-items: center;
-            padding: 0 28px;
+            justify-content: space-between;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 16px;
-        }
-
-        .user-text {
-            text-align: right;
-        }
-
-        .user-name {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-
-        .user-email {
-            color: #92766a;
-            font-size: 12px;
+            gap: 12px;
         }
 
         .avatar {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            background: #eee3d9;
-            color: #352923;
+            background: #eadccf;
+            color: #2a1e17;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 17px;
         }
 
-        .date-box {
-            border-left: 1px solid #342724;
-            padding-left: 18px;
-            margin-left: 2px;
-            text-align: right;
-        }
-
-        .time {
-            font-size: 17px;
-            margin-bottom: 5px;
-        }
-
-        .date {
-            color: #92766a;
-            font-size: 12px;
-        }
-
+        /* CONTENT */
         .content {
-            padding: 35px;
+            padding: 30px;
         }
 
         .welcome {
-            margin-bottom: 28px;
+            margin-bottom: 25px;
         }
 
-        .welcome h1 {
-            font-size: 27px;
-            margin-bottom: 8px;
+        .welcome h2 {
+            margin-bottom: 5px;
         }
 
         .welcome p {
-            color: #a98e82;
-            font-size: 14px;
+            color: #a89485;
+            margin: 0;
         }
 
-        .cards {
+        /* SEARCH */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: #261c17;
+            border: 1px solid rgba(255,255,255,.1);
+            color: white;
+            border-radius: 10px;
+            padding: 12px 15px;
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: #8f7e72;
+        }
+
+        .filter-btn {
+            background: #eadccf;
+            color: #2a1e17;
+            border: none;
+            border-radius: 10px;
+            padding: 0 20px;
+            font-weight: 600;
+        }
+
+        /* LAYOUT MENU */
+        .menu-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 25px;
+        }
+
+        .menu-title {
+            margin-bottom: 18px;
+        }
+
+        .category {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .category span {
+            padding: 8px 16px;
+            background: #33261f;
+            border-radius: 20px;
+            color: #cdbeb3;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .category span.active {
+            background: #eadccf;
+            color: #2a1e17;
+        }
+
+        /* PRODUCTS */
+        .product-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            max-width: 1000px;
+            gap: 15px;
         }
 
-        .card {
-            background: #241a17;
-            border: 1px solid #3a2b26;
-            border-radius: 12px;
-            padding: 22px;
+        .product-card {
+            background: #261c17;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 14px;
+            padding: 12px;
         }
 
-        .card-icon {
-            font-size: 27px;
-            margin-bottom: 15px;
+        .product-image {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #33261f;
+            margin-bottom: 12px;
         }
 
-        .card h3 {
-            font-size: 17px;
-            margin-bottom: 8px;
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .card p {
-            color: #a98e82;
+        .product-name {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .product-description {
+            color: #a89485;
+            font-size: 12px;
+            min-height: 35px;
+            margin-bottom: 10px;
+        }
+
+        .product-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .price {
+            font-weight: 700;
+            color: #eadccf;
+        }
+
+        .btn-order {
+            border: none;
+            background: #eadccf;
+            color: #2a1e17;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-order:hover {
+            background: white;
+        }
+
+        /* CART */
+        .cart {
+            background: #261c17;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 16px;
+            padding: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .cart h4 {
+            margin-bottom: 20px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 35px 10px;
+            color: #a89485;
+        }
+
+        .cart-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .cart-info {
+            background: #33261f;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .cart-info p {
+            color: #a89485;
             font-size: 13px;
-            line-height: 1.5;
-            margin-bottom: 17px;
+            margin-bottom: 5px;
         }
 
-        .card a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 13px;
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,.1);
+            font-weight: bold;
         }
 
-        .card a:hover {
-            color: #d7b7a8;
+        .btn-checkout {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            border: none;
+            border-radius: 9px;
+            background: #eadccf;
+            color: #2a1e17;
+            font-weight: 700;
         }
 
-        @media (max-width: 900px) {
-            .sidebar {
-                width: 220px;
-            }
-
-            .main {
-                margin-left: 220px;
-            }
-
-            .cards {
+        @media (max-width: 1100px) {
+            .menu-layout {
                 grid-template-columns: 1fr;
+            }
+
+            .cart {
+                position: static;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -249,48 +344,44 @@
 
 <body>
 
-    {{-- SIDEBAR --}}
-    <aside class="sidebar">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
 
         <div class="brand">
-            <div class="brand-icon">🍕</div>
-
-            <div>
-                <h2>PIZZA MOZA</h2>
-                <span>PEMBELI PANEL</span>
-            </div>
+            <h4>🍕 PIZZA MOZA</h4>
+            <small>PEMBELI PANEL</small>
         </div>
 
-        <nav class="menu">
+        <nav>
 
-            <a href="{{ route('dashboard.pembeli') }}" class="active">
-                <span class="menu-icon">🏠</span>
-                <span>Beranda</span>
+            <a href="{{ route('dashboard.pembeli') }}"
+               class="nav-link active">
+                🏠 Beranda
             </a>
 
-            <a href="{{ route('pembeli.products') }}">
-                <span class="menu-icon">🍕</span>
-                <span>Menu Produk</span>
+            <a href="{{ route('pembeli.products') }}"
+               class="nav-link">
+                🍕 Menu Produk
             </a>
 
-            <a href="{{ route('pembeli.kategoris') }}">
-                <span class="menu-icon">📁</span>
-                <span>Kategori</span>
+            <a href="{{ route('pembeli.kategoris') }}"
+               class="nav-link">
+                📂 Kategori
             </a>
 
-            <a href="{{ route('pesanans.index') }}">
-                <span class="menu-icon">📦</span>
-                <span>Pesanan Saya</span>
+            <a href="{{ route('pesanans.index') }}"
+               class="nav-link">
+                📋 Pesanan Saya
             </a>
 
-            <a href="{{ route('checkout.index') }}">
-                <span class="menu-icon">🛒</span>
-                <span>Checkout</span>
+            <a href="{{ route('checkout.index') }}"
+               class="nav-link">
+                🛒 Checkout
             </a>
 
-            <a href="{{ route('profil.show') }}">
-                <span class="menu-icon">👤</span>
-                <span>Profil</span>
+            <a href="{{ route('profil.show') }}"
+               class="nav-link">
+                👤 Profil
             </a>
 
         </nav>
@@ -298,35 +389,41 @@
         <div class="logout">
 
             <form action="{{ route('logout') }}" method="POST">
+
                 @csrf
 
-                <button type="submit">
+                <button type="submit" class="logout-btn">
                     ⏻ Logout
                 </button>
+
             </form>
 
         </div>
 
-    </aside>
+    </div>
 
 
-    {{-- MAIN --}}
-    <main class="main">
+    <!-- MAIN -->
+    <div class="main">
 
-        {{-- TOPBAR --}}
-        <header class="topbar">
+        <!-- TOPBAR -->
+        <div class="topbar">
+
+            <div>
+                <strong>Beranda</strong>
+            </div>
 
             <div class="user-info">
 
-                <div class="user-text">
+                <div class="text-end">
 
-                    <div class="user-name">
+                    <div style="font-size:14px;">
                         {{ session('nama') ?? 'Pembeli' }}
                     </div>
 
-                    <div class="user-email">
+                    <small style="color:#a89485;">
                         {{ session('email') ?? '' }}
-                    </div>
+                    </small>
 
                 </div>
 
@@ -334,163 +431,233 @@
                     {{ strtoupper(substr(session('nama') ?? 'P', 0, 1)) }}
                 </div>
 
-                <div class="date-box">
-
-                    <div class="time" id="clock">
-                        00:00
-                    </div>
-
-                    <div class="date" id="date">
-                        -
-                    </div>
-
-                </div>
-
             </div>
 
-        </header>
+        </div>
 
 
-        {{-- CONTENT --}}
-        <section class="content">
+        <!-- CONTENT -->
+        <div class="content">
 
             <div class="welcome">
 
-                <h1>
-                    Selamat Datang 👋
-                </h1>
+                <h2>
+                    Halo, {{ session('nama') ?? 'Pembeli' }} 👋
+                </h2>
 
                 <p>
-                    Selamat datang di Dashboard Pembeli Pizza Moza.
+                    Mau makan pizza apa hari ini?
                 </p>
 
             </div>
 
 
-            <div class="cards">
+            <!-- SEARCH -->
+            <div class="search-box">
 
-                <div class="card">
+                <input
+                    type="text"
+                    id="searchProduct"
+                    placeholder="🔍 Cari pizza atau produk..."
+                >
 
-                    <div class="card-icon">
-                        🍕
+                <button class="filter-btn">
+                    ☰ Filter
+                </button>
+
+            </div>
+
+
+            <div class="menu-layout">
+
+                <!-- MENU -->
+                <div>
+
+                    <h4 class="menu-title">
+                        Pizza Menu
+                    </h4>
+
+                    <div class="category">
+
+                        <span class="active">
+                            Semua
+                        </span>
+
+                        <span>
+                            Pizza
+                        </span>
+
+                        <span>
+                            Minuman
+                        </span>
+
+                        <span>
+                            Snack
+                        </span>
+
                     </div>
 
-                    <h3>
-                        Menu Produk
-                    </h3>
 
-                    <p>
-                        Lihat berbagai produk pizza yang tersedia di Pizza Moza.
-                    </p>
+                    <div class="product-grid">
 
-                    <a href="{{ route('pembeli.products') }}">
-                        Lihat Produk →
-                    </a>
+                        @forelse ($products as $product)
+
+                            <div class="product-card">
+
+                                <div class="product-image">
+
+                                    @if ($product->image)
+                                        <img
+                                            src="{{ asset('storage/' . $product->image) }}"
+                                            alt="{{ $product->name }}"
+                                        >
+                                    @else
+                                        <img
+                                            src="{{ asset('images/pizza.jpg') }}"
+                                            alt="Pizza"
+                                        >
+                                    @endif
+
+                                </div>
+
+                                <div class="product-name">
+                                    {{ $product->name }}
+                                </div>
+
+                                <div class="product-description">
+                                    {{ Str::limit($product->description ?? 'Pizza lezat khas Pizza Moza.', 65) }}
+                                </div>
+
+                                <div class="product-bottom">
+
+                                    <div class="price">
+                                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                                    </div>
+
+                                    <a
+                                        href="{{ route('checkout.index') }}"
+                                        class="btn-order"
+                                    >
+                                        Pesan
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        @empty
+
+                            <div class="col-12">
+
+                                <div class="cart-empty">
+
+                                    <div class="cart-icon">
+                                        🍕
+                                    </div>
+
+                                    <h5>
+                                        Belum ada produk
+                                    </h5>
+
+                                    <p>
+                                        Produk pizza belum tersedia.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        @endforelse
+
+                    </div>
 
                 </div>
 
 
-                <div class="card">
+                <!-- CART -->
+                <div class="cart">
 
-                    <div class="card-icon">
-                        🛒
+                    <h4>
+                        🛒 Ringkasan Pesanan
+                    </h4>
+
+                    <div class="cart-empty">
+
+                        <div class="cart-icon">
+                            🍕
+                        </div>
+
+                        <strong>
+                            Belum ada pesanan
+                        </strong>
+
+                        <p>
+                            Pilih pizza yang kamu mau.
+                        </p>
+
                     </div>
 
-                    <h3>
-                        Buat Pesanan
-                    </h3>
+                    <div class="cart-info">
 
-                    <p>
-                        Pilih produk dan buat pesanan sesuai kebutuhan kamu.
-                    </p>
+                        <p>
+                            Untuk melakukan pemesanan,
+                            pilih produk terlebih dahulu.
+                        </p>
 
-                    <a href="{{ route('checkout.index') }}">
-                        Mulai Pesan →
-                    </a>
+                        <a
+                            href="{{ route('checkout.index') }}"
+                            class="btn-checkout d-block text-center text-decoration-none"
+                        >
+                            Buat Pesanan
+                        </a>
 
-                </div>
-
-
-                <div class="card">
-
-                    <div class="card-icon">
-                        📦
                     </div>
-
-                    <h3>
-                        Pesanan Saya
-                    </h3>
-
-                    <p>
-                        Lihat pesanan dan status pembayaran yang sudah dibuat.
-                    </p>
-
-                    <a href="{{ route('pesanans.index') }}">
-                        Lihat Pesanan →
-                    </a>
 
                 </div>
 
             </div>
 
-        </section>
+        </div>
 
-    </main>
+    </div>
 
 
     <script>
 
-        function updateDateTime() {
+        const searchInput =
+            document.getElementById('searchProduct');
 
-            const now = new Date();
+        searchInput.addEventListener('keyup', function () {
 
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const keyword =
+                this.value.toLowerCase();
 
-            document.getElementById('clock').textContent =
-                hours + ':' + minutes;
+            const products =
+                document.querySelectorAll('.product-card');
 
+            products.forEach(function (product) {
 
-            const days = [
-                'Minggu',
-                'Senin',
-                'Selasa',
-                'Rabu',
-                'Kamis',
-                'Jumat',
-                'Sabtu'
-            ];
+                const name =
+                    product.querySelector('.product-name')
+                    .textContent
+                    .toLowerCase();
 
-            const months = [
-                'Januari',
-                'Februari',
-                'Maret',
-                'April',
-                'Mei',
-                'Juni',
-                'Juli',
-                'Agustus',
-                'September',
-                'Oktober',
-                'November',
-                'Desember'
-            ];
+                if (name.includes(keyword)) {
 
-            const dateText =
-                days[now.getDay()] + ', ' +
-                now.getDate() + ' ' +
-                months[now.getMonth()] + ' ' +
-                now.getFullYear();
+                    product.style.display = '';
 
-            document.getElementById('date').textContent = dateText;
-        }
+                } else {
 
-        updateDateTime();
+                    product.style.display = 'none';
 
-        setInterval(updateDateTime, 1000);
+                }
+
+            });
+
+        });
 
     </script>
 
 </body>
-
 </html>
+

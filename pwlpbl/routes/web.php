@@ -109,7 +109,11 @@ Route::middleware('role:admin')->group(function () {
 Route::middleware('role:pembeli')->group(function () {
 
     Route::get('/pembeli/dashboard', function () {
-        return view('dashboard.pembeli');
+
+        $products = \App\Models\Product::latest()->get();
+
+        return view('dashboard.pembeli', compact('products'));
+
     })->name('dashboard.pembeli');
 
 
