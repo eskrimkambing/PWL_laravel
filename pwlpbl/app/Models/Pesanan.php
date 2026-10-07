@@ -17,15 +17,34 @@ class Pesanan extends Model
         'total_harga',
         'jenis_pesanan',
         'status',
+        'snap_token',
+        'status_pembayaran',
+        'metode_pembayaran',
+        'dibayar_pada',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'dibayar_pada' => 'datetime',
+        ];
+    }
 
     public function pembeli(): BelongsTo
     {
-        return $this->belongsTo(Pembeli::class, 'pembeli_id', 'id_pembeli');
+        return $this->belongsTo(
+            Pembeli::class,
+            'pembeli_id',
+            'id_pembeli'
+        );
     }
 
     public function detailPesanans(): HasMany
     {
-        return $this->hasMany(DetailPesanan::class, 'pesanan_id', 'id_pesanan');
+        return $this->hasMany(
+            DetailPesanan::class,
+            'pesanan_id',
+            'id_pesanan'
+        );
     }
 }
