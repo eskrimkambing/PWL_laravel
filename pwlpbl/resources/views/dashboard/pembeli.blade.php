@@ -6,7 +6,10 @@
 
     <title>Beranda - Pizza Moza</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
     <style>
         * {
@@ -22,19 +25,19 @@
 
         /* SIDEBAR */
         .sidebar {
-            width: 250px;
-            height: 100vh;
             position: fixed;
             left: 0;
             top: 0;
+            width: 240px;
+            height: 100vh;
             background: #261c17;
             border-right: 1px solid rgba(255,255,255,.08);
-            padding: 24px 16px;
+            padding: 25px 18px;
         }
 
         .brand {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         .brand h4 {
@@ -47,11 +50,18 @@
             color: #a89485;
         }
 
+        .menu-title {
+            color: #806f63;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin: 20px 12px 10px;
+        }
+
         .nav-link {
-            color: #cdbeb3;
+            color: #cdbdb1;
             padding: 12px 14px;
-            margin-bottom: 6px;
-            border-radius: 10px;
+            border-radius: 9px;
+            margin-bottom: 5px;
             text-decoration: none;
             display: block;
         }
@@ -63,41 +73,42 @@
         }
 
         .logout {
-            position: absolute;
-            bottom: 20px;
-            left: 16px;
-            right: 16px;
-        }
-
-        .logout-btn {
-            width: 100%;
-            padding: 11px 15px;
-            border: 1px solid #dc3545;
-            border-radius: 6px;
-            background: transparent;
-            color: #dc3545;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .logout-btn:hover {
-            background: #dc3545;
-            color: white;
+            color: #e58d8d !important;
         }
 
         /* MAIN */
         .main {
-            margin-left: 250px;
+            margin-left: 240px;
             min-height: 100vh;
         }
 
+        /* TOPBAR */
         .topbar {
             height: 75px;
-            padding: 0 30px;
             border-bottom: 1px solid rgba(255,255,255,.08);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 35px;
+            background: #1c1512;
+        }
+
+        .search-box {
+            width: 350px;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: #261c17;
+            border: 1px solid rgba(255,255,255,.08);
+            color: #fff;
+            border-radius: 8px;
+            padding: 10px 14px;
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: #8f7f73;
         }
 
         .user-info {
@@ -107,8 +118,8 @@
         }
 
         .avatar {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: #eadccf;
             color: #2a1e17;
@@ -120,223 +131,161 @@
 
         /* CONTENT */
         .content {
-            padding: 30px;
-        }
-
-        .welcome {
-            margin-bottom: 25px;
+            padding: 30px 35px 50px;
         }
 
         .welcome h2 {
             margin-bottom: 5px;
+            font-weight: 700;
         }
 
         .welcome p {
             color: #a89485;
-            margin: 0;
+            margin-bottom: 28px;
         }
 
-        /* SEARCH */
-        .search-box {
+        /* CATEGORY */
+        .category-list {
             display: flex;
             gap: 10px;
             margin-bottom: 25px;
-        }
-
-        .search-box input {
-            flex: 1;
-            background: #261c17;
-            border: 1px solid rgba(255,255,255,.1);
-            color: white;
-            border-radius: 10px;
-            padding: 12px 15px;
-            outline: none;
-        }
-
-        .search-box input::placeholder {
-            color: #8f7e72;
-        }
-
-        .filter-btn {
-            background: #eadccf;
-            color: #2a1e17;
-            border: none;
-            border-radius: 10px;
-            padding: 0 20px;
-            font-weight: 600;
-        }
-
-        /* LAYOUT MENU */
-        .menu-layout {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 25px;
-        }
-
-        .menu-title {
-            margin-bottom: 18px;
-        }
-
-        .category {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
-        .category span {
-            padding: 8px 16px;
-            background: #33261f;
+        .category-btn {
+            border: 1px solid #514138;
+            background: #261c17;
+            color: #cdbdb1;
+            padding: 9px 18px;
             border-radius: 20px;
-            color: #cdbeb3;
-            font-size: 14px;
             cursor: pointer;
         }
 
-        .category span.active {
+        .category-btn.active,
+        .category-btn:hover {
             background: #eadccf;
             color: #2a1e17;
         }
 
-        /* PRODUCTS */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
+        /* PRODUCT CARD */
         .product-card {
             background: #261c17;
-            border: 1px solid rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.07);
             border-radius: 14px;
-            padding: 12px;
+            overflow: hidden;
+            height: 100%;
         }
 
         .product-image {
             width: 100%;
-            height: 150px;
-            border-radius: 10px;
-            overflow: hidden;
+            height: 220px;
             background: #33261f;
-            margin-bottom: 12px;
+            overflow: hidden;
         }
 
         .product-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+        }
+
+        .product-body {
+            padding: 18px;
         }
 
         .product-name {
+            font-size: 19px;
             font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 5px;
+            color: #fff;
+            margin-bottom: 7px;
         }
 
         .product-description {
+            font-size: 13px;
             color: #a89485;
+            min-height: 40px;
+            margin-bottom: 15px;
+        }
+
+        .size-title {
             font-size: 12px;
-            min-height: 35px;
-            margin-bottom: 10px;
+            color: #a89485;
+            margin-bottom: 7px;
+        }
+
+        .size-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .size-btn {
+            border: 1px solid #5a493e;
+            background: transparent;
+            color: #d7c8bc;
+            padding: 6px 10px;
+            border-radius: 7px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .size-btn.active,
+        .size-btn:hover {
+            background: #eadccf;
+            color: #2a1e17;
+            border-color: #eadccf;
         }
 
         .product-bottom {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 10px;
         }
 
         .price {
-            font-weight: 700;
             color: #eadccf;
+            font-weight: 700;
+            font-size: 17px;
         }
 
         .btn-order {
-            border: none;
             background: #eadccf;
             color: #2a1e17;
-            border-radius: 8px;
-            padding: 7px 10px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .btn-order:hover {
-            background: white;
-        }
-
-        /* CART */
-        .cart {
-            background: #261c17;
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: 16px;
-            padding: 20px;
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-        }
-
-        .cart h4 {
-            margin-bottom: 20px;
-        }
-
-        .cart-empty {
-            text-align: center;
-            padding: 35px 10px;
-            color: #a89485;
-        }
-
-        .cart-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-
-        .cart-info {
-            background: #33261f;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .cart-info p {
-            color: #a89485;
+            border: none;
+            border-radius: 7px;
+            padding: 8px 15px;
+            text-decoration: none;
             font-size: 13px;
-            margin-bottom: 5px;
-        }
-
-        .cart-total {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,.1);
-            font-weight: bold;
-        }
-
-        .btn-checkout {
-            width: 100%;
-            margin-top: 15px;
-            padding: 12px;
-            border: none;
-            border-radius: 9px;
-            background: #eadccf;
-            color: #2a1e17;
             font-weight: 700;
         }
 
-        @media (max-width: 1100px) {
-            .menu-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .cart {
-                position: static;
-            }
+        .btn-order:hover {
+            background: #fff;
+            color: #2a1e17;
         }
 
-        @media (max-width: 800px) {
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
+        .no-product {
+            background: #261c17;
+            border-radius: 12px;
+            padding: 35px;
+            text-align: center;
+            color: #a89485;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+            }
+
+            .search-box {
+                width: 250px;
             }
         }
     </style>
@@ -344,277 +293,88 @@
 
 <body>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
+<!-- SIDEBAR -->
+<aside class="sidebar">
 
-        <div class="brand">
-            <h4>🍕 PIZZA MOZA</h4>
-            <small>PEMBELI PANEL</small>
-        </div>
-
-        <nav>
-
-            <a href="{{ route('dashboard.pembeli') }}"
-               class="nav-link active">
-                🏠 Beranda
-            </a>
-
-            <a href="{{ route('pembeli.products') }}"
-               class="nav-link">
-                🍕 Menu Produk
-            </a>
-
-            <a href="{{ route('pembeli.kategoris') }}"
-               class="nav-link">
-                📂 Kategori
-            </a>
-
-            <a href="{{ route('pesanans.index') }}"
-               class="nav-link">
-                📋 Pesanan Saya
-            </a>
-
-            <a href="{{ route('checkout.index') }}"
-               class="nav-link">
-                🛒 Checkout
-            </a>
-
-            <a href="{{ route('profil.show') }}"
-               class="nav-link">
-                👤 Profil
-            </a>
-
-        </nav>
-
-        <div class="logout">
-
-            <form action="{{ route('logout') }}" method="POST">
-
-                @csrf
-
-                <button type="submit" class="logout-btn">
-                    ⏻ Logout
-                </button>
-
-            </form>
-
-        </div>
-
+    <div class="brand">
+        <h4>🍕 PIZZA MOZA</h4>
+        <small>PEMBELI PANEL</small>
     </div>
 
+    <div class="menu-title">Menu</div>
 
-    <!-- MAIN -->
-    <div class="main">
+    <a href="{{ route('dashboard.pembeli') }}"
+       class="nav-link active">
+        🏠 Beranda
+    </a>
 
-        <!-- TOPBAR -->
-        <div class="topbar">
+    <a href="{{ route('pembeli.products') }}"
+       class="nav-link">
+        🍕 Menu Produk
+    </a>
+
+    <a href="{{ route('pembeli.kategoris') }}"
+       class="nav-link">
+        📂 Kategori
+    </a>
+
+    <a href="{{ route('pesanans.index') }}"
+       class="nav-link">
+        🧾 Pesanan Saya
+    </a>
+
+    <a href="{{ route('checkout.index') }}"
+       class="nav-link">
+        🛒 Checkout
+    </a>
+
+    <a href="{{ route('profil.show') }}"
+       class="nav-link">
+        👤 Profil
+    </a>
+
+    <div class="menu-title">Akun</div>
+
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+
+        <button type="submit"
+                class="nav-link logout border-0 bg-transparent w-100 text-start">
+            🚪 Logout
+        </button>
+    </form>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+
+        <div class="search-box">
+            <input
+                type="text"
+                id="searchProduct"
+                placeholder="Cari menu pizza..."
+            >
+        </div>
+
+        <div class="user-info">
 
             <div>
-                <strong>Beranda</strong>
-            </div>
-
-            <div class="user-info">
-
-                <div class="text-end">
-
-                    <div style="font-size:14px;">
-                        {{ session('nama') ?? 'Pembeli' }}
-                    </div>
-
-                    <small style="color:#a89485;">
-                        {{ session('email') ?? '' }}
-                    </small>
-
+                <div style="font-size: 14px;">
+                    {{ session('nama') ?? 'Pembeli' }}
                 </div>
 
-                <div class="avatar">
-                    {{ strtoupper(substr(session('nama') ?? 'P', 0, 1)) }}
-                </div>
-
+                <small style="color:#a89485;">
+                    {{ session('email') ?? '' }}
+                </small>
             </div>
 
-        </div>
-
-
-        <!-- CONTENT -->
-        <div class="content">
-
-            <div class="welcome">
-
-                <h2>
-                    Halo, {{ session('nama') ?? 'Pembeli' }} 👋
-                </h2>
-
-                <p>
-                    Mau makan pizza apa hari ini?
-                </p>
-
-            </div>
-
-
-            <!-- SEARCH -->
-            <div class="search-box">
-
-                <input
-                    type="text"
-                    id="searchProduct"
-                    placeholder="🔍 Cari pizza atau produk..."
-                >
-
-                <button class="filter-btn">
-                    ☰ Filter
-                </button>
-
-            </div>
-
-
-            <div class="menu-layout">
-
-                <!-- MENU -->
-                <div>
-
-                    <h4 class="menu-title">
-                        Pizza Menu
-                    </h4>
-
-                    <div class="category">
-
-                        <span class="active">
-                            Semua
-                        </span>
-
-                        <span>
-                            Pizza
-                        </span>
-
-                        <span>
-                            Minuman
-                        </span>
-
-                        <span>
-                            Snack
-                        </span>
-
-                    </div>
-
-
-                    <div class="product-grid">
-
-                        @forelse ($products as $product)
-
-                            <div class="product-card">
-
-                                <div class="product-image">
-
-                                    @if ($product->image)
-                                        <img
-                                            src="{{ asset('storage/' . $product->image) }}"
-                                            alt="{{ $product->name }}"
-                                        >
-                                    @else
-                                        <img
-                                            src="{{ asset('images/pizza.jpg') }}"
-                                            alt="Pizza"
-                                        >
-                                    @endif
-
-                                </div>
-
-                                <div class="product-name">
-                                    {{ $product->name }}
-                                </div>
-
-                                <div class="product-description">
-                                    {{ Str::limit($product->description ?? 'Pizza lezat khas Pizza Moza.', 65) }}
-                                </div>
-
-                                <div class="product-bottom">
-
-                                    <div class="price">
-                                        Rp {{ number_format($product->price, 0, ',', '.') }}
-                                    </div>
-
-                                    <a
-                                        href="{{ route('checkout.index') }}"
-                                        class="btn-order"
-                                    >
-                                        Pesan
-                                    </a>
-
-                                </div>
-
-                            </div>
-
-                        @empty
-
-                            <div class="col-12">
-
-                                <div class="cart-empty">
-
-                                    <div class="cart-icon">
-                                        🍕
-                                    </div>
-
-                                    <h5>
-                                        Belum ada produk
-                                    </h5>
-
-                                    <p>
-                                        Produk pizza belum tersedia.
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                        @endforelse
-
-                    </div>
-
-                </div>
-
-
-                <!-- CART -->
-                <div class="cart">
-
-                    <h4>
-                        🛒 Ringkasan Pesanan
-                    </h4>
-
-                    <div class="cart-empty">
-
-                        <div class="cart-icon">
-                            🍕
-                        </div>
-
-                        <strong>
-                            Belum ada pesanan
-                        </strong>
-
-                        <p>
-                            Pilih pizza yang kamu mau.
-                        </p>
-
-                    </div>
-
-                    <div class="cart-info">
-
-                        <p>
-                            Untuk melakukan pemesanan,
-                            pilih produk terlebih dahulu.
-                        </p>
-
-                        <a
-                            href="{{ route('checkout.index') }}"
-                            class="btn-checkout d-block text-center text-decoration-none"
-                        >
-                            Buat Pesanan
-                        </a>
-
-                    </div>
-
-                </div>
-
+            <div class="avatar">
+                {{ strtoupper(substr(session('nama') ?? 'P', 0, 1)) }}
             </div>
 
         </div>
@@ -622,42 +382,277 @@
     </div>
 
 
-    <script>
+    <!-- CONTENT -->
+    <div class="content">
 
-        const searchInput =
-            document.getElementById('searchProduct');
+        <div class="welcome">
 
-        searchInput.addEventListener('keyup', function () {
+            <h2>Mau makan apa hari ini? 🍕</h2>
 
-            const keyword =
-                this.value.toLowerCase();
+            <p>
+                Pilih pizza favorit kamu dan langsung pesan.
+            </p>
 
-            const products =
-                document.querySelectorAll('.product-card');
+        </div>
 
-            products.forEach(function (product) {
 
-                const name =
-                    product.querySelector('.product-name')
-                    .textContent
-                    .toLowerCase();
+        <!-- CATEGORY -->
+        <div class="category-list">
 
-                if (name.includes(keyword)) {
+            <button class="category-btn active">
+                Semua
+            </button>
 
-                    product.style.display = '';
+            <button class="category-btn">
+                Pizza
+            </button>
 
-                } else {
+            <button class="category-btn">
+                Cheese
+            </button>
 
-                    product.style.display = 'none';
+            <button class="category-btn">
+                Beef
+            </button>
 
-                }
+            <button class="category-btn">
+                Chicken
+            </button>
 
-            });
+        </div>
+
+
+        <!-- PRODUCTS -->
+        <div class="row g-4">
+
+            @php
+
+                $menuImages = [
+                    'Extra Chicken' => 'extra-chicken.jpeg',
+                    'Cheese Volcano' => 'cheese-volcano.jpeg',
+                    'Ekstra Beef' => 'ekstra-beef.jpeg',
+                    'Original Mozza' => 'original-mozza.jpeg',
+                    'Original Cheese Volcano' => 'original-cheese-volcano.jpeg',
+                    'Long Pizza' => 'long-pizza.jpeg',
+                ];
+
+                $menuPrices = [
+                    'Extra Chicken' => [
+                        'Medium' => 55000,
+                        'Large' => 80000,
+                        'Extra Large' => 95000,
+                    ],
+
+                    'Cheese Volcano' => [
+                        'Medium' => 68000,
+                        'Large' => 93000,
+                        'Extra Large' => 105000,
+                    ],
+
+                    'Ekstra Beef' => [
+                        'Medium' => 75000,
+                        'Large' => 105000,
+                        'Extra Large' => 125000,
+                    ],
+
+                    'Original Mozza' => [
+                        'Mini' => 25000,
+                        'Medium' => 40000,
+                        'Large' => 65000,
+                        'Extra Large' => 85000,
+                    ],
+
+                    'Original Cheese Volcano' => [
+                        'Medium' => 55000,
+                        'Large' => 78000,
+                        'Extra Large' => 90000,
+                    ],
+
+                    'Long Pizza' => [
+                        'Original' => 88000,
+                        'Extra Mozza' => 100000,
+                        'Extra Ayam' => 100000,
+                        'Extra Beef' => 120000,
+                    ],
+                ];
+
+            @endphp
+
+
+            @forelse ($products as $product)
+
+                @php
+
+                    $namaProduk = $product->name;
+
+                    $image = $menuImages[$namaProduk] ?? null;
+
+                    $prices = $menuPrices[$namaProduk]
+                        ?? [
+                            'Normal' => $product->price
+                        ];
+
+                    $firstSize = array_key_first($prices);
+
+                    $firstPrice = $prices[$firstSize];
+
+                @endphp
+
+
+                <div class="col-xl-4 col-lg-6 col-md-6 product-item"
+                     data-name="{{ strtolower($namaProduk) }}">
+
+                    <div class="product-card">
+
+                        <!-- FOTO -->
+                        <div class="product-image">
+
+                            @if ($image)
+
+                                <img
+                                    src="{{ asset('images/pizza/' . $image) }}"
+                                    alt="{{ $namaProduk }}"
+                                >
+
+                            @else
+
+                                <img
+                                    src="{{ asset('images/pizza.jpg') }}"
+                                    alt="{{ $namaProduk }}"
+                                >
+
+                            @endif
+
+                        </div>
+
+
+                        <!-- BODY -->
+                        <div class="product-body">
+
+                            <div class="product-name">
+                                {{ $namaProduk }}
+                            </div>
+
+                            <div class="product-description">
+                                {{ $product->description ?? 'Pizza lezat khas Pizza Moza.' }}
+                            </div>
+
+
+                            <div class="size-title">
+                                Pilih ukuran
+                            </div>
+
+                            <div class="size-buttons">
+
+                                @foreach ($prices as $size => $price)
+
+                                    <button
+                                        type="button"
+                                        class="size-btn {{ $loop->first ? 'active' : '' }}"
+                                        data-price="{{ $price }}"
+                                        onclick="changePrice(this)"
+                                    >
+                                        {{ $size }}
+                                    </button>
+
+                                @endforeach
+
+                            </div>
+
+
+                            <div class="product-bottom">
+
+                                <div class="price">
+                                    Rp {{ number_format($firstPrice, 0, ',', '.') }}
+                                </div>
+
+                                <a
+                                    href="{{ route('checkout.index') }}"
+                                    class="btn-order"
+                                >
+                                    Pesan
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            @empty
+
+                <div class="col-12">
+
+                    <div class="no-product">
+                        Belum ada produk.
+                    </div>
+
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    function changePrice(button) {
+
+        const card = button.closest('.product-card');
+
+        const price = button.getAttribute('data-price');
+
+        const priceElement = card.querySelector('.price');
+
+        priceElement.innerText =
+            'Rp ' + Number(price).toLocaleString('id-ID');
+
+
+        const buttons =
+            card.querySelectorAll('.size-btn');
+
+        buttons.forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+
+        button.classList.add('active');
+    }
+
+
+    // SEARCH
+    const searchInput =
+        document.getElementById('searchProduct');
+
+    searchInput.addEventListener('keyup', function() {
+
+        const keyword =
+            this.value.toLowerCase();
+
+        const products =
+            document.querySelectorAll('.product-item');
+
+        products.forEach(function(product) {
+
+            const name =
+                product.getAttribute('data-name');
+
+            if (name.includes(keyword)) {
+                product.style.display = '';
+            } else {
+                product.style.display = 'none';
+            }
 
         });
 
-    </script>
+    });
+
+</script>
 
 </body>
 </html>
-
