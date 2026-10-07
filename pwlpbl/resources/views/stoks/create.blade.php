@@ -1,31 +1,45 @@
-@extends('layouts.app')
+@extends('dashboard.admin')
+
+@section('title', 'Tambah Stok')
 
 @section('content')
 
-<div class="container">
+<div class="container-fluid">
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1">
+            Tambah Stok Produk
+        </h3>
+
+        <p class="text-secondary mb-0">
+            Tambahkan data stok produk Pizza Moza
+        </p>
+    </div>
+
 
     <div class="row justify-content-center">
 
-        <div class="col-md-6">
+        <div class="col-lg-7 col-xl-6">
 
-            <div class="card shadow-sm border-0">
+            <div class="card">
 
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">
-                        Tambah Stok Produk
-                    </h5>
-                </div>
+                <div class="card-body p-4">
 
-                <div class="card-body">
-
-                    <form action="{{ route('stoks.store') }}" method="POST">
+                    <form
+                        action="{{ route('stoks.store') }}"
+                        method="POST"
+                    >
 
                         @csrf
+
 
                         {{-- Produk --}}
                         <div class="mb-3">
 
-                            <label for="product_id" class="form-label fw-semibold">
+                            <label
+                                for="product_id"
+                                class="form-label fw-semibold"
+                            >
                                 Produk
                             </label>
 
@@ -54,17 +68,23 @@
                             </select>
 
                             @error('product_id')
+
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
+
                             @enderror
 
                         </div>
 
+
                         {{-- Tanggal --}}
                         <div class="mb-3">
 
-                            <label for="tanggal_stok" class="form-label fw-semibold">
+                            <label
+                                for="tanggal_stok"
+                                class="form-label fw-semibold"
+                            >
                                 Tanggal Stok
                             </label>
 
@@ -78,17 +98,23 @@
                             >
 
                             @error('tanggal_stok')
+
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
+
                             @enderror
 
                         </div>
 
+
                         {{-- Jumlah --}}
                         <div class="mb-3">
 
-                            <label for="jumlah_stok" class="form-label fw-semibold">
+                            <label
+                                for="jumlah_stok"
+                                class="form-label fw-semibold"
+                            >
                                 Jumlah Stok
                             </label>
 
@@ -104,17 +130,23 @@
                             >
 
                             @error('jumlah_stok')
+
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
+
                             @enderror
 
                         </div>
 
+
                         {{-- Status --}}
                         <div class="mb-4">
 
-                            <label for="status_stok" class="form-label fw-semibold">
+                            <label
+                                for="status_stok"
+                                class="form-label fw-semibold"
+                            >
                                 Status Stok
                             </label>
 
@@ -146,26 +178,29 @@
                             </select>
 
                             @error('status_stok')
+
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
+
                             @enderror
 
                         </div>
+
 
                         {{-- Tombol --}}
                         <div class="d-flex gap-2">
 
                             <button
                                 type="submit"
-                                class="btn btn-dark"
+                                class="btn btn-moza px-4"
                             >
                                 Simpan Stok
                             </button>
 
                             <a
                                 href="{{ route('stoks.index') }}"
-                                class="btn btn-secondary"
+                                class="btn btn-outline-secondary px-4"
                             >
                                 Batal
                             </a>

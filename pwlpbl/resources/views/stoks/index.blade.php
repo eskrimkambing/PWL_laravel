@@ -1,64 +1,55 @@
-@extends('layouts.app')
+@extends('dashboard.admin')
+
+@section('title', 'Data Stok')
 
 @section('content')
 
-<div class="card shadow-sm border-0">
+<div class="container-fluid">
 
-    {{-- Header --}}
-    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+```
+{{-- Header --}}
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-        <div>
-            <h5 class="mb-0 fw-bold text-dark">
-                Data Stok Produk
-            </h5>
+    <div>
+        <h3 class="fw-bold mb-1">
+            Data Stok Produk
+        </h3>
 
-            <small class="text-muted">
-                Kelola stok produk Pizza Moza
-            </small>
-        </div>
-
-        <div class="d-flex gap-2">
-
-            {{-- Tombol kembali ke dashboard --}}
-            <a
-                href="{{ route('dashboard.admin') }}"
-                class="btn btn-secondary btn-sm px-3"
-            >
-                ← Kembali ke Dashboard
-            </a>
-
-            {{-- Tombol tambah stok --}}
-            <a
-                href="{{ route('stoks.create') }}"
-                class="btn btn-dark btn-sm px-3"
-            >
-                + Tambah Stok
-            </a>
-
-        </div>
-
+        <p class="text-secondary mb-0">
+            Kelola stok produk Pizza Moza
+        </p>
     </div>
 
+    <a
+        href="{{ route('stoks.create') }}"
+        class="btn btn-moza px-3"
+    >
+        + Tambah Stok
+    </a>
 
-    {{-- Isi --}}
+</div>
+
+
+{{-- Pesan sukses --}}
+@if (session('success'))
+
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+
+@endif
+
+
+{{-- Tabel --}}
+<div class="card">
+
     <div class="card-body p-0">
-
-        {{-- Pesan sukses --}}
-        @if (session('success'))
-
-            <div class="alert alert-success m-3">
-                {{ session('success') }}
-            </div>
-
-        @endif
-
 
         <div class="table-responsive">
 
             <table class="table table-hover align-middle mb-0">
 
-                <thead class="table-dark">
-
+                <thead>
                     <tr>
 
                         <th class="text-center" style="width: 5%">
@@ -86,7 +77,6 @@
                         </th>
 
                     </tr>
-
                 </thead>
 
 
@@ -114,9 +104,7 @@
 
                             {{-- Tanggal --}}
                             <td>
-
                                 {{ \Carbon\Carbon::parse($stok->tanggal_stok)->format('d-m-Y') }}
-
                             </td>
 
 
@@ -153,7 +141,6 @@
                             {{-- Aksi --}}
                             <td class="text-center">
 
-                                {{-- Edit --}}
                                 <a
                                     href="{{ route('stoks.edit', $stok->id_stok) }}"
                                     class="btn btn-outline-warning btn-sm"
@@ -162,7 +149,6 @@
                                 </a>
 
 
-                                {{-- Hapus --}}
                                 <form
                                     action="{{ route('stoks.destroy', $stok->id_stok) }}"
                                     method="POST"
@@ -171,7 +157,6 @@
                                 >
 
                                     @csrf
-
                                     @method('DELETE')
 
                                     <button
@@ -193,7 +178,7 @@
 
                             <td
                                 colspan="6"
-                                class="text-center py-4 text-muted"
+                                class="text-center py-5 text-secondary"
                             >
                                 Belum ada data stok.
                             </td>
@@ -211,5 +196,9 @@
     </div>
 
 </div>
+```
+
+</div>
 
 @endsection
+
