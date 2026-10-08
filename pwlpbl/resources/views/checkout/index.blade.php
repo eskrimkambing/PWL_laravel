@@ -15,6 +15,23 @@
         background: #2d211b;
     }
 
+    .product-thumb {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+        flex-shrink: 0;
+        border: 1px solid var(--bs-border-color);
+    }
+
+    .product-thumb-empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bs-body-bg);
+        font-size: 30px;
+    }
+
     .checkout-box {
         background: var(--bs-card-bg);
         border: 1px solid var(--bs-border-color);
@@ -102,18 +119,33 @@
                     <div class="col-md-6 col-xl-4">
                         <div class="product-card p-3">
 
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="mb-0">{{ $product->name }}</h5>
-                                <span class="badge bg-secondary">{{ $product->category }}</span>
-                            </div>
+                            <div class="d-flex gap-3 mb-3">
 
-                            <div class="price fw-semibold mb-2">
-                                Rp {{ number_format($product->price, 0, ',', '.') }}
-                            </div>
+                                {{-- GAMBAR KECIL --}}
+                                @if ($product->image)
+                                    <img src="{{ asset('storage/' . $product->image) }}"
+                                         alt="{{ $product->name }}"
+                                         class="product-thumb">
+                                @else
+                                    <div class="product-thumb product-thumb-empty">🍕</div>
+                                @endif
 
-                            <p class="text-secondary small mb-3">
-                                {{ $product->description ?? 'Tidak ada deskripsi.' }}
-                            </p>
+                                {{-- INFO PRODUK --}}
+                                <div class="flex-grow-1" style="min-width:0;">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                        <h5 class="mb-0">{{ $product->name }}</h5>
+                                        <span class="badge bg-secondary">{{ $product->category }}</span>
+                                    </div>
+
+                                    <div class="price fw-semibold mb-1">
+                                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                                    </div>
+
+                                    <p class="text-secondary small mb-0">
+                                        {{ $product->description ?? 'Tidak ada deskripsi.' }}
+                                    </p>
+                                </div>
+                            </div>
 
                             <label class="form-label small">Jumlah</label>
                             <input type="number"

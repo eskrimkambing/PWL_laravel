@@ -12,7 +12,7 @@ class StokController extends Controller
     public function index()
     {
         $stoks = Stok::with('product')
-            ->latest('tanggal_stok')
+            ->latest()
             ->get();
 
         return view('stoks.index', compact('stoks'));
