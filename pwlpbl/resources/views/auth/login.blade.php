@@ -34,7 +34,7 @@
         }
 
         .card {
-            background: rgba(58, 48, 45, 0.94);
+            background: rgba(209, 120, 79, 0.8);
             padding: 32px;
             border-radius: 15px;
             width: 100%;
@@ -151,7 +151,7 @@
         }
 
         .bawah a {
-            color: #ff6b5f;
+            color: #0222c2;
             text-decoration: none;
         }
 

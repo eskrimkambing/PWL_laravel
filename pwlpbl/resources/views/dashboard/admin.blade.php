@@ -161,6 +161,11 @@
                 Kelola Produk
             </a>
 
+            <a class="nav-link {{ request()->routeIs('pesanans.*') ? 'active' : '' }}"
+                href="{{ route('pesanans.index') }}">
+                <span>📋</span> Kelola Pesanan
+            </a>
+
             <a
                 class="nav-link {{ request()->routeIs('kategoris.*') ? 'active' : '' }}"
                 href="{{ route('kategoris.index') }}"
