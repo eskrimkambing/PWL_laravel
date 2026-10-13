@@ -36,6 +36,23 @@
         --bs-table-color: #f3e9e1;
         --bs-table-border-color: var(--bs-border-color);
     }
+
+    .order-thumb {
+        width: 56px;
+        height: 56px;
+        object-fit: cover;
+        border-radius: 10px;
+        flex-shrink: 0;
+        border: 1px solid var(--bs-border-color);
+    }
+
+    .order-thumb-empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bs-body-bg);
+        font-size: 24px;
+    }
 </style>
 @endpush
 
@@ -135,7 +152,21 @@
                 <tbody>
                     @forelse ($pesanan->detailPesanans as $detail)
                         <tr>
-                            <td>{{ $detail->product->name ?? 'Produk tidak ditemukan' }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+
+                                    {{-- GAMBAR PRODUK --}}
+                                    @if ($detail->product && $detail->product->image)
+                                        <img src="{{ $detail->product->image }}"
+                                             alt="{{ $detail->product->name }}"
+                                             class="order-thumb">
+                                    @else
+                                        <div class="order-thumb order-thumb-empty">🍕</div>
+                                    @endif
+
+                                    <span>{{ $detail->product->name ?? 'Produk tidak ditemukan' }}</span>
+                                </div>
+                            </td>
                             <td class="text-center">{{ $detail->jumlah }}</td>
                             <td class="text-end">
                                 Rp {{ number_format($detail->harga, 0, ',', '.') }}

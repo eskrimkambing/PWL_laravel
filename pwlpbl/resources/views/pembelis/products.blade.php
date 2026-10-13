@@ -22,7 +22,7 @@
 @section('content')
 
     @php
-        // FOTO PIZZA
+        // FOTO CADANGAN untuk produk lama yang belum punya gambar di database
         $fotoPizza = [
             'Extra Chicken' => 'extra-chicken.jpeg',
             'Cheese Volcano' => 'cheese-volcano.jpeg',
@@ -32,7 +32,6 @@
             'Long Pizza' => 'long-pizza.jpeg',
         ];
 
-        // FOTO CEMILAN
         $fotoCemilan = [
             'Tape Bakar Original' => 'tape-bakar-original.jpeg',
             'Singkong Keju' => 'singkong-keju.jpeg',
@@ -55,19 +54,26 @@
         @forelse ($products as $product)
 
             @php
-                if (isset($fotoPizza[$product->name])) {
-                    $pathFoto = 'images/pizza/' . $fotoPizza[$product->name];
-                } elseif (isset($fotoCemilan[$product->name])) {
-                    $pathFoto = 'images/cemilan/' . $fotoCemilan[$product->name];
+                // 1. Pakai gambar dari database kalau ada
+                // 2. Kalau tidak ada, pakai foto cadangan di folder public/images
+                if ($product->image) {
+                    $srcFoto = $product->image;
                 } else {
-                    $pathFoto = 'images/pizza.jpg';
+                    if (isset($fotoPizza[$product->name])) {
+                        $pathFoto = 'images/pizza/' . $fotoPizza[$product->name];
+                    } elseif (isset($fotoCemilan[$product->name])) {
+                        $pathFoto = 'images/cemilan/' . $fotoCemilan[$product->name];
+                    } else {
+                        $pathFoto = 'images/pizza.jpg';
+                    }
+                    $srcFoto = asset($pathFoto);
                 }
             @endphp
 
             <div class="col-sm-6 col-lg-4 col-xxl-3 product-item">
                 <div class="card h-100 overflow-hidden">
 
-                    <img src="{{ asset($pathFoto) }}"
+                    <img src="{{ $srcFoto }}"
                          alt="{{ $product->name }}"
                          class="product-image">
 

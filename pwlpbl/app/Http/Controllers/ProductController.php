@@ -39,7 +39,11 @@ class ProductController extends Controller
             'price'       => 'required|numeric|min:0',
             'portion'     => 'required|string',
             'description' => 'nullable|string',
+            'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:1024',
         ]);
+
+        // Ubah file gambar jadi teks base64 sebelum disimpan
+        $validated['image'] = $this->imageToBase64($request->file('image'));
 
         Product::create($validated);
 
@@ -65,7 +69,14 @@ class ProductController extends Controller
             'price'       => 'required|numeric|min:0',
             'portion'     => 'required|string',
             'description' => 'nullable|string',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $this->imageToBase64($request->file('image'));
+        } else {
+            unset($validated['image']);
+        }
 
         $product->update($validated);
 
@@ -82,5 +93,11 @@ class ProductController extends Controller
         return redirect()
             ->route('products.index')
             ->with('success', 'Produk berhasil dihapus!');
+    }
+
+    // Mengubah file gambar menjadi teks base64 (data URI)
+    private function imageToBase64($file): string
+    {
+        return 'data:' . $file->getMimeType() . ';base64,' . base64_encode(file_get_contents($file->getRealPath()));
     }
 }

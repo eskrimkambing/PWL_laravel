@@ -1,4 +1,3 @@
-
 @extends('dashboard.admin')
 
 @section('title', 'Tambah Menu')
@@ -10,7 +9,7 @@
 
             <div class="card shadow-sm border-0">
 
-                <div class=>
+                <div class="card-header">
                     <h5 class="mb-0 fw-bold">
                         Tambah Menu Baru
                     </h5>
@@ -18,7 +17,7 @@
 
                 <div class="card-body p-4">
 
-                    <form action="{{ route('products.store') }}" method="POST">
+                    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         {{-- Nama Menu --}}
@@ -142,6 +141,40 @@
                             @enderror
                         </div>
 
+                        {{-- Gambar Produk --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                Gambar Menu
+                            </label>
+
+                            <input
+                                type="file"
+                                name="image"
+                                id="image"
+                                class="form-control @error('image') is-invalid @enderror"
+                                accept="image/*"
+                                required
+                            >
+
+                            <small class="text-secondary">
+                                Format JPG, PNG, atau WEBP. Maksimal 1 MB.
+                            </small>
+
+                            @error('image')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            {{-- Preview gambar sebelum disimpan --}}
+                            <div class="mt-2">
+                                <img id="preview"
+                                     src=""
+                                     alt="Preview"
+                                     style="display:none; width:120px; height:120px; object-fit:cover; border-radius:10px;">
+                            </div>
+                        </div>
+
                         {{-- Tombol --}}
                         <div class="d-flex justify-content-end gap-2">
 
@@ -154,7 +187,7 @@
 
                             <button
                                 type="submit"
-                                class="btn btn-dark"
+                                class="btn btn-moza"
                             >
                                 Simpan Menu
                             </button>
@@ -170,3 +203,20 @@
     </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    // Tampilkan preview gambar saat file dipilih
+    document.getElementById('image').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('preview');
+
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        } else {
+            preview.style.display = 'none';
+        }
+    });
+</script>
+@endpush

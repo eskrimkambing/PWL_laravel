@@ -121,9 +121,9 @@
 
                             <div class="d-flex gap-3 mb-3">
 
-                                {{-- GAMBAR KECIL --}}
+                                {{-- GAMBAR KECIL (dari database) --}}
                                 @if ($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}"
+                                    <img src="{{ $product->image }}"
                                          alt="{{ $product->name }}"
                                          class="product-thumb">
                                 @else

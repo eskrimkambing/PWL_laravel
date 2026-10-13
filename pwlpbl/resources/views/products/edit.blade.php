@@ -9,7 +9,7 @@
 
             <div class="card shadow-sm border-0">
 
-                <div class="card-header bg-white py-3">
+                <div class="card-header py-3">
                     <h5 class="mb-0 fw-bold">
                         Edit Menu: {{ $product->name }}
                     </h5>
@@ -17,7 +17,7 @@
 
                 <div class="card-body p-4">
 
-                    <form action="{{ route('products.update', $product->id) }}" method="POST">
+                    <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -115,6 +115,50 @@
                             @enderror
                         </div>
 
+                        {{-- Gambar Produk --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                Gambar Menu
+                            </label>
+
+                            {{-- Gambar saat ini --}}
+                            @if ($product->image)
+                                <div class="mb-2">
+                                    <small class="text-secondary d-block mb-1">Gambar saat ini:</small>
+                                    <img src="{{ $product->image }}"
+                                         alt="{{ $product->name }}"
+                                         style="width:120px; height:120px; object-fit:cover; border-radius:10px;">
+                                </div>
+                            @endif
+
+                            <input
+                                type="file"
+                                name="image"
+                                id="image"
+                                class="form-control @error('image') is-invalid @enderror"
+                                accept="image/*"
+                            >
+
+                            <small class="text-secondary">
+                                Kosongkan jika tidak ingin mengganti gambar. Format JPG, PNG, atau WEBP, maksimal 1 MB.
+                            </small>
+
+                            @error('image')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            {{-- Preview gambar baru sebelum disimpan --}}
+                            <div class="mt-2">
+                                <small id="preview-label" class="text-secondary d-none mb-1">Gambar baru:</small>
+                                <img id="preview"
+                                     src=""
+                                     alt="Preview"
+                                     style="display:none; width:120px; height:120px; object-fit:cover; border-radius:10px;">
+                            </div>
+                        </div>
+
                         {{-- Tombol --}}
                         <div class="d-flex justify-content-end gap-2">
 
@@ -137,3 +181,23 @@
     </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    // Tampilkan preview gambar baru saat file dipilih
+    document.getElementById('image').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('preview');
+        const label = document.getElementById('preview-label');
+
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+            label.classList.remove('d-none');
+        } else {
+            preview.style.display = 'none';
+            label.classList.add('d-none');
+        }
+    });
+</script>
+@endpush

@@ -13,6 +13,7 @@ class Product extends Model
         'price',
         'portion',
         'description',
+        'image',
     ];
 
     public function stoks(): HasMany
