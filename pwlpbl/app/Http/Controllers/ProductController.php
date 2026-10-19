@@ -34,11 +34,11 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
+            'nama'        => 'required|string|max:255',
             'category'    => 'required|string',
-            'price'       => 'required|numeric|min:0',
+            'harga_satuan'=> 'required|numeric|min:0',
             'portion'     => 'required|string',
-            'description' => 'nullable|string',
+            'deskripsi'   => 'nullable|string',
             'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:1024',
         ]);
 

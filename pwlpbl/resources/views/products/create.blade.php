@@ -51,8 +51,8 @@
                                 </label>
 
                                 <select
-                                    name="category"
-                                    class="form-select @error('category') is-invalid @enderror"
+                                    name="kategori"
+                                    class="form-select @error('kategori') is-invalid @enderror"
                                     required
                                 >
                                     <option value="">
@@ -128,13 +128,13 @@
                             </label>
 
                             <textarea
-                                name="description"
+                                name="deskripsi"
                                 rows="3"
-                                class="form-control @error('description') is-invalid @enderror"
+                                class="form-control @error('deskripsi') is-invalid @enderror"
                                 placeholder="Keterangan bahan dan topping"
-                            >{{ old('description') }}</textarea>
+                            >{{ old('deskripsi') }}</textarea>
 
-                            @error('description')
+                            @error('deskripsi')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
