@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('id_admin');
             $table->string('email', 100)->unique();
             $table->string('password', 255);
+            $table->string('nama','255');
         });
 
     }

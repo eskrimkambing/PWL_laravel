@@ -38,6 +38,7 @@ class PenggunaController extends Controller
             Admin::create([
                 'email'    => $request->email,
                 'password' => Hash::make($request->password),
+                'nama'     => $request -> nama,
             ]);
         } else {
             Pembeli::create([
@@ -75,7 +76,7 @@ class PenggunaController extends Controller
             'alamat'   => 'nullable|string',
         ]);
 
-        $data = ['email' => $request->email];
+        $data = ['email' => $request->email, 'nama' => $request ->nama,];
 
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);

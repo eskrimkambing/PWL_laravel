@@ -10,6 +10,6 @@ class Admin extends Model
     protected $primaryKey = 'id_admin';   // sesuaikan, mis. 'id_admin'
     public $timestamps = false;     // ubah ke true kalau tabel punya created_at/updated_at
 
-    protected $fillable = ['email', 'password'];
+    protected $fillable = ['nama','email', 'password'];
     protected $hidden = ['password'];
 }
