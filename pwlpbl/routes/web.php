@@ -13,7 +13,19 @@ use App\Http\Controllers\PembeliController;
 use App\Http\Controllers\PembayaranController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn() => redirect()->route('login'));
+
+// ==========================================================
+// ROUTE UMUM
+// ==========================================================
+
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
+
+// ==========================================================
+// AUTH
+// ==========================================================
 
 Route::get('/login', [AuthController::class, 'showLogin'])
     ->name('login');
@@ -31,35 +43,70 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
 
-/*
-|--------------------------------------------------------------------------
-| ROUTE ADMIN
-|--------------------------------------------------------------------------
-*/
+// ==========================================================
+// ROUTE ADMIN
+// ==========================================================
 
 Route::middleware('role:admin')->group(function () {
 
+    // Dashboard Admin
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
         ->name('dashboard.admin');
 
 
-    // CRUD Produk
+    // ======================================================
+    // PRODUK
+    // ======================================================
+
     Route::resource('products', ProductController::class);
 
 
-    // CRUD Kategori
+    // ======================================================
+    // KATEGORI
+    // ======================================================
+
     Route::resource('kategoris', KategoriController::class);
 
 
-    // CRUD Pembeli
+    // ======================================================
+    // PEMBELI
+    // ======================================================
+
     Route::resource('pembelis', PembeliController::class);
 
 
-    // CRUD Pembayaran
+    // ======================================================
+    // PEMBAYARAN
+    // ======================================================
+
     Route::resource('pembayaran', PembayaranController::class);
 
 
-    // Pengguna
+   // ======================================================
+// KELOLA PESANAN ADMIN
+// ======================================================
+
+// Menampilkan semua pesanan
+Route::get('/admin/pesanans', [PesananController::class, 'index'])
+    ->name('admin.pesanans.indexAdmin');
+
+// Detail pesanan (admin)
+Route::get('/admin/pesanans/{id}', [PesananController::class, 'show'])
+    ->name('admin.pesanans.show');
+
+// Halaman edit pesanan
+Route::get('/admin/pesanans/{id}/edit', [PesananController::class, 'edit'])
+    ->name('admin.pesanans.edit');
+
+// Simpan perubahan pesanan
+Route::put('/admin/pesanans/{id}', [PesananController::class, 'update'])
+    ->name('admin.pesanans.update');
+
+
+    // ======================================================
+    // PENGGUNA
+    // ======================================================
+
     Route::get('/pengguna', [PenggunaController::class, 'index'])
         ->name('pengguna.index');
 
@@ -72,14 +119,14 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/pengguna/{role}/{id}/edit', [PenggunaController::class, 'edit'])
         ->name('pengguna.edit');
 
-    Route::put('/pengguna/{role}/{id}', [PenggunaController::class, 'update'])
-        ->name('pengguna.update');
-
     Route::delete('/pengguna/{role}/{id}', [PenggunaController::class, 'destroy'])
         ->name('pengguna.destroy');
 
 
-    // Stok
+    // ======================================================
+    // STOK
+    // ======================================================
+
     Route::get('/stoks', [StokController::class, 'index'])
         ->name('stoks.index');
 
@@ -97,17 +144,17 @@ Route::middleware('role:admin')->group(function () {
 
     Route::delete('/stoks/{stok}', [StokController::class, 'destroy'])
         ->name('stoks.destroy');
+
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| ROUTE PEMBELI
-|--------------------------------------------------------------------------
-*/
+// ==========================================================
+// ROUTE PEMBELI
+// ==========================================================
 
 Route::middleware('role:pembeli')->group(function () {
 
+    // Dashboard Pembeli
     Route::get('/pembeli/dashboard', function () {
 
         $products = \App\Models\Product::latest()->get();
@@ -117,17 +164,26 @@ Route::middleware('role:pembeli')->group(function () {
     })->name('dashboard.pembeli');
 
 
-    // Produk Pembeli
+    // ======================================================
+    // PRODUK PEMBELI
+    // ======================================================
+
     Route::get('/pembeli/products', [ProductController::class, 'pembeli'])
         ->name('pembeli.products');
 
 
-    // Kategori
+    // ======================================================
+    // KATEGORI PEMBELI
+    // ======================================================
+
     Route::get('/pembeli/kategoris', [KategoriController::class, 'index'])
         ->name('pembeli.kategoris');
 
 
-    // Pesanan
+    // ======================================================
+    // PESANAN PEMBELI
+    // ======================================================
+
     Route::get('/pesanans', [PesananController::class, 'index'])
         ->name('pesanans.index');
 
@@ -141,7 +197,10 @@ Route::middleware('role:pembeli')->group(function () {
         ->name('pesanans.update');
 
 
-    // Checkout
+    // ======================================================
+    // CHECKOUT
+    // ======================================================
+
     Route::get('/checkout', [CheckoutController::class, 'index'])
         ->name('checkout.index');
 
@@ -149,7 +208,10 @@ Route::middleware('role:pembeli')->group(function () {
         ->name('checkout.store');
 
 
-    // Profil
+    // ======================================================
+    // PROFIL
+    // ======================================================
+
     Route::get('/profil', [ProfilController::class, 'show'])
         ->name('profil.show');
 
@@ -161,4 +223,5 @@ Route::middleware('role:pembeli')->group(function () {
 
     Route::delete('/profil', [ProfilController::class, 'destroy'])
         ->name('profil.destroy');
+
 });

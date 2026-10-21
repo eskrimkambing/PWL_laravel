@@ -9,18 +9,39 @@ use Midtrans\Snap;
 
 class PesananController extends Controller
 {
-    // Menampilkan daftar pesanan
+    /**
+     * Menampilkan daftar pesanan.
+     * Admin melihat semua pesanan (view: pesanans.indexAdmin).
+     * Pembeli hanya melihat pesanannya sendiri (view: pesanans.index).
+     */
     public function index()
     {
-        $pesanans = Pesanan::with([
+        $query = Pesanan::with([
             'pembeli',
             'detailPesanans.product'
-        ])->latest()->get();
+        ]);
+
+        // Pembeli hanya boleh melihat pesanan miliknya.
+        if (session('role') === 'pembeli') {
+            $query->where('pembeli_id', session('user_id'));
+        } elseif (session('role') !== 'admin') {
+            abort(403);
+        }
+
+        $pesanans = $query->latest()->get();
+
+        // Pisahkan tampilan admin dan pembeli.
+        if (session('role') === 'admin') {
+            return view('pesanans.indexAdmin', compact('pesanans'));
+        }
 
         return view('pesanans.index', compact('pesanans'));
     }
 
-    // Menampilkan detail pesanan
+    /**
+     * Menampilkan detail pesanan.
+     * Admin memakai view pesanans.showAdmin, pembeli memakai pesanans.show.
+     */
     public function show($id)
     {
         $pesanan = Pesanan::with([
@@ -28,21 +49,30 @@ class PesananController extends Controller
             'detailPesanans.product'
         ])->findOrFail($id);
 
-        // Pembeli hanya boleh melihat pesanannya sendiri
+        // Pembeli hanya boleh melihat pesanannya sendiri.
         if (session('role') === 'pembeli') {
             abort_unless(
-                (int) $pesanan->pembeli_id ===
-                (int) session('user_id'),
+                (int) $pesanan->pembeli_id === (int) session('user_id'),
                 403
             );
+        } elseif (session('role') !== 'admin') {
+            abort(403);
+        }
+
+        // Pisahkan tampilan admin dan pembeli.
+        if (session('role') === 'admin') {
+            return view('pesanans.showAdmin', compact('pesanan'));
         }
 
         return view('pesanans.show', compact('pesanan'));
     }
 
-    // Membuat token pembayaran Midtrans
+    /**
+     * Membuat token pembayaran Midtrans.
+     */
     public function bayar($id)
     {
+        // Hanya pembeli yang boleh melakukan pembayaran.
         abort_unless(session('role') === 'pembeli', 403);
 
         $pesanan = Pesanan::with([
@@ -50,36 +80,29 @@ class PesananController extends Controller
             'detailPesanans.product'
         ])->findOrFail($id);
 
-        // Memastikan pesanan milik pembeli yang login
+        // Pastikan pesanan milik pembeli yang login.
         abort_unless(
-            (int) $pesanan->pembeli_id ===
-            (int) session('user_id'),
+            (int) $pesanan->pembeli_id === (int) session('user_id'),
             403
         );
 
+        // Periksa status pembayaran.
         if ($pesanan->status_pembayaran === 'Dibayar') {
-            return back()->with(
-                'error',
-                'Pesanan ini sudah dibayar.'
-            );
+            return back()->with('error', 'Pesanan ini sudah dibayar.');
         }
 
+        // Periksa detail pesanan.
         if ($pesanan->detailPesanans->isEmpty()) {
-            return back()->with(
-                'error',
-                'Detail pesanan tidak ditemukan.'
-            );
+            return back()->with('error', 'Detail pesanan tidak ditemukan.');
         }
 
         $pembeli = $pesanan->pembeli;
 
         if (!$pembeli) {
-            return back()->with(
-                'error',
-                'Data pembeli tidak ditemukan.'
-            );
+            return back()->with('error', 'Data pembeli tidak ditemukan.');
         }
 
+        // Periksa konfigurasi Midtrans.
         if (!config('services.midtrans.server_key')) {
             return back()->with(
                 'error',
@@ -87,6 +110,7 @@ class PesananController extends Controller
             );
         }
 
+        // Konfigurasi Midtrans.
         Config::$serverKey = config('services.midtrans.server_key');
         Config::$isProduction = (bool) config(
             'services.midtrans.is_production',
@@ -95,14 +119,12 @@ class PesananController extends Controller
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
+        // Siapkan daftar produk untuk pembayaran.
         $items = [];
 
         foreach ($pesanan->detailPesanans as $detail) {
             if (!$detail->product) {
-                return back()->with(
-                    'error',
-                    'Data produk tidak ditemukan.'
-                );
+                return back()->with('error', 'Data produk tidak ditemukan.');
             }
 
             $namaProduk = $detail->product->name
@@ -110,29 +132,34 @@ class PesananController extends Controller
                 ?? 'Produk';
 
             $items[] = [
-                'id' => (string) $detail->product_id,
-                'price' => (int) $detail->harga,
+                'id'       => (string) $detail->product_id,
+                'price'    => (int) $detail->harga,
                 'quantity' => (int) $detail->jumlah,
-                'name' => mb_substr($namaProduk, 0, 50),
+                'name'     => mb_substr($namaProduk, 0, 50),
             ];
         }
 
+        // Data transaksi Midtrans.
         $params = [
             'transaction_details' => [
-                'order_id' => 'PZ-' . $pesanan->id_pesanan,
+                'order_id'     => 'PZ-' . $pesanan->id_pesanan,
                 'gross_amount' => (int) $pesanan->total_harga,
             ],
+
             'item_details' => $items,
+
             'customer_details' => [
                 'first_name' => $pembeli->nama ?: 'Pembeli',
-                'email' => $pembeli->email,
-                'phone' => $pembeli->no_telp ?? '',
+                'email'      => $pembeli->email,
+                'phone'      => $pembeli->no_telp ?? '',
             ],
         ];
 
         try {
+            // Buat token pembayaran.
             $token = Snap::getSnapToken($params);
 
+            // Simpan token ke database.
             $pesanan->update([
                 'snap_token' => $token,
             ]);
@@ -152,7 +179,24 @@ class PesananController extends Controller
         }
     }
 
-    // Memperbarui status pesanan oleh admin
+    /**
+     * Menampilkan halaman edit pesanan khusus admin.
+     */
+    public function edit($id)
+    {
+        abort_unless(session('role') === 'admin', 403);
+
+        $pesanan = Pesanan::with([
+            'pembeli',
+            'detailPesanans.product'
+        ])->findOrFail($id);
+
+        return view('pesanans.edit', compact('pesanan'));
+    }
+
+    /**
+     * Memperbarui status pesanan oleh admin.
+     */
     public function update(Request $request, $id)
     {
         abort_unless(session('role') === 'admin', 403);
@@ -167,8 +211,9 @@ class PesananController extends Controller
             'status' => $request->status,
         ]);
 
+        // Kembali ke halaman kelola pesanan admin.
         return redirect()
-            ->route('pesanans.index')
+            ->route('admin.pesanans.indexAdmin')
             ->with('success', 'Status pesanan berhasil diperbarui!');
     }
 }

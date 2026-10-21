@@ -161,9 +161,12 @@
                 Kelola Produk
             </a>
 
-            <a class="nav-link {{ request()->routeIs('pesanans.*') ? 'active' : '' }}"
-                href="{{ route('pesanans.index') }}">
-                <span>📋</span> Kelola Pesanan
+            <a
+                class="nav-link {{ request()->routeIs('admin.pesanans.*') ? 'active' : '' }}"
+                href="{{ route('admin.pesanans.indexAdmin') }}"
+            >
+                <span>📋</span>
+                Kelola Pesanan
             </a>
 
             <a
