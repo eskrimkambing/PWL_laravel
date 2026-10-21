@@ -40,6 +40,12 @@
         background: var(--moza-accent);
         color: var(--moza-accent-text);
     }
+
+    .danger-zone {
+        border: 1px solid rgba(220, 53, 69, 0.4);
+        background: rgba(220, 53, 69, 0.06);
+        border-radius: 14px;
+    }
 </style>
 @endpush
 
@@ -58,7 +64,7 @@
         <div class="alert alert-danger" style="max-width: 850px;">{{ session('error') }}</div>
     @endif
 
-    <div class="card" style="max-width: 850px;">
+    <div class="card mb-4" style="max-width: 850px;">
         <div class="card-body p-4">
 
             {{-- HEADER PROFIL --}}
@@ -124,4 +130,71 @@
 
         </div>
     </div>
+
+    {{-- ================= HAPUS AKUN ================= --}}
+    <div class="danger-zone p-4" style="max-width: 850px;">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h5 class="text-danger mb-1">Hapus Akun</h5>
+                <p class="text-secondary small mb-0">
+                    Akun dan data profil kamu akan dihapus permanen dan tidak bisa dikembalikan.
+                </p>
+            </div>
+
+            <button type="button" class="btn btn-outline-danger"
+                    data-bs-toggle="modal" data-bs-target="#modalHapusAkun">
+                🗑️ Hapus Akun Saya
+            </button>
+        </div>
+    </div>
+
+    {{-- MODAL KONFIRMASI --}}
+    <div class="modal fade" id="modalHapusAkun" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Hapus akun?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form action="{{ route('profil.destroy') }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+
+                    <div class="modal-body">
+                        <p>
+                            Akun <strong>{{ $pembeli->email }}</strong> akan dihapus permanen
+                            dan kamu akan langsung keluar. Tindakan ini tidak bisa dibatalkan.
+                        </p>
+
+                        <label class="form-label small" for="konfirmasiHapus">
+                            Ketik <strong>HAPUS</strong> untuk melanjutkan
+                        </label>
+                        <input type="text" id="konfirmasiHapus" class="form-control"
+                               autocomplete="off" placeholder="HAPUS">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                        <button type="submit" id="tombolHapus" class="btn btn-danger" disabled>
+                            Ya, Hapus Akun
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+<script>
+    // Tombol hapus baru aktif setelah pengguna mengetik "HAPUS"
+    document.getElementById('konfirmasiHapus').addEventListener('input', function () {
+        document.getElementById('tombolHapus').disabled = this.value.trim() !== 'HAPUS';
+    });
+</script>
+@endpush

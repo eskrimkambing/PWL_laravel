@@ -69,16 +69,20 @@ class ProfilController extends Controller
         return $depan . $sisa;
     }
 
+    /**
+     * Pembeli menghapus akunnya sendiri.
+     * Tidak bisa dihapus selama masih ada pesanan yang berjalan
+     * (status selain Selesai dan Dibatalkan).
+     */
     public function destroy(Request $request)
     {
         $idPembeli = session('user_id');
 
-        // Cek dulu ada pesanan yang belum selesai atau tidak
-        $adaPesananBelumSelesai = Pesanan::where('pembeli_id', $idPembeli)
-            ->where('status', '!=', 'selesai')
+        $adaPesananBerjalan = Pesanan::where('pembeli_id', $idPembeli)
+            ->whereNotIn('status', ['Selesai', 'Dibatalkan'])
             ->exists();
 
-        if ($adaPesananBelumSelesai) {
+        if ($adaPesananBerjalan) {
             return redirect()->route('profil.show')
                 ->with('error', 'Akun tidak bisa dihapus karena masih ada pesanan yang belum selesai.');
         }

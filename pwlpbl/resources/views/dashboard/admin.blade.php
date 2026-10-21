@@ -224,7 +224,7 @@
                 href="{{ route('pembayaran.index') }}"
             >
                 <span>💳</span>
-                Kelola Pembayaran
+                Kelola Transaksi
             </a>
 
             <a
