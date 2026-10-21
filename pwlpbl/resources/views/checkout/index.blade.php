@@ -49,8 +49,8 @@
     .form-select:focus {
         background: var(--bs-body-bg);
         color: var(--bs-body-color);
-        border-color: #6b5648;
-        box-shadow: none;
+        border-color: #f0b36b;
+        box-shadow: 0 0 0 3px rgba(240, 179, 107, 0.2);
     }
 
     .form-select option {
@@ -58,20 +58,53 @@
         color: #f3e9e1;
     }
 
+    /* ================= METODE PEMBAYARAN ================= */
     .payment-option {
+        position: relative;
         background: var(--bs-body-bg);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 10px;
-        padding: 14px;
-        margin-bottom: 10px;
+        border: 1.5px solid var(--bs-border-color);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
     }
 
     .payment-option:hover {
         background: #2d211b;
+        border-color: #c9a27e;
     }
 
     .payment-option .form-check-input {
         margin-top: 5px;
+        width: 1.2em;
+        height: 1.2em;
+        cursor: pointer;
+    }
+
+    /* Opsi yang sedang DIPILIH */
+    .payment-option:has(input[type="radio"]:checked) {
+        background: rgba(240, 179, 107, 0.15);
+        border-color: #f0b36b;
+        box-shadow: 0 0 0 3px rgba(240, 179, 107, 0.25);
+    }
+
+    .payment-option:has(input[type="radio"]:checked) strong {
+        color: #f0b36b;
+    }
+
+    .payment-option:has(input[type="radio"]:checked) .text-secondary {
+        color: #d9c3ab !important;
+    }
+
+    /* Lingkaran radio saat dipilih */
+    .payment-option .form-check-input:checked {
+        background-color: #f0b36b;
+        border-color: #f0b36b;
+    }
+
+    .payment-option .form-check-input:focus {
+        box-shadow: 0 0 0 0.25rem rgba(240, 179, 107, 0.3);
     }
 
     .price {
@@ -199,7 +232,7 @@
                             <input class="form-check-input" type="radio"
                                    name="metode_pembayaran" id="cash" value="Cash"
                                    {{ old('metode_pembayaran') == 'Cash' ? 'checked' : '' }} required>
-                            <label class="form-check-label w-100" for="cash">
+                            <label class="form-check-label w-100 stretched-link" for="cash">
                                 <strong>Cash</strong>
                                 <div class="text-secondary small">Bayar langsung kepada kasir.</div>
                             </label>
@@ -212,7 +245,7 @@
                             <input class="form-check-input" type="radio"
                                    name="metode_pembayaran" id="midtrans" value="Midtrans"
                                    {{ old('metode_pembayaran') == 'Midtrans' ? 'checked' : '' }} required>
-                            <label class="form-check-label w-100" for="midtrans">
+                            <label class="form-check-label w-100 stretched-link" for="midtrans">
                                 <strong>Midtrans</strong>
                                 <div class="text-secondary small">
                                     Bayar secara online melalui halaman pembayaran Midtrans.
