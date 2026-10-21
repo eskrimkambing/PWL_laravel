@@ -98,10 +98,6 @@ class PesananController extends Controller
 
         $pembeli = $pesanan->pembeli;
 
-        if (!$pembeli) {
-            return back()->with('error', 'Data pembeli tidak ditemukan.');
-        }
-
         // Periksa konfigurasi Midtrans.
         if (!config('services.midtrans.server_key')) {
             return back()->with(
@@ -139,6 +135,14 @@ class PesananController extends Controller
             ];
         }
 
+        // Data pelanggan: pakai data penerima di pesanan,
+        // cadangan ke profil untuk pesanan lama.
+        $customerDetails = array_filter([
+            'first_name' => $pesanan->nama_penerima ?: ($pembeli->nama ?? null) ?: 'Pembeli',
+            'email'      => $pembeli->email ?? null,
+            'phone'      => $pesanan->no_telp ?: ($pembeli->no_telp ?? null),
+        ]);
+
         // Data transaksi Midtrans.
         $params = [
             'transaction_details' => [
@@ -148,11 +152,7 @@ class PesananController extends Controller
 
             'item_details' => $items,
 
-            'customer_details' => [
-                'first_name' => $pembeli->nama ?: 'Pembeli',
-                'email'      => $pembeli->email,
-                'phone'      => $pembeli->no_telp ?? '',
-            ],
+            'customer_details' => $customerDetails,
         ];
 
         try {

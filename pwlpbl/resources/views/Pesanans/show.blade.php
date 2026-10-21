@@ -15,6 +15,7 @@
         border: 1px solid var(--bs-border-color);
         border-radius: 10px;
         padding: 14px;
+        height: 100%;
     }
 
     .info-label {
@@ -127,6 +128,43 @@
                             <span class="badge bg-secondary">{{ $pesanan->status_pembayaran ?? '-' }}</span>
                         @endif
                     </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {{-- ================= DATA PENERIMA ================= --}}
+    <div class="content-card p-4 mb-4">
+
+        <h5 class="mb-3">Data Penerima</h5>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="info-box">
+                    <div class="info-label">Nama Penerima</div>
+                    <div class="fw-semibold">{{ $pesanan->nama_penerima ?? '-' }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="info-box">
+                    <div class="info-label">Nomor HP</div>
+                    <div class="fw-semibold">{{ $pesanan->no_telp ?? '-' }}</div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="info-box">
+                    <div class="info-label">Alamat</div>
+                    <div class="fw-semibold">{{ $pesanan->alamat ?? '-' }}</div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="info-box">
+                    <div class="info-label">Catatan</div>
+                    <div class="fw-semibold" style="white-space: pre-line;">{{ $pesanan->catatan ?: '-' }}</div>
                 </div>
             </div>
         </div>

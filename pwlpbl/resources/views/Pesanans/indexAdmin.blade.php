@@ -86,7 +86,7 @@
 
                         <td class="fw-bold">#{{ $pesanan->id_pesanan }}</td>
 
-                        <td>{{ $pesanan->pembeli->nama ?? $pesanan->pembeli->email ?? '-' }}</td>
+                        <td>{{ $pesanan->nama_penerima ?? $pesanan->pembeli->nama ?? $pesanan->pembeli->email ?? '-' }}</td>
 
                         <td>
                             {{ $pesanan->created_at

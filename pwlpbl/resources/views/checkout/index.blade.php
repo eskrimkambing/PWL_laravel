@@ -53,6 +53,14 @@
         box-shadow: 0 0 0 3px rgba(240, 179, 107, 0.2);
     }
 
+    .form-control::placeholder {
+        color: #8f7e73;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+
     .form-select option {
         background: #261c17;
         color: #f3e9e1;
@@ -198,6 +206,55 @@
         </div>
 
         @if ($products->count() > 0)
+
+            {{-- ================= DATA PENERIMA ================= --}}
+            <div class="checkout-box p-4 mb-4">
+
+                <h5 class="mb-1">Data Penerima</h5>
+                <p class="text-secondary small mb-4">
+                    Terisi otomatis dari profil kamu. Kamu bisa mengubahnya untuk pesanan ini saja,
+                    data profil tidak ikut berubah.
+                </p>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label for="nama_penerima" class="form-label">Nama Penerima</label>
+                        <input type="text" name="nama_penerima" id="nama_penerima"
+                               class="form-control"
+                               value="{{ old('nama_penerima', $pembeli->nama) }}"
+                               placeholder="Masukkan nama penerima" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="no_telp" class="form-label">Nomor HP</label>
+                        <input type="text" name="no_telp" id="no_telp"
+                               class="form-control"
+                               value="{{ old('no_telp', $pembeli->no_telp) }}"
+                               placeholder="Contoh: 081234567890" required>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="alamat" class="form-label">Alamat</label>
+                        <textarea name="alamat" id="alamat" rows="3"
+                                  class="form-control"
+                                  placeholder="Masukkan alamat lengkap"
+                                  required>{{ old('alamat', $pembeli->alamat) }}</textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="catatan" class="form-label">
+                            Catatan <span class="text-secondary small">(opsional)</span>
+                        </label>
+                        <textarea name="catatan" id="catatan" rows="3"
+                                  class="form-control"
+                                  maxlength="500"
+                                  placeholder="Contoh: tanpa bawang, pedas level 2, jangan dipotong...">{{ old('catatan') }}</textarea>
+                    </div>
+
+                </div>
+
+            </div>
 
             {{-- ================= DETAIL CHECKOUT ================= --}}
             <div class="checkout-box p-4">

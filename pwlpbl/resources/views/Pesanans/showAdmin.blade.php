@@ -165,7 +165,9 @@
             <div class="col-md-6">
                 <div class="info-box">
                     <div class="info-label">Nama</div>
-                    <div class="fw-semibold">{{ $pesanan->pembeli->nama ?? '-' }}</div>
+                    <div class="fw-semibold">
+                        {{ $pesanan->nama_penerima ?? ($pesanan->pembeli->nama ?? '-') }}
+                    </div>
                 </div>
             </div>
 
@@ -179,14 +181,25 @@
             <div class="col-md-6">
                 <div class="info-box">
                     <div class="info-label">No. Telepon</div>
-                    <div class="fw-semibold">{{ $pesanan->pembeli->no_telp ?? '-' }}</div>
+                    <div class="fw-semibold">
+                        {{ $pesanan->no_telp ?? ($pesanan->pembeli->no_telp ?? '-') }}
+                    </div>
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="info-box">
                     <div class="info-label">Alamat</div>
-                    <div class="fw-semibold">{{ $pesanan->pembeli->alamat ?? '-' }}</div>
+                    <div class="fw-semibold">
+                        {{ $pesanan->alamat ?? ($pesanan->pembeli->alamat ?? '-') }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="info-box">
+                    <div class="info-label">Catatan</div>
+                    <div class="fw-semibold" style="white-space: pre-line;">{{ $pesanan->catatan ?: '-' }}</div>
                 </div>
             </div>
         </div>

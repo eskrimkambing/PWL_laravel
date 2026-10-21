@@ -10,20 +10,26 @@ use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
-    // Menampilkan daftar produk untuk pembeli
+    // Menampilkan daftar produk + data penerima (diambil dari data pembeli)
     public function index()
     {
         $products = Product::latest()->get();
 
-        return view('checkout.index', compact('products'));
+        $pembeli = Pembeli::findOrFail(session('user_id'));
+
+        return view('checkout.index', compact('products', 'pembeli'));
     }
 
     // Menyimpan pesanan dari pembeli
     public function store(Request $request)
     {
         $request->validate([
-            'products' => 'required|array',
-            'jenis_pesanan' => 'required|in:Makan di tempat,Dibungkus',
+            'products'          => 'required|array',
+            'nama_penerima'     => 'required|string|max:100',
+            'no_telp'           => 'required|string|max:20',
+            'alamat'            => 'required|string|max:500',
+            'catatan'           => 'nullable|string|max:500',
+            'jenis_pesanan'     => 'required|in:Makan di tempat,Dibungkus',
             'metode_pembayaran' => 'required|in:Cash,Midtrans',
         ]);
 
@@ -67,15 +73,22 @@ class CheckoutController extends Controller
             }
 
             $pesanan = Pesanan::create([
-                'pembeli_id' => $pembeli->id_pembeli,
-                'total_harga' => $totalHarga,
-                'jenis_pesanan' => $request->jenis_pesanan,
-                'status' => 'Menunggu',
+                'pembeli_id'        => $pembeli->id_pembeli,
+
+                // Data penerima: disalin ke pesanan (boleh berbeda dari profil)
+                'nama_penerima'     => $request->nama_penerima,
+                'no_telp'           => $request->no_telp,
+                'alamat'            => $request->alamat,
+                'catatan'           => $request->catatan,
+
+                'total_harga'       => $totalHarga,
+                'jenis_pesanan'     => $request->jenis_pesanan,
+                'status'            => 'Menunggu',
                 'metode_pembayaran' => $request->metode_pembayaran,
                 'status_pembayaran' => $request->metode_pembayaran === 'Cash'
                     ? 'Belum Dibayar'
                     : 'Menunggu Pembayaran',
-                'dibayar_pada' => null,
+                'dibayar_pada'      => null,
             ]);
 
             foreach ($daftarProduk as $item) {
