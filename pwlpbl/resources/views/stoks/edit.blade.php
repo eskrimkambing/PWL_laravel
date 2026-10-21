@@ -61,7 +61,7 @@
                                         value="{{ $product->id }}"
                                         {{ old('product_id', $stok->product_id) == $product->id ? 'selected' : '' }}
                                     >
-                                        {{ $product->name }}
+                                        {{ $product->nama }}
                                     </option>
 
                                 @endforeach

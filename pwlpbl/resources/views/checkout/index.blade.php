@@ -24,14 +24,6 @@
         border: 1px solid var(--bs-border-color);
     }
 
-    .product-thumb-empty {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--bs-body-bg);
-        font-size: 30px;
-    }
-
     .checkout-box {
         background: var(--bs-card-bg);
         border: 1px solid var(--bs-border-color);
@@ -123,6 +115,29 @@
 
 @section('content')
 
+    @php
+        // FOTO CADANGAN untuk produk yang belum punya gambar di database
+        $fotoPizza = [
+            'Extra Chicken' => 'extra-chicken.jpeg',
+            'Cheese Volcano' => 'cheese-volcano.jpeg',
+            'Ekstra Beef' => 'ekstra-beef.jpeg',
+            'Original Mozza' => 'original-mozza.jpeg',
+            'Original Cheese Volcano' => 'original-cheese-volcano.jpeg',
+            'Long Pizza' => 'long-pizza.jpeg',
+        ];
+
+        $fotoCemilan = [
+            'Tape Bakar Original' => 'tape-bakar-original.jpeg',
+            'Singkong Keju' => 'singkong-keju.jpeg',
+            'Tape Bakar Topping Keju' => 'tape-bakar-topping-keju.jpeg',
+        ];
+
+        $fotoDefault = asset('images/pizza.jpg');
+
+        // Produk yang dipilih dari tombol "Pesan" di halaman produk
+        $produkDipilih = request('product');
+    @endphp
+
     {{-- JUDUL --}}
     <div class="mb-4">
         <h2 class="fw-bold mb-1">Checkout</h2>
@@ -157,25 +172,47 @@
 
             <div class="row g-3">
                 @forelse ($products as $product)
+
+                    @php
+                        // 1. Pakai gambar dari database (lewat asset()) kalau ada
+                        // 2. Kalau kosong, pakai foto cadangan di folder public/images
+                        if (!empty($product->image)) {
+                            if (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://'])) {
+                                $srcFoto = $product->image;
+                            } else {
+                                $srcFoto = asset(ltrim($product->image, '/'));
+                            }
+                        } else {
+                            if (isset($fotoPizza[$product->nama])) {
+                                $pathFoto = 'images/pizza/' . $fotoPizza[$product->nama];
+                            } elseif (isset($fotoCemilan[$product->nama])) {
+                                $pathFoto = 'images/cemilan/' . $fotoCemilan[$product->nama];
+                            } else {
+                                $pathFoto = 'images/pizza.jpg';
+                            }
+                            $srcFoto = asset($pathFoto);
+                        }
+
+                        // Jumlah awal: 1 kalau produk ini dipilih dari halaman produk, selain itu 0
+                        $jumlahAwal = ((string) $produkDipilih === (string) $product->id) ? 1 : 0;
+                    @endphp
+
                     <div class="col-md-6 col-xl-4">
                         <div class="product-card p-3">
 
                             <div class="d-flex gap-3 mb-3">
 
-                                {{-- GAMBAR KECIL (dari database) --}}
-                                @if ($product->image)
-                                    <img src="{{ $product->image }}"
-                                         alt="{{ $product->name }}"
-                                         class="product-thumb">
-                                @else
-                                    <div class="product-thumb product-thumb-empty">🍕</div>
-                                @endif
+                                {{-- GAMBAR KECIL --}}
+                                <img src="{{ $srcFoto }}"
+                                     alt="{{ $product->nama }}"
+                                     class="product-thumb"
+                                     onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
 
                                 {{-- INFO PRODUK --}}
                                 <div class="flex-grow-1" style="min-width:0;">
                                     <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
-                                        <h5 class="mb-0">{{ $product->name }}</h5>
-                                        <span class="badge bg-secondary">{{ $product->category }}</span>
+                                        <h5 class="mb-0">{{ $product->nama }}</h5>
+                                        <span class="badge bg-secondary">{{ $product->kategori }}</span>
                                     </div>
 
                                     <div class="price fw-semibold mb-1">
@@ -183,8 +220,12 @@
                                     </div>
 
                                     <p class="text-secondary small mb-0">
-                                        {{ $product->description ?? 'Tidak ada deskripsi.' }}
+                                        {{ $product->deskripsi ?? 'Tidak ada deskripsi.' }}
                                     </p>
+
+                                    @if (!empty($product->portion))
+                                        <small class="text-secondary">Porsi: {{ $product->portion }}</small>
+                                    @endif
                                 </div>
                             </div>
 
@@ -193,7 +234,7 @@
                                    name="products[{{ $product->id }}]"
                                    class="form-control"
                                    min="0"
-                                   value="{{ old('products.' . $product->id, 0) }}">
+                                   value="{{ old('products.' . $product->id, $jumlahAwal) }}">
 
                         </div>
                     </div>

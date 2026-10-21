@@ -110,13 +110,13 @@
                             'Tape Bakar Topping Keju' => 'tape-bakar-topping-keju.jpeg',
                         ];
 
-                        if (isset($fotoPizza[$item->name])) {
+                        if (isset($fotoPizza[$item->nama])) {
 
-                            $pathFoto = 'images/pizza/' . $fotoPizza[$item->name];
+                            $pathFoto = 'images/pizza/' . $fotoPizza[$item->nama];
 
-                        } elseif (isset($fotoCemilan[$item->name])) {
+                        } elseif (isset($fotoCemilan[$item->nama])) {
 
-                            $pathFoto = 'images/cemilan/' . $fotoCemilan[$item->name];
+                            $pathFoto = 'images/cemilan/' . $fotoCemilan[$item->nama];
 
                         } else {
 
@@ -133,7 +133,7 @@
 
                             <img
                                 src="{{ asset($pathFoto) }}"
-                                alt="{{ $item->name }}"
+                                alt="{{ $item->nama }}"
                                 style="
                                     width: 100%;
                                     height: 180px;
@@ -144,17 +144,17 @@
                             <div class="card-body">
 
                                 <h6 class="fw-bold mb-1">
-                                    {{ $item->name }}
+                                    {{ $item->nama }}
                                 </h6>
 
                                 <small class="text-secondary d-block mb-2">
-                                    {{ $item->category }}
+                                    {{ $item->kategori }}
                                 </small>
 
-                                @if ($item->description)
+                                @if ($item->deskripsi)
 
                                     <p class="text-secondary small mb-3">
-                                        {{ $item->description }}
+                                        {{ $item->deskripsi }}
                                     </p>
 
                                 @endif

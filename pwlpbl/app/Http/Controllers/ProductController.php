@@ -34,16 +34,20 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama'        => 'required|string|max:255',
-            'category'    => 'required|string',
-            'harga_satuan'=> 'required|numeric|min:0',
-            'portion'     => 'required|string',
-            'deskripsi'   => 'nullable|string',
-            'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:1024',
+            'nama'      => 'required|string|max:255',
+            'kategori'  => 'required|string',
+            'price'     => 'required|numeric|min:0',
+            'portion'   => 'required|string',
+            'deskripsi' => 'nullable|string',
+            'image'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
         ]);
 
-        // Ubah file gambar jadi teks base64 sebelum disimpan
-        $validated['image'] = $this->imageToBase64($request->file('image'));
+        // Gambar opsional: hanya diubah ke base64 kalau ada file yang diupload
+        if ($request->hasFile('image')) {
+            $validated['image'] = $this->imageToBase64($request->file('image'));
+        } else {
+            unset($validated['image']);
+        }
 
         Product::create($validated);
 
@@ -64,14 +68,15 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'category'    => 'required|string',
-            'price'       => 'required|numeric|min:0',
-            'portion'     => 'required|string',
-            'description' => 'nullable|string',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
+            'nama'      => 'required|string|max:255',
+            'kategori'  => 'required|string',
+            'price'     => 'required|numeric|min:0',
+            'portion'   => 'required|string',
+            'deskripsi' => 'nullable|string',
+            'image'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
         ]);
 
+        // Kalau tidak upload gambar baru, gambar lama tetap dipakai
         if ($request->hasFile('image')) {
             $validated['image'] = $this->imageToBase64($request->file('image'));
         } else {

@@ -28,14 +28,14 @@
 
                             <input
                                 type="text"
-                                name="name"
-                                class="form-control @error('name') is-invalid @enderror"
-                                value="{{ old('name') }}"
+                                name="nama"
+                                class="form-control @error('nama') is-invalid @enderror"
+                                value="{{ old('nama') }}"
                                 placeholder="Contoh: Pizza Super Cheese"
                                 required
                             >
 
-                            @error('name')
+                            @error('nama')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -62,14 +62,14 @@
                                     @foreach ($kategoris as $kategori)
                                         <option
                                             value="{{ $kategori->nama_kategori }}"
-                                            {{ old('category') == $kategori->nama_kategori ? 'selected' : '' }}
+                                            {{ old('kategori') == $kategori->nama_kategori ? 'selected' : '' }}
                                         >
                                             {{ $kategori->nama_kategori }}
                                         </option>
                                     @endforeach
                                 </select>
 
-                                @error('category')
+                                @error('kategori')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -153,11 +153,10 @@
                                 id="image"
                                 class="form-control @error('image') is-invalid @enderror"
                                 accept="image/*"
-                                required
                             >
 
                             <small class="text-secondary">
-                                Format JPG, PNG, atau WEBP. Maksimal 1 MB.
+                                Opsional. Format JPG, PNG, atau WEBP. Maksimal 1 MB.
                             </small>
 
                             @error('image')

@@ -31,29 +31,23 @@
 @section('content')
 
     @php
-        $menuImages = [
+        // FOTO CADANGAN untuk produk yang belum punya gambar di database
+        $fotoPizza = [
             'Extra Chicken' => 'extra-chicken.jpeg',
             'Cheese Volcano' => 'cheese-volcano.jpeg',
             'Ekstra Beef' => 'ekstra-beef.jpeg',
             'Original Mozza' => 'original-mozza.jpeg',
             'Original Cheese Volcano' => 'original-cheese-volcano.jpeg',
             'Long Pizza' => 'long-pizza.jpeg',
+        ];
+
+        $fotoCemilan = [
             'Tape Bakar Original' => 'tape-bakar-original.jpeg',
             'Singkong Keju' => 'singkong-keju.jpeg',
             'Tape Bakar Topping Keju' => 'tape-bakar-topping-keju.jpeg',
         ];
 
-        $menuPrices = [
-            'Extra Chicken'            => 55000,
-            'Cheese Volcano'           => 68000,
-            'Ekstra Beef'              => 75000,
-            'Original Mozza'           => 25000,
-            'Original Cheese Volcano'  => 55000,
-            'Long Pizza'               => 88000,
-            'Tape Bakar Original'      => 12000,
-            'Singkong Keju'            => 12000,
-            'Tape Bakar Topping Keju'  => 12000,
-        ];
+        $fotoDefault = asset('images/pizza.jpg');
     @endphp
 
     <div class="mb-4">
@@ -74,34 +68,54 @@
     <div class="row g-4" id="productContainer">
         @foreach ($products as $product)
             @php
-                $namaProduk = $product->name;
-                $harga = $menuPrices[$namaProduk] ?? $product->price;
-                $image = $menuImages[$namaProduk] ?? null;
+                // 1. Pakai gambar dari database (lewat asset()) kalau ada
+                // 2. Kalau kosong, pakai foto cadangan di folder public/images
+                if (!empty($product->image)) {
+                    if (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://'])) {
+                        $srcFoto = $product->image;
+                    } else {
+                        $srcFoto = asset(ltrim($product->image, '/'));
+                    }
+                } else {
+                    if (isset($fotoPizza[$product->nama])) {
+                        $pathFoto = 'images/pizza/' . $fotoPizza[$product->nama];
+                    } elseif (isset($fotoCemilan[$product->nama])) {
+                        $pathFoto = 'images/cemilan/' . $fotoCemilan[$product->nama];
+                    } else {
+                        $pathFoto = 'images/pizza.jpg';
+                    }
+                    $srcFoto = asset($pathFoto);
+                }
             @endphp
 
             <div class="col-xl-4 col-lg-6 col-md-6 product-item"
-                 data-name="{{ strtolower($namaProduk) }}"
-                 data-category="{{ $product->category }}">
+                 data-name="{{ strtolower($product->nama) }}"
+                 data-category="{{ strtolower($product->kategori) }}">
 
                 <div class="card h-100 overflow-hidden">
 
-                    @if ($image)
-                        <img src="{{ asset('images/pizza/' . $image) }}"
-                             alt="{{ $namaProduk }}" class="product-image">
-                    @else
-                        <div class="product-image"></div>
-                    @endif
+                    <img src="{{ $srcFoto }}"
+                         alt="{{ $product->nama }}"
+                         class="product-image"
+                         onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
 
                     <div class="card-body d-flex flex-column">
-                        <small class="text-secondary">{{ $product->category }}</small>
-                        <div class="fs-5 fw-bold mb-1">{{ $namaProduk }}</div>
-                        <div class="product-description text-secondary mb-3">{{ $product->description }}</div>
-
-                        <div class="price mb-3">
-                            Rp{{ number_format($harga, 0, ',', '.') }}
+                        <small class="text-secondary">{{ $product->kategori }}</small>
+                        <div class="fs-5 fw-bold mb-1">{{ $product->nama }}</div>
+                        <div class="product-description text-secondary mb-3">
+                            {{ $product->deskripsi ?? 'Produk Pizza Moza' }}
                         </div>
 
-                        <a href="{{ route('checkout.index') }}" class="btn btn-moza w-100 mt-auto">Pesan</a>
+                        @if (!empty($product->portion))
+                            <small class="text-secondary mb-2">Porsi: {{ $product->portion }}</small>
+                        @endif
+
+                        <div class="price mb-3">
+                            Rp{{ number_format($product->price, 0, ',', '.') }}
+                        </div>
+
+                        <a href="{{ route('checkout.index', ['product' => $product->id]) }}"
+                           class="btn btn-moza w-100 mt-auto">Pesan</a>
                     </div>
                 </div>
             </div>
@@ -122,9 +136,11 @@
         button.classList.add('active');
         document.getElementById('searchInput').value = '';
 
+        const kategori = category.toLowerCase();
         let visibleCount = 0;
+
         document.querySelectorAll('.product-item').forEach(function (product) {
-            const show = category === 'all' || product.getAttribute('data-category') === category;
+            const show = kategori === 'all' || product.getAttribute('data-category') === kategori;
             product.style.display = show ? '' : 'none';
             if (show) visibleCount++;
         });
@@ -138,7 +154,7 @@
         let visibleCount = 0;
         document.querySelectorAll('.product-item').forEach(function (product) {
             const name = product.getAttribute('data-name');
-            const category = product.getAttribute('data-category').toLowerCase();
+            const category = product.getAttribute('data-category');
             const show = name.includes(input) || category.includes(input);
             product.style.display = show ? '' : 'none';
             if (show) visibleCount++;

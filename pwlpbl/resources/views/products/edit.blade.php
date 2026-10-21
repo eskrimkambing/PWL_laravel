@@ -11,7 +11,7 @@
 
                 <div class="card-header py-3">
                     <h5 class="mb-0 fw-bold">
-                        Edit Menu: {{ $product->name }}
+                        Edit Menu: {{ $product->nama }}
                     </h5>
                 </div>
 
@@ -27,10 +27,10 @@
                                 Nama Menu
                             </label>
 
-                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                                value="{{ old('name', $product->name) }}" required>
+                            <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
+                                value="{{ old('nama', $product->nama) }}" required>
 
-                            @error('name')
+                            @error('nama')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -45,7 +45,7 @@
                                     Kategori Menu
                                 </label>
 
-                                <select name="category" class="form-select @error('category') is-invalid @enderror"
+                                <select name="kategori" class="form-select @error('kategori') is-invalid @enderror"
                                     required>
                                     <option value="">
                                         -- Pilih Kategori --
@@ -53,13 +53,13 @@
 
                                     @foreach ($kategoris as $kategori)
                                         <option value="{{ $kategori->nama_kategori }}"
-                                            {{ old('category', $product->category) == $kategori->nama_kategori ? 'selected' : '' }}>
+                                            {{ old('kategori', $product->kategori) == $kategori->nama_kategori ? 'selected' : '' }}>
                                             {{ $kategori->nama_kategori }}
                                         </option>
                                     @endforeach
                                 </select>
 
-                                @error('category')
+                                @error('kategori')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -106,9 +106,9 @@
                                 Deskripsi Menu
                             </label>
 
-                            <textarea name="description" rows="3" class="form-control @error('description') is-invalid @enderror">{{ old('description', $product->description) }}</textarea>
+                            <textarea name="deskripsi" rows="3" class="form-control @error('deskripsi') is-invalid @enderror">{{ old('deskripsi', $product->deskripsi) }}</textarea>
 
-                            @error('description')
+                            @error('deskripsi')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -126,7 +126,7 @@
                                 <div class="mb-2">
                                     <small class="text-secondary d-block mb-1">Gambar saat ini:</small>
                                     <img src="{{ $product->image }}"
-                                         alt="{{ $product->name }}"
+                                         alt="{{ $product->nama }}"
                                          style="width:120px; height:120px; object-fit:cover; border-radius:10px;">
                                 </div>
                             @endif

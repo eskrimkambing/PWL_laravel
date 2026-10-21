@@ -84,10 +84,10 @@
                                 if ($item->image) {
                                     $srcFoto = $item->image;
                                 } else {
-                                    if (isset($fotoPizza[$item->name])) {
-                                        $pathFoto = 'images/pizza/' . $fotoPizza[$item->name];
-                                    } elseif (isset($fotoCemilan[$item->name])) {
-                                        $pathFoto = 'images/cemilan/' . $fotoCemilan[$item->name];
+                                    if (isset($fotoPizza[$item->nama])) {
+                                        $pathFoto = 'images/pizza/' . $fotoPizza[$item->nama];
+                                    } elseif (isset($fotoCemilan[$item->nama])) {
+                                        $pathFoto = 'images/cemilan/' . $fotoCemilan[$item->nama];
                                     } else {
                                         $pathFoto = 'images/pizza.jpg';
                                     }
@@ -109,7 +109,7 @@
 
                                     <img
                                         src="{{ $srcFoto }}"
-                                        alt="{{ $item->name }}"
+                                        alt="{{ $item->nama }}"
                                         style="
                                             width: 70px;
                                             height: 55px;
@@ -125,11 +125,11 @@
                                 <td>
 
                                     <span class="fw-semibold">
-                                        {{ $item->name }}
+                                        {{ $item->nama }}
                                     </span>
 
                                     <small class="text-muted d-block">
-                                        {{ $item->description }}
+                                        {{ $item->deskripsi }}
                                     </small>
 
                                 </td>
@@ -139,7 +139,7 @@
                                 <td>
 
                                     <span class="badge bg-secondary">
-                                        {{ $item->category }}
+                                        {{ $item->kategori }}
                                     </span>
 
                                 </td>

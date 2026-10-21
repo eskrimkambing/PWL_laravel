@@ -46,18 +46,30 @@
         flex-shrink: 0;
         border: 1px solid var(--bs-border-color);
     }
-
-    .order-thumb-empty {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--bs-body-bg);
-        font-size: 24px;
-    }
 </style>
 @endpush
 
 @section('content')
+
+    @php
+        // FOTO CADANGAN untuk produk yang belum punya gambar di database
+        $fotoPizza = [
+            'Extra Chicken' => 'extra-chicken.jpeg',
+            'Cheese Volcano' => 'cheese-volcano.jpeg',
+            'Ekstra Beef' => 'ekstra-beef.jpeg',
+            'Original Mozza' => 'original-mozza.jpeg',
+            'Original Cheese Volcano' => 'original-cheese-volcano.jpeg',
+            'Long Pizza' => 'long-pizza.jpeg',
+        ];
+
+        $fotoCemilan = [
+            'Tape Bakar Original' => 'tape-bakar-original.jpeg',
+            'Singkong Keju' => 'singkong-keju.jpeg',
+            'Tape Bakar Topping Keju' => 'tape-bakar-topping-keju.jpeg',
+        ];
+
+        $fotoDefault = asset('images/pizza.jpg');
+    @endphp
 
     {{-- HEADER --}}
     <div class="d-flex justify-content-between align-items-start mb-4">
@@ -225,20 +237,42 @@
 
                 <tbody>
                     @forelse ($pesanan->detailPesanans as $detail)
+
+                        @php
+                            $produk = $detail->product;
+                            $namaProduk = $produk->nama ?? null;
+
+                            // 1. Pakai gambar dari database (lewat asset()) kalau ada
+                            // 2. Kalau kosong, pakai foto cadangan di folder public/images
+                            if ($produk && !empty($produk->image)) {
+                                if (\Illuminate\Support\Str::startsWith($produk->image, ['http://', 'https://'])) {
+                                    $srcFoto = $produk->image;
+                                } else {
+                                    $srcFoto = asset(ltrim($produk->image, '/'));
+                                }
+                            } else {
+                                if ($namaProduk && isset($fotoPizza[$namaProduk])) {
+                                    $pathFoto = 'images/pizza/' . $fotoPizza[$namaProduk];
+                                } elseif ($namaProduk && isset($fotoCemilan[$namaProduk])) {
+                                    $pathFoto = 'images/cemilan/' . $fotoCemilan[$namaProduk];
+                                } else {
+                                    $pathFoto = 'images/pizza.jpg';
+                                }
+                                $srcFoto = asset($pathFoto);
+                            }
+                        @endphp
+
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
 
                                     {{-- GAMBAR PRODUK --}}
-                                    @if ($detail->product && $detail->product->image)
-                                        <img src="{{ $detail->product->image }}"
-                                             alt="{{ $detail->product->name }}"
-                                             class="order-thumb">
-                                    @else
-                                        <div class="order-thumb order-thumb-empty">🍕</div>
-                                    @endif
+                                    <img src="{{ $srcFoto }}"
+                                         alt="{{ $namaProduk ?? 'Produk' }}"
+                                         class="order-thumb"
+                                         onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
 
-                                    <span>{{ $detail->product->name ?? 'Produk tidak ditemukan' }}</span>
+                                    <span>{{ $namaProduk ?? 'Produk tidak ditemukan' }}</span>
                                 </div>
                             </td>
                             <td class="text-center">{{ $detail->jumlah }}</td>

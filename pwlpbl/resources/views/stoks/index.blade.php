@@ -96,7 +96,7 @@
                             <td>
 
                                 <span class="fw-semibold">
-                                    {{ $stok->product->name ?? 'Produk tidak ditemukan' }}
+                                    {{ $stok->product->nama ?? 'Produk tidak ditemukan' }}
                                 </span>
 
                             </td>
