@@ -24,21 +24,6 @@
     .product-description { font-size: 13px; min-height: 38px; }
     .price { font-size: 18px; font-weight: bold; color: var(--moza-accent); }
 
-    .size-btn {
-        border: 1px solid var(--bs-border-color);
-        background: #33261f;
-        color: var(--bs-secondary-color);
-        padding: 7px 10px;
-        border-radius: 8px;
-        font-size: 12px;
-    }
-    .size-btn:hover { background: #3d2e26; color: #fff; }
-    .size-btn.active {
-        background: var(--moza-accent);
-        border-color: var(--moza-accent);
-        color: var(--moza-accent-text);
-    }
-
     #emptyMessage { display: none; }
 </style>
 @endpush
@@ -59,15 +44,15 @@
         ];
 
         $menuPrices = [
-            'Extra Chicken' => ['Medium' => 55000, 'Large' => 80000, 'Extra Large' => 95000],
-            'Cheese Volcano' => ['Medium' => 68000, 'Large' => 93000, 'Extra Large' => 105000],
-            'Ekstra Beef' => ['Medium' => 75000, 'Large' => 105000, 'Extra Large' => 125000],
-            'Original Mozza' => ['Mini' => 25000, 'Medium' => 40000, 'Large' => 65000, 'Extra Large' => 85000],
-            'Original Cheese Volcano' => ['Medium' => 55000, 'Large' => 78000, 'Extra Large' => 90000],
-            'Long Pizza' => ['Original' => 88000, 'Extra Mozza' => 100000, 'Extra Ayam' => 100000, 'Extra Beef' => 120000],
-            'Tape Bakar Original' => ['Box Kecil' => 12000, 'Box Sedang' => 17000, 'Box Besar' => 25000],
-            'Singkong Keju' => ['Box Kecil' => 12000, 'Box Sedang' => 17000, 'Box Besar' => 25000],
-            'Tape Bakar Topping Keju' => ['Box Kecil' => 12000, 'Box Sedang' => 17000, 'Box Besar' => 25000],
+            'Extra Chicken'            => 55000,
+            'Cheese Volcano'           => 68000,
+            'Ekstra Beef'              => 75000,
+            'Original Mozza'           => 25000,
+            'Original Cheese Volcano'  => 55000,
+            'Long Pizza'               => 88000,
+            'Tape Bakar Original'      => 12000,
+            'Singkong Keju'            => 12000,
+            'Tape Bakar Topping Keju'  => 12000,
         ];
     @endphp
 
@@ -90,9 +75,8 @@
         @foreach ($products as $product)
             @php
                 $namaProduk = $product->name;
-                $prices = $menuPrices[$namaProduk] ?? [$product->portion => $product->price];
+                $harga = $menuPrices[$namaProduk] ?? $product->price;
                 $image = $menuImages[$namaProduk] ?? null;
-                $firstPrice = reset($prices);
             @endphp
 
             <div class="col-xl-4 col-lg-6 col-md-6 product-item"
@@ -113,21 +97,8 @@
                         <div class="fs-5 fw-bold mb-1">{{ $namaProduk }}</div>
                         <div class="product-description text-secondary mb-3">{{ $product->description }}</div>
 
-                        <div class="price mb-3" id="price-{{ $product->id }}">
-                            Rp{{ number_format($firstPrice, 0, ',', '.') }}
-                        </div>
-
-                        <small class="text-secondary mb-2">Pilih ukuran:</small>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            @foreach ($prices as $size => $price)
-                                <button type="button"
-                                        class="size-btn {{ $loop->first ? 'active' : '' }}"
-                                        data-product="{{ $product->id }}"
-                                        data-price="{{ $price }}"
-                                        onclick="changePrice(this)">
-                                    {{ $size }}
-                                </button>
-                            @endforeach
+                        <div class="price mb-3">
+                            Rp{{ number_format($harga, 0, ',', '.') }}
                         </div>
 
                         <a href="{{ route('checkout.index') }}" class="btn btn-moza w-100 mt-auto">Pesan</a>
@@ -146,21 +117,6 @@
 
 @push('scripts')
 <script>
-    function changePrice(button) {
-        const productId = button.getAttribute('data-product');
-        const price = parseInt(button.getAttribute('data-price'));
-
-        const priceElement = document.getElementById('price-' + productId);
-        if (priceElement) {
-            priceElement.innerText = 'Rp' + price.toLocaleString('id-ID');
-        }
-
-        document.querySelectorAll('.size-btn[data-product="' + productId + '"]')
-            .forEach(btn => btn.classList.remove('active'));
-
-        button.classList.add('active');
-    }
-
     function filterCategory(category, button) {
         document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
