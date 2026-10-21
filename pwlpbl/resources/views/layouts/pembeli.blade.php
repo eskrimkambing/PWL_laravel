@@ -79,6 +79,16 @@
             background: var(--moza-accent);
             color: var(--moza-accent-text);
             font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--moza-accent);
         }
 
         .card {
@@ -91,6 +101,15 @@
 </head>
 
 <body>
+
+@php
+    // Data pembeli yang sedang login (nama & foto selalu terbaru dari database)
+    $pembeliLogin = \App\Models\Pembeli::find(session('user_id'));
+
+    $emailPembeli = $pembeliLogin->email ?? session('email');
+    $namaPembeli  = $pembeliLogin->nama ?? 'Pembeli';
+    $fotoPembeli  = $pembeliLogin->foto ?? null;
+@endphp
 
 <div class="d-flex min-vh-100">
 
@@ -153,13 +172,22 @@
             </button>
 
             <div class="ms-auto d-flex align-items-center gap-3">
+
+                {{-- NAMA & EMAIL --}}
                 <div class="text-end d-none d-sm-block">
-                    <div class="fw-semibold">{{ session('nama') ?? 'Pembeli' }}</div>
-                    <small class="text-secondary">{{ session('email') }}</small>
+                    <div class="fw-semibold">{{ $namaPembeli }}</div>
+                    <small class="text-secondary">{{ $emailPembeli }}</small>
                 </div>
-                <div class="avatar d-flex align-items-center justify-content-center">
-                    {{ strtoupper(substr(session('nama') ?? session('email') ?? 'P', 0, 1)) }}
-                </div>
+
+                {{-- FOTO / AVATAR --}}
+                @if ($fotoPembeli)
+                    <img src="{{ $fotoPembeli }}" alt="Foto {{ $namaPembeli }}" class="avatar-img">
+                @else
+                    <div class="avatar d-flex align-items-center justify-content-center">
+                        {{ strtoupper(substr($pembeliLogin->nama ?? $emailPembeli ?? 'P', 0, 1)) }}
+                    </div>
+                @endif
+
                 <div class="text-end border-start ps-3">
                     <div class="fs-5" id="jam">--:--</div>
                     <small class="text-secondary" id="tanggal">-</small>

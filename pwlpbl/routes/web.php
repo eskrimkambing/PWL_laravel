@@ -7,6 +7,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\ProfilAdminController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\PembeliController;
@@ -55,6 +56,20 @@ Route::middleware('role:admin')->group(function () {
 
 
     // ======================================================
+    // PROFIL ADMIN
+    // ======================================================
+
+    Route::get('/admin/profil', [ProfilAdminController::class, 'show'])
+        ->name('admin.profil.show');
+
+    Route::get('/admin/profil/edit', [ProfilAdminController::class, 'edit'])
+        ->name('admin.profil.edit');
+
+    Route::put('/admin/profil', [ProfilAdminController::class, 'update'])
+        ->name('admin.profil.update');
+
+
+    // ======================================================
     // PRODUK
     // ======================================================
 
@@ -82,25 +97,25 @@ Route::middleware('role:admin')->group(function () {
     Route::resource('pembayaran', PembayaranController::class);
 
 
-   // ======================================================
-// KELOLA PESANAN ADMIN
-// ======================================================
+    // ======================================================
+    // KELOLA PESANAN ADMIN
+    // ======================================================
 
-// Menampilkan semua pesanan
-Route::get('/admin/pesanans', [PesananController::class, 'index'])
-    ->name('admin.pesanans.indexAdmin');
+    // Menampilkan semua pesanan
+    Route::get('/admin/pesanans', [PesananController::class, 'index'])
+        ->name('admin.pesanans.indexAdmin');
 
-// Detail pesanan (admin)
-Route::get('/admin/pesanans/{id}', [PesananController::class, 'show'])
-    ->name('admin.pesanans.show');
+    // Detail pesanan (admin)
+    Route::get('/admin/pesanans/{id}', [PesananController::class, 'show'])
+        ->name('admin.pesanans.show');
 
-// Halaman edit pesanan
-Route::get('/admin/pesanans/{id}/edit', [PesananController::class, 'edit'])
-    ->name('admin.pesanans.edit');
+    // Halaman edit pesanan
+    Route::get('/admin/pesanans/{id}/edit', [PesananController::class, 'edit'])
+        ->name('admin.pesanans.edit');
 
-// Simpan perubahan pesanan
-Route::put('/admin/pesanans/{id}', [PesananController::class, 'update'])
-    ->name('admin.pesanans.update');
+    // Simpan perubahan pesanan
+    Route::put('/admin/pesanans/{id}', [PesananController::class, 'update'])
+        ->name('admin.pesanans.update');
 
 
     // ======================================================
@@ -118,6 +133,9 @@ Route::put('/admin/pesanans/{id}', [PesananController::class, 'update'])
 
     Route::get('/pengguna/{role}/{id}/edit', [PenggunaController::class, 'edit'])
         ->name('pengguna.edit');
+
+    Route::put('/pengguna/{role}/{id}', [PenggunaController::class, 'update'])
+        ->name('pengguna.update');
 
     Route::delete('/pengguna/{role}/{id}', [PenggunaController::class, 'destroy'])
         ->name('pengguna.destroy');
@@ -192,9 +210,6 @@ Route::middleware('role:pembeli')->group(function () {
 
     Route::post('/pesanans/{id}/bayar', [PesananController::class, 'bayar'])
         ->name('pesanans.bayar');
-
-    Route::put('/pesanans/{id}', [PesananController::class, 'update'])
-        ->name('pesanans.update');
 
 
     // ======================================================

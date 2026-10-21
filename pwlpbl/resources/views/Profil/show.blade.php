@@ -5,13 +5,23 @@
 @push('styles')
 <style>
     .profile-avatar {
-        width: 80px;
-        height: 80px;
+        width: 90px;
+        height: 90px;
         border-radius: 50%;
         background: var(--moza-accent);
         color: var(--moza-accent-text);
-        font-size: 30px;
+        font-size: 34px;
         font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .profile-avatar-img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 2px solid var(--moza-accent);
     }
 
     .info-box {
@@ -39,14 +49,29 @@
         <p class="text-secondary mb-0">Lihat dan kelola informasi akun kamu.</p>
     </div>
 
+    {{-- NOTIFIKASI --}}
+    @if (session('sukses'))
+        <div class="alert alert-success" style="max-width: 850px;">{{ session('sukses') }}</div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" style="max-width: 850px;">{{ session('error') }}</div>
+    @endif
+
     <div class="card" style="max-width: 850px;">
         <div class="card-body p-4">
 
             {{-- HEADER PROFIL --}}
             <div class="d-flex align-items-center gap-3 pb-4 mb-4 border-bottom">
-                <div class="profile-avatar d-flex align-items-center justify-content-center">
-                    {{ strtoupper(substr($pembeli->nama ?? 'P', 0, 1)) }}
-                </div>
+
+                @if ($pembeli->foto)
+                    <img src="{{ $pembeli->foto }}" alt="Foto profil" class="profile-avatar-img">
+                @else
+                    <div class="profile-avatar d-flex align-items-center justify-content-center">
+                        {{ strtoupper(substr($pembeli->nama ?? $pembeli->email ?? 'P', 0, 1)) }}
+                    </div>
+                @endif
+
                 <div>
                     <h4 class="mb-1">{{ $pembeli->nama ?? 'Pembeli' }}</h4>
                     <p class="text-secondary mb-0">{{ $pembeli->email ?? '-' }}</p>

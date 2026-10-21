@@ -38,6 +38,25 @@
         background: var(--moza-accent);
         color: var(--moza-accent-text);
     }
+
+    /* Foto profil */
+    .foto-preview {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--moza-accent);
+    }
+
+    .foto-placeholder {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background: var(--moza-accent);
+        color: var(--moza-accent-text);
+        font-size: 42px;
+        font-weight: bold;
+    }
 </style>
 @endpush
 
@@ -62,9 +81,41 @@
     <div class="card" style="max-width: 850px;">
         <div class="card-body p-4">
 
-            <form action="{{ route('profil.update') }}" method="POST">
+            <form action="{{ route('profil.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+
+                {{-- FOTO PROFIL --}}
+                <div class="text-center mb-4">
+
+                    <img id="fotoPreview"
+                         src="{{ $pembeli->foto }}"
+                         alt="Foto profil"
+                         class="foto-preview mb-3 {{ $pembeli->foto ? '' : 'd-none' }}">
+
+                    <div id="fotoPlaceholder"
+                         class="foto-placeholder d-inline-flex align-items-center justify-content-center mb-3 {{ $pembeli->foto ? 'd-none' : '' }}">
+                        {{ strtoupper(substr($pembeli->nama ?? $pembeli->email ?? 'P', 0, 1)) }}
+                    </div>
+
+                    <div style="max-width: 360px; margin: 0 auto;">
+                        <input type="file" name="foto" id="fotoInput" class="form-control"
+                               accept="image/png, image/jpeg, image/webp">
+                        <div class="text-secondary small mt-1">
+                            Format JPG, PNG, atau WEBP. Maksimal 1 MB.
+                        </div>
+                    </div>
+
+                    @if ($pembeli->foto)
+                        <div class="form-check d-inline-block mt-2">
+                            <input class="form-check-input" type="checkbox"
+                                   name="hapus_foto" id="hapus_foto" value="1">
+                            <label class="form-check-label" for="hapus_foto">Hapus foto profil</label>
+                        </div>
+                    @endif
+                </div>
+
+                <hr class="mb-4">
 
                 {{-- NAMA --}}
                 <div class="mb-3">
@@ -74,47 +125,19 @@
                            placeholder="Masukkan nama lengkap" required>
                 </div>
 
-                {{-- EMAIL --}}
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control"
-                           value="{{ old('email', $pembeli->email) }}"
-                           placeholder="Masukkan email" required>
-                </div>
-
                 {{-- NOMOR TELEPON --}}
                 <div class="mb-3">
                     <label class="form-label">Nomor Telepon</label>
                     <input type="text" name="no_telp" class="form-control"
                            value="{{ old('no_telp', $pembeli->no_telp) }}"
-                           placeholder="Masukkan nomor telepon">
+                           placeholder="Masukkan nomor telepon" required>
                 </div>
 
                 {{-- ALAMAT --}}
-                <div class="mb-3">
+                <div class="mb-4">
                     <label class="form-label">Alamat</label>
                     <textarea name="alamat" class="form-control"
-                              placeholder="Masukkan alamat lengkap">{{ old('alamat', $pembeli->alamat) }}</textarea>
-                </div>
-
-                <hr class="my-4">
-
-                {{-- PASSWORD --}}
-                <h5 class="mb-3">Ubah Password</h5>
-
-                <div class="mb-3">
-                    <label class="form-label">Password Baru</label>
-                    <input type="password" name="password" class="form-control"
-                           placeholder="Kosongkan jika tidak ingin mengubah password">
-                    <div class="text-secondary small mt-1">
-                        Minimal 6 karakter. Kosongkan jika password tidak ingin diubah.
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label">Konfirmasi Password Baru</label>
-                    <input type="password" name="password_confirmation" class="form-control"
-                           placeholder="Ulangi password baru">
+                              placeholder="Masukkan alamat lengkap" required>{{ old('alamat', $pembeli->alamat) }}</textarea>
                 </div>
 
                 {{-- TOMBOL --}}
@@ -127,3 +150,30 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    // Pratinjau foto sebelum disimpan
+    document.getElementById('fotoInput').addEventListener('change', function () {
+
+        const file = this.files[0];
+
+        if (!file) return;
+
+        if (file.size > 1024 * 1024) {
+            alert('Ukuran foto maksimal 1 MB.');
+            this.value = '';
+            return;
+        }
+
+        const preview = document.getElementById('fotoPreview');
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove('d-none');
+
+        document.getElementById('fotoPlaceholder').classList.add('d-none');
+
+        const hapus = document.getElementById('hapus_foto');
+        if (hapus) hapus.checked = false;
+    });
+</script>
+@endpush

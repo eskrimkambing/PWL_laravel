@@ -85,6 +85,27 @@
             background: var(--moza-accent);
             color: var(--moza-accent-text);
             font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--moza-accent);
+        }
+
+        /* Link profil di topbar */
+        .profil-link {
+            padding: 4px 8px;
+            border-radius: 12px;
+            transition: background 0.2s ease;
+        }
+
+        .profil-link:hover {
+            background: var(--bs-tertiary-bg);
         }
 
         .card {
@@ -97,6 +118,19 @@
 </head>
 
 <body>
+
+@php
+    // Data admin yang sedang login (untuk nama & foto di topbar)
+    $adminLogin = \App\Models\Admin::find(session('user_id'));
+
+    $emailAdmin = $adminLogin->email ?? session('email');
+
+    // Pakai kolom "nama" jika ada, jika tidak pakai bagian email sebelum "@"
+    $namaAdmin = $adminLogin->nama
+        ?? ucfirst(\Illuminate\Support\Str::before($emailAdmin ?? 'admin', '@'));
+
+    $fotoAdmin = $adminLogin->foto ?? null;
+@endphp
 
 <div class="d-flex min-vh-100">
 
@@ -248,24 +282,39 @@
 
             <div class="ms-auto d-flex align-items-center gap-3">
 
-                <div class="text-end d-none d-sm-block">
+                {{-- NAMA, EMAIL & FOTO (klik untuk membuka profil admin) --}}
+                <a
+                    href="{{ route('admin.profil.show') }}"
+                    class="profil-link d-flex align-items-center gap-3 text-decoration-none text-reset"
+                    title="Lihat profil"
+                >
 
-                    <div class="fw-semibold">
-                        Admin
+                    <div class="text-end d-none d-sm-block">
+
+                        <div class="fw-semibold">
+                            {{ $namaAdmin }}
+                        </div>
+
+                        <small class="text-secondary">
+                            {{ $emailAdmin }}
+                        </small>
+
                     </div>
 
-                    <small class="text-secondary">
-                        {{ session('email') }}
-                    </small>
 
-                </div>
+                    @if ($fotoAdmin)
+                        <img
+                            src="{{ $fotoAdmin }}"
+                            alt="Foto {{ $namaAdmin }}"
+                            class="avatar-img"
+                        >
+                    @else
+                        <div class="avatar d-flex align-items-center justify-content-center">
+                            {{ strtoupper(substr($namaAdmin ?: 'A', 0, 1)) }}
+                        </div>
+                    @endif
 
-
-                <div class="avatar d-flex align-items-center justify-content-center">
-
-                    {{ strtoupper(substr(session('email') ?? 'A', 0, 1)) }}
-
-                </div>
+                </a>
 
 
                 <div class="text-end border-start ps-3">
