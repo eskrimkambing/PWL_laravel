@@ -25,7 +25,7 @@
 
         <div>
             <h2 class="fw-bold mb-1">Kelola Pesanan</h2>
-            <p class="text-secondary mb-0">Daftar semua pesanan yang masuk ke Pizza Moza</p>
+            <p class="text-secondary mb-0">list semua pesanan yang masuk ke Pizza Moza</p>
         </div>
 
         <a href="{{ url('/admin/dashboard') }}" class="btn btn-secondary">
@@ -39,12 +39,7 @@
     <div class="row align-items-center mb-4 px-2">
 
         <div class="col-md-7">
-            <input
-                type="text"
-                id="cariPesanan"
-                class="form-control"
-                placeholder="Cari pesanan (ID, pembeli, status)..."
-            >
+            <input type="text" id="cariPesanan" class="form-control" placeholder="Cari pesanan (ID, pembeli, status)...">
         </div>
 
         <div class="col-md-5 text-md-end text-secondary mt-2 mt-md-0">
@@ -75,7 +70,6 @@
             <tbody>
 
                 @forelse ($pesanans as $pesanan)
-
                     @php
                         $status = strtolower($pesanan->status ?? 'menunggu');
                     @endphp
@@ -86,12 +80,10 @@
 
                         <td class="fw-bold">#{{ $pesanan->id_pesanan }}</td>
 
-                        <td>{{ $pesanan->nama_penerima ?? $pesanan->pembeli->nama ?? $pesanan->pembeli->email ?? '-' }}</td>
+                        <td>{{ $pesanan->nama_penerima ?? ($pesanan->pembeli->nama ?? ($pesanan->pembeli->email ?? '-')) }}</td>
 
                         <td>
-                            {{ $pesanan->created_at
-                                ? $pesanan->created_at->format('d/m/Y H:i')
-                                : '-' }}
+                            {{ $pesanan->created_at ? $pesanan->created_at->format('d/m/Y H:i') : '-' }}
                         </td>
 
                         <td class="fw-bold">
@@ -123,17 +115,13 @@
                         {{-- AKSI --}}
                         <td class="text-end">
 
-                            <a
-                                href="{{ route('admin.pesanans.show', $pesanan->id_pesanan) }}"
-                                class="btn btn-sm btn-outline-info"
-                            >
+                            <a href="{{ route('admin.pesanans.show', $pesanan->id_pesanan) }}"
+                                class="btn btn-sm btn-outline-info">
                                 Detail
                             </a>
 
-                            <a
-                                href="{{ route('admin.pesanans.edit', $pesanan->id_pesanan) }}"
-                                class="btn btn-sm btn-outline-primary"
-                            >
+                            <a href="{{ route('admin.pesanans.edit', $pesanan->id_pesanan) }}"
+                                class="btn btn-sm btn-outline-primary">
                                 Edit
                             </a>
 
@@ -148,7 +136,6 @@
                             Belum ada pesanan. Pesanan yang masuk akan tampil di halaman ini.
                         </td>
                     </tr>
-
                 @endforelse
 
             </tbody>
@@ -161,16 +148,16 @@
 
 
 @push('scripts')
-<script>
-    // Filter tabel pesanan berdasarkan teks yang diketik
-    document.getElementById('cariPesanan').addEventListener('input', function () {
+    <script>
+        // Filter tabel pesanan berdasarkan teks yang diketik
+        document.getElementById('cariPesanan').addEventListener('input', function() {
 
-        const kata = this.value.toLowerCase();
+            const kata = this.value.toLowerCase();
 
-        document.querySelectorAll('#tabelPesanan tbody tr').forEach(function (baris) {
-            baris.style.display = baris.textContent.toLowerCase().includes(kata) ? '' : 'none';
+            document.querySelectorAll('#tabelPesanan tbody tr').forEach(function(baris) {
+                baris.style.display = baris.textContent.toLowerCase().includes(kata) ? '' : 'none';
+            });
+
         });
-
-    });
-</script>
+    </script>
 @endpush
