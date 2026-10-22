@@ -58,7 +58,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold mb-1">Kelola Pembayaran</h2>
-            <p class="text-secondary mb-0">Daftar pembayaran pesanan Pizza Moza</p>
+            <p class="text-secondary mb-0">List Pembayaran</p>
         </div>
 
         <div class="d-flex gap-2">
