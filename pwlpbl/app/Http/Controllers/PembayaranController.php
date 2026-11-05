@@ -7,15 +7,37 @@ use Illuminate\Http\Request;
 
 class PembayaranController extends Controller
 {
-    // Menampilkan semua data pembayaran
-    public function index()
+    // Menampilkan semua data transaksi dengan filter tanggal dan pagination
+    public function index(Request $request)
     {
-        $pembayarans = Pesanan::with('pembeli')
-            ->whereNotNull('metode_pembayaran')
-            ->latest('id_pesanan')
-            ->get();
+        $request->validate([
+            'tanggal' => 'nullable|date',
+        ]);
 
-        return view('pembayaran.index', compact('pembayarans'));
+        $query = Pesanan::with('pembeli')
+            ->whereNotNull('metode_pembayaran');
+
+        // Filter transaksi berdasarkan tanggal pesanan dibuat
+        if ($request->filled('tanggal')) {
+            $query->whereDate('created_at', $request->tanggal);
+        }
+
+        // Menampilkan maksimal 10 transaksi per halaman
+        $pembayarans = $query
+            ->orderBy('id_pesanan', 'asc')
+            ->paginate(10)
+             ->withQueryString();
+
+        // Menghitung total transaksi hari ini
+        // Tidak terpengaruh oleh filter tanggal
+        $totalTransaksiHariIni = Pesanan::whereNotNull('metode_pembayaran')
+            ->whereDate('created_at', today())
+            ->count();
+
+        return view('pembayaran.index', compact(
+            'pembayarans',
+            'totalTransaksiHariIni'
+        ));
     }
 
     // Menampilkan form tambah pembayaran
