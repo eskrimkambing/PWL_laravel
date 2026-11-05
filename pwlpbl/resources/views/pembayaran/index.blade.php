@@ -45,7 +45,7 @@
     }
 
     .badge-metode {
-        background: #3d2e26;
+        background: #00ee00;
         color: var(--moza-accent);
         font-weight: 500;
     }
