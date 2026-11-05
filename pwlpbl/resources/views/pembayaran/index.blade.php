@@ -1,55 +1,55 @@
 @extends('dashboard.admin')
 
-@section('title', 'Kelola Pembayaran')
+@section('title', 'Kelola Transaksi')
 
 @push('styles')
-<style>
-    .search-box {
-        background: transparent;
-        border: 1px solid var(--bs-border-color);
-        color: var(--bs-body-color);
-        border-radius: 8px;
-    }
+    <style>
+        .search-box {
+            background: transparent;
+            border: 1px solid var(--bs-border-color);
+            color: var(--bs-body-color);
+            border-radius: 8px;
+        }
 
-    .search-box:focus {
-        background: transparent;
-        color: var(--bs-body-color);
-        border-color: #6b5648;
-        box-shadow: none;
-    }
+        .search-box:focus {
+            background: transparent;
+            color: var(--bs-body-color);
+            border-color: var(--moza-orange);
+            box-shadow: none;
+        }
 
-    .search-box::placeholder {
-        color: var(--bs-secondary-color);
-    }
+        .search-box::placeholder {
+            color: var(--bs-secondary-color);
+        }
 
-    .table {
-        --bs-table-bg: transparent;
-        --bs-table-color: #f3e9e1;
-        margin-bottom: 0;
-    }
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: var(--bs-body-color);
+            margin-bottom: 0;
+        }
 
-    .table thead th {
-        border-bottom: 1px solid var(--bs-border-color);
-        font-weight: 600;
-        padding: 14px 10px;
-    }
+        .table thead th {
+            border-bottom: 1px solid var(--bs-border-color);
+            font-weight: 600;
+            padding: 14px 10px;
+        }
 
-    .table tbody td {
-        border-bottom: 1px solid var(--bs-border-color);
-        padding: 14px 10px;
-        vertical-align: middle;
-    }
+        .table tbody td {
+            border-bottom: 1px solid var(--bs-border-color);
+            padding: 14px 10px;
+            vertical-align: middle;
+        }
 
-    .table tbody tr:hover {
-        background: rgba(255, 255, 255, 0.02);
-    }
+        .table tbody tr:hover {
+            background: rgba(66, 51, 51, 0.02);
+        }
 
-    .badge-metode {
-        background: #3d2e26;
-        color: var(--moza-accent);
-        font-weight: 500;
-    }
-</style>
+        .badge-metode {
+            background: var(--moza-maroon);
+            color: var(--moza-cream);
+            font-weight: 500;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -80,8 +80,7 @@
     {{-- ================= SEARCH ================= --}}
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div style="width: 500px; max-width: 100%;">
-            <input type="text" id="searchPembayaran" class="form-control search-box"
-                   placeholder="Cari pembayaran...">
+            <input type="text" id="searchPembayaran" class="form-control search-box" placeholder="Cari pembayaran...">
         </div>
 
         <div class="text-secondary">
@@ -116,9 +115,7 @@
                                 <td>#{{ $pembayaran->id_pesanan }}</td>
 
                                 <td>
-                                    {{ $pembayaran->pembeli->nama
-                                        ?? $pembayaran->pembeli->email
-                                        ?? '-' }}
+                                    {{ $pembayaran->pembeli->nama ?? ($pembayaran->pembeli->email ?? '-') }}
                                 </td>
 
                                 <td class="fw-semibold">
@@ -154,14 +151,14 @@
                                 <td>
                                     <div class="d-flex gap-1">
                                         <a href="{{ route('pembayaran.show', $pembayaran->id_pesanan) }}"
-                                           class="btn btn-sm btn-info text-white">Detail</a>
+                                            class="btn btn-sm btn-info text-white">Detail</a>
 
                                         <a href="{{ route('pembayaran.edit', $pembayaran->id_pesanan) }}"
-                                           class="btn btn-sm btn-warning">Edit</a>
+                                            class="btn btn-sm btn-warning">Edit</a>
 
                                         <form action="{{ route('pembayaran.destroy', $pembayaran->id_pesanan) }}"
-                                              method="POST"
-                                              onsubmit="return confirm('Yakin ingin menghapus data pembayaran ini?')">
+                                            method="POST"
+                                            onsubmit="return confirm('Yakin ingin menghapus data pembayaran ini?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
@@ -185,14 +182,14 @@
 @endsection
 
 @push('scripts')
-<script>
-    // Search pembayaran
-    document.getElementById('searchPembayaran').addEventListener('keyup', function () {
-        const keyword = this.value.toLowerCase();
+    <script>
+        // Search pembayaran
+        document.getElementById('searchPembayaran').addEventListener('keyup', function() {
+            const keyword = this.value.toLowerCase();
 
-        document.querySelectorAll('#tabelPembayaran tr').forEach(function (row) {
-            row.style.display = row.textContent.toLowerCase().includes(keyword) ? '' : 'none';
+            document.querySelectorAll('#tabelPembayaran tr').forEach(function(row) {
+                row.style.display = row.textContent.toLowerCase().includes(keyword) ? '' : 'none';
+            });
         });
-    });
-</script>
+    </script>
 @endpush

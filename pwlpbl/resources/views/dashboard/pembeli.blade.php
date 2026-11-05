@@ -3,29 +3,48 @@
 @section('title', 'Beranda')
 
 @push('styles')
-<style>
-    .category-btn {
-        border: 1px solid var(--bs-border-color);
-        background: #261c17;
-        color: var(--bs-secondary-color);
-        padding: 9px 20px;
-        border-radius: 12px;
-        font-size: 14px;
-    }
-    .category-btn:hover { background: #33261f; color: #fff; }
-    .category-btn.active { background: #3d2e26; color: #fff; }
+    <style>
+        .category-btn {
+            border: 1px solid var(--bs-border-color);
+            background: #3d2e26;
+            color: var(--bs-secondary-color);
+            padding: 9px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
 
-    .product-image {
-        width: 100%;
-        height: 210px;
-        object-fit: cover;
-        background: #33261f;
-    }
-    .product-description { font-size: 13px; min-height: 38px; }
-    .price { font-size: 18px; font-weight: bold; color: var(--moza-accent); }
+        .category-btn:hover {
+            background: #3d2e26;
+            color: #fff;
+        }
 
-    #emptyMessage { display: none; }
-</style>
+        .category-btn.active {
+            background: #3d2e26;
+            color: #fff;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            background: #3d2e26;
+        }
+
+        .product-description {
+            font-size: 13px;
+            min-height: 38px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--moza-accent);
+        }
+
+        #emptyMessage {
+            display: none;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -55,8 +74,8 @@
         <p class="text-secondary mb-0">Pilih menu favorit kamu dan pesan sekarang.</p>
     </div>
 
-    <input type="text" id="searchInput" class="form-control mb-3"
-           style="max-width: 360px;" placeholder="Cari menu..." onkeyup="searchProducts()">
+    <input type="text" id="searchInput" class="form-control mb-3" style="max-width: 360px;" placeholder="Cari menu..."
+        onkeyup="searchProducts()">
 
     <div class="d-flex flex-wrap gap-2 mb-4">
         <button type="button" class="category-btn active" onclick="filterCategory('all', this)">Semua</button>
@@ -88,16 +107,13 @@
                 }
             @endphp
 
-            <div class="col-xl-4 col-lg-6 col-md-6 product-item"
-                 data-name="{{ strtolower($product->nama) }}"
-                 data-category="{{ strtolower($product->kategori) }}">
+            <div class="col-xl-4 col-lg-6 col-md-6 product-item" data-name="{{ strtolower($product->nama) }}"
+                data-category="{{ strtolower($product->kategori) }}">
 
                 <div class="card h-100 overflow-hidden">
 
-                    <img src="{{ $srcFoto }}"
-                         alt="{{ $product->nama }}"
-                         class="product-image"
-                         onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
+                    <img src="{{ $srcFoto }}" alt="{{ $product->nama }}" class="product-image"
+                        onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
 
                     <div class="card-body d-flex flex-column">
                         <small class="text-secondary">{{ $product->kategori }}</small>
@@ -115,7 +131,7 @@
                         </div>
 
                         <a href="{{ route('checkout.index', ['product' => $product->id]) }}"
-                           class="btn btn-moza w-100 mt-auto">Pesan</a>
+                            class="btn btn-moza w-100 mt-auto">Pesan</a>
                     </div>
                 </div>
             </div>
@@ -130,37 +146,37 @@
 @endsection
 
 @push('scripts')
-<script>
-    function filterCategory(category, button) {
-        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        document.getElementById('searchInput').value = '';
+    <script>
+        function filterCategory(category, button) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            document.getElementById('searchInput').value = '';
 
-        const kategori = category.toLowerCase();
-        let visibleCount = 0;
+            const kategori = category.toLowerCase();
+            let visibleCount = 0;
 
-        document.querySelectorAll('.product-item').forEach(function (product) {
-            const show = kategori === 'all' || product.getAttribute('data-category') === kategori;
-            product.style.display = show ? '' : 'none';
-            if (show) visibleCount++;
-        });
+            document.querySelectorAll('.product-item').forEach(function(product) {
+                const show = kategori === 'all' || product.getAttribute('data-category') === kategori;
+                product.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
 
-        document.getElementById('emptyMessage').style.display = visibleCount === 0 ? 'block' : 'none';
-    }
+            document.getElementById('emptyMessage').style.display = visibleCount === 0 ? 'block' : 'none';
+        }
 
-    function searchProducts() {
-        const input = document.getElementById('searchInput').value.toLowerCase().trim();
+        function searchProducts() {
+            const input = document.getElementById('searchInput').value.toLowerCase().trim();
 
-        let visibleCount = 0;
-        document.querySelectorAll('.product-item').forEach(function (product) {
-            const name = product.getAttribute('data-name');
-            const category = product.getAttribute('data-category');
-            const show = name.includes(input) || category.includes(input);
-            product.style.display = show ? '' : 'none';
-            if (show) visibleCount++;
-        });
+            let visibleCount = 0;
+            document.querySelectorAll('.product-item').forEach(function(product) {
+                const name = product.getAttribute('data-name');
+                const category = product.getAttribute('data-category');
+                const show = name.includes(input) || category.includes(input);
+                product.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
 
-        document.getElementById('emptyMessage').style.display = visibleCount === 0 ? 'block' : 'none';
-    }
-</script>
+            document.getElementById('emptyMessage').style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+    </script>
 @endpush
