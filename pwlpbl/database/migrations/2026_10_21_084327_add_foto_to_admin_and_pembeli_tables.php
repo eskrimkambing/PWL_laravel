@@ -6,23 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    // Daftar tabel yang butuh kolom foto (yang tidak ada akan dilewati)
+    private array $tabel = ['admin', 'pembeli', 'pembelis'];
+
     public function up(): void
-{
-    Schema::table('pembeli', function (Blueprint $table) {
-        $table->longText('foto')->nullable();
-    });
+    {
+        foreach ($this->tabel as $nama) {
+            if (Schema::hasTable($nama) && !Schema::hasColumn($nama, 'foto')) {
+                Schema::table($nama, function (Blueprint $table) {
+                    $table->longText('foto')->nullable();
+                });
+            }
+        }
+    }
 
-    Schema::table('admin', function (Blueprint $table) {
-        $table->longText('foto')->nullable();
-    });
-}
-
-public function down(): void
-{
-    Schema::table('pembeli', fn (Blueprint $t) => $t->dropColumn('foto'));
-    Schema::table('admin', fn (Blueprint $t) => $t->dropColumn('foto'));
-}
+    public function down(): void
+    {
+        foreach ($this->tabel as $nama) {
+            if (Schema::hasTable($nama) && Schema::hasColumn($nama, 'foto')) {
+                Schema::table($nama, function (Blueprint $table) {
+                    $table->dropColumn('foto');
+                });
+            }
+        }
+    }
 };

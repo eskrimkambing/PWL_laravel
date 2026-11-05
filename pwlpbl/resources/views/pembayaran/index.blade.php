@@ -4,6 +4,7 @@
 @section('title', 'Kelola Transaksi')
 
 @push('styles')
+<<<<<<< HEAD
 <style>
     .search-box,
     .date-box {
@@ -20,34 +21,59 @@
         border-color: #6b5648;
         box-shadow: none;
     }
+=======
+    <style>
+        .search-box {
+            background: transparent;
+            border: 1px solid var(--bs-border-color);
+            color: var(--bs-body-color);
+            border-radius: 8px;
+        }
 
-    .search-box::placeholder {
-        color: var(--bs-secondary-color);
-    }
+        .search-box:focus {
+            background: transparent;
+            color: var(--bs-body-color);
+            border-color: var(--moza-orange);
+            box-shadow: none;
+        }
+>>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
 
-    .table {
-        --bs-table-bg: transparent;
-        --bs-table-color: #f3e9e1;
-        margin-bottom: 0;
-    }
+        .search-box::placeholder {
+            color: var(--bs-secondary-color);
+        }
 
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: var(--bs-body-color);
+            margin-bottom: 0;
+        }
+
+<<<<<<< HEAD
     .table thead th {
         border-bottom: 1px solid var(--bs-border-color);
         font-weight: 600;
         padding: 14px 10px;
         white-space: nowrap;
     }
+=======
+        .table thead th {
+            border-bottom: 1px solid var(--bs-border-color);
+            font-weight: 600;
+            padding: 14px 10px;
+        }
+>>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
 
-    .table tbody td {
-        border-bottom: 1px solid var(--bs-border-color);
-        padding: 14px 10px;
-        vertical-align: middle;
-    }
+        .table tbody td {
+            border-bottom: 1px solid var(--bs-border-color);
+            padding: 14px 10px;
+            vertical-align: middle;
+        }
 
-    .table tbody tr:hover {
-        background: rgba(255, 255, 255, 0.02);
-    }
+        .table tbody tr:hover {
+            background: rgba(66, 51, 51, 0.02);
+        }
 
+<<<<<<< HEAD
     .badge-metode {
         background: #00ee00;
         color: var(--moza-accent);
@@ -98,6 +124,14 @@
         color: #777;
     }
 </style>
+=======
+        .badge-metode {
+            background: var(--moza-maroon);
+            color: var(--moza-cream);
+            font-weight: 500;
+        }
+    </style>
+>>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
 @endpush
 
 @section('content')
@@ -197,11 +231,16 @@
 
     {{-- PENCARIAN DAN TOTAL TRANSAKSI --}}
     <div class="d-flex justify-content-between align-items-center mb-3">
+<<<<<<< HEAD
         <div style="width: 350px; max-width: 100%;">
             <input type="text"
                    id="searchPembayaran"
                    class="form-control search-box"
                    placeholder="Cari transaksi...">
+=======
+        <div style="width: 500px; max-width: 100%;">
+            <input type="text" id="searchPembayaran" class="form-control search-box" placeholder="Cari pembayaran...">
+>>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
         </div>
 
         <div class="text-secondary">
@@ -235,7 +274,11 @@
                             <tr>
                                 {{-- NOMOR URUT --}}
                                 <td>
+<<<<<<< HEAD
                                     {{ $pembayarans->firstItem() + $loop->index }}
+=======
+                                    {{ $pembayaran->pembeli->nama ?? ($pembayaran->pembeli->email ?? '-') }}
+>>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
                                 </td>
 
                                 {{-- ID PESANAN --}}
@@ -297,6 +340,7 @@
                                 <td>
                                     <div class="d-flex gap-1">
                                         <a href="{{ route('pembayaran.show', $pembayaran->id_pesanan) }}"
+<<<<<<< HEAD
                                            class="btn btn-sm btn-info text-white">
                                             Detail
                                         </a>
@@ -310,6 +354,16 @@
                                               method="POST"
                                               onsubmit="return confirm('Yakin ingin menghapus data pembayaran ini?')">
 
+=======
+                                            class="btn btn-sm btn-info text-white">Detail</a>
+
+                                        <a href="{{ route('pembayaran.edit', $pembayaran->id_pesanan) }}"
+                                            class="btn btn-sm btn-warning">Edit</a>
+
+                                        <form action="{{ route('pembayaran.destroy', $pembayaran->id_pesanan) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Yakin ingin menghapus data pembayaran ini?')">
+>>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
                                             @csrf
                                             @method('DELETE')
 
@@ -389,6 +443,7 @@
 @endsection
 
 @push('scripts')
+<<<<<<< HEAD
 <script>
     // Pencarian transaksi pada halaman yang sedang dibuka
     document.getElementById('searchPembayaran').addEventListener('keyup', function () {
@@ -401,4 +456,16 @@
         });
     });
 </script>
+=======
+    <script>
+        // Search pembayaran
+        document.getElementById('searchPembayaran').addEventListener('keyup', function() {
+            const keyword = this.value.toLowerCase();
+
+            document.querySelectorAll('#tabelPembayaran tr').forEach(function(row) {
+                row.style.display = row.textContent.toLowerCase().includes(keyword) ? '' : 'none';
+            });
+        });
+    </script>
+>>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
 @endpush
