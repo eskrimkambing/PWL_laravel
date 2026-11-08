@@ -3,38 +3,33 @@
 @section('title', 'Edit Pembayaran')
 
 @push('styles')
-<style>
-    .form-box {
-        max-width: 750px;
-    }
+    <style>
+        .form-box {
+            max-width: 750px;
+        }
 
-    .form-control,
-    .form-select {
-        background: var(--bs-card-bg);
-        border: 1px solid var(--bs-border-color);
-        color: var(--bs-body-color);
-    }
+        .form-control,
+        .form-select {
+            background-color: #fff;
+            border: 1px solid rgba(106, 8, 1, 0.2);
+            color: var(--moza-maroon);
+        }
 
-    .form-control:focus,
-    .form-select:focus {
-        background: var(--bs-card-bg);
-        color: var(--bs-body-color);
-        border-color: #6b5648;
-        box-shadow: none;
-    }
+        .form-control:focus,
+        .form-select:focus {
+            background-color: #fff;
+            color: var(--moza-maroon);
+            border-color: var(--moza-orange);
+            box-shadow: 0 0 0 .2rem rgba(222, 120, 1, 0.2);
+        }
 
-    .form-select option {
-        background: #261c17;
-        color: #f3e9e1;
-    }
-
-    .info-box {
-        background: var(--bs-card-bg);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 8px;
-        padding: 14px 16px;
-    }
-</style>
+        .info-box {
+            background: var(--bs-card-bg);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -73,9 +68,7 @@
                 <div class="col-md-4">
                     <small class="text-secondary">Pembeli</small>
                     <div class="fw-semibold">
-                        {{ $pembayaran->pembeli->nama
-                            ?? $pembayaran->pembeli->email
-                            ?? '-' }}
+                        {{ $pembayaran->pembeli->nama ?? ($pembayaran->pembeli->email ?? '-') }}
                     </div>
                 </div>
 

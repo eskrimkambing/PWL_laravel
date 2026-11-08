@@ -26,7 +26,7 @@
 
                 @if (session('role') === 'admin')
                     <a href="{{ route('kategoris.create') }}" class="btn btn-primary">
-                        + Tambah Kate
+                        + Tambah Kategori
                     </a>
                 @endif
 

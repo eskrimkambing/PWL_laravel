@@ -1,137 +1,125 @@
-
 @extends('dashboard.admin')
 
 @section('title', 'Kelola Transaksi')
 
 @push('styles')
-<<<<<<< HEAD
-<style>
-    .search-box,
-    .date-box {
-        background: transparent;
-        border: 1px solid var(--bs-border-color);
-        color: var(--bs-body-color);
-        border-radius: 8px;
-    }
-
-    .search-box:focus,
-    .date-box:focus {
-        background: transparent;
-        color: var(--bs-body-color);
-        border-color: #6b5648;
-        box-shadow: none;
-    }
-=======
     <style>
-        .search-box {
-            background: transparent;
-            border: 1px solid var(--bs-border-color);
+        /* Teks abu-abu mengikuti tema (maroon lembut) */
+        .text-secondary,
+        .text-muted {
+            color: var(--bs-secondary-color) !important;
+        }
+
+        /* Kolom cari & tanggal */
+        .search-box,
+        .date-box {
+            background: #fff;
+            border: 1px solid rgba(106, 8, 1, 0.2);
             color: var(--bs-body-color);
             border-radius: 8px;
         }
 
-        .search-box:focus {
-            background: transparent;
+        .search-box:focus,
+        .date-box:focus {
+            background: #fff;
             color: var(--bs-body-color);
             border-color: var(--moza-orange);
-            box-shadow: none;
+            box-shadow: 0 0 0 .2rem rgba(222, 120, 1, 0.2);
         }
->>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
 
         .search-box::placeholder {
-            color: var(--bs-secondary-color);
+            color: rgba(106, 8, 1, 0.4);
         }
 
+        .date-box {
+            min-width: 220px;
+            padding: 9px 12px;
+        }
+
+        /* Kartu tanggal hari ini */
+        .tanggal-card {
+            background: var(--moza-cream);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: var(--moza-maroon);
+        }
+
+        .tanggal-card h4,
+        .tanggal-card h5 {
+            color: var(--moza-maroon);
+        }
+
+        /* Tabel */
         .table {
             --bs-table-bg: transparent;
-            --bs-table-color: var(--bs-body-color);
+            --bs-table-color: var(--moza-maroon);
+            color: var(--moza-maroon);
             margin-bottom: 0;
         }
 
-<<<<<<< HEAD
-    .table thead th {
-        border-bottom: 1px solid var(--bs-border-color);
-        font-weight: 600;
-        padding: 14px 10px;
-        white-space: nowrap;
-    }
-=======
         .table thead th {
+            background: var(--moza-cream);
+            color: var(--moza-maroon);
             border-bottom: 1px solid var(--bs-border-color);
             font-weight: 600;
             padding: 14px 10px;
+            white-space: nowrap;
         }
->>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
 
         .table tbody td {
-            border-bottom: 1px solid var(--bs-border-color);
+            color: var(--moza-maroon);
+            border-bottom: 1px solid rgba(106, 8, 1, 0.15);
             padding: 14px 10px;
             vertical-align: middle;
         }
 
-        .table tbody tr:hover {
-            background: rgba(66, 51, 51, 0.02);
+        .table tbody tr:hover td {
+            background: rgba(247, 217, 145, 0.35);
         }
 
-<<<<<<< HEAD
-    .badge-metode {
-        background: #00ee00;
-        color: var(--moza-accent);
-        font-weight: 500;
-    }
+        /* Tombol aksi tidak melebar / turun baris */
+        .table .btn-sm {
+            white-space: nowrap;
+        }
 
-    /* Kartu tanggal hari ini */
-    .tanggal-card {
-        background: #3d2e26;
-        border: 1px solid var(--bs-border-color);
-        border-radius: 10px;
-        padding: 15px 20px;
-    }
-
-    /* Input tanggal */
-    .date-box {
-        min-width: 220px;
-        padding: 9px 12px;
-    }
-
-    /* Pagination */
-    .pagination {
-    margin-top: 20px;
-    margin-bottom: 0;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-}
-
-    .pagination .page-link {
-        background: transparent;
-        color: #f3e9e1;
-        border-color: var(--bs-border-color);
-    }
-
-    .pagination .page-link:hover {
-        background: #3d2e26;
-        color: var(--moza-accent);
-    }
-
-    .pagination .page-item.active .page-link {
-        background: #6b5648;
-        border-color: #6b5648;
-        color: #fff;
-    }
-
-    .pagination .page-item.disabled .page-link {
-        background: transparent;
-        color: #777;
-    }
-</style>
-=======
+        /* Badge metode */
         .badge-metode {
             background: var(--moza-maroon);
             color: var(--moza-cream);
             font-weight: 500;
         }
+
+        /* Pagination */
+        .pagination {
+            margin-top: 20px;
+            margin-bottom: 0;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .pagination .page-link {
+            background: var(--moza-cream-card);
+            color: var(--moza-maroon);
+            border-color: var(--bs-border-color);
+        }
+
+        .pagination .page-link:hover {
+            background: var(--moza-cream);
+            color: var(--moza-maroon);
+        }
+
+        .pagination .page-item.active .page-link {
+            background: var(--moza-orange);
+            border-color: var(--moza-orange);
+            color: #fff;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            background: transparent;
+            color: rgba(106, 8, 1, 0.35);
+        }
     </style>
->>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
 @endpush
 
 @section('content')
@@ -146,14 +134,12 @@
         </div>
 
         <div class="d-flex gap-2">
-            <a href="{{ route('dashboard.admin') }}"
-               class="btn btn-outline-secondary">
+            <a href="{{ route('dashboard.admin') }}" class="btn btn-outline-secondary">
                 Kembali
             </a>
 
-            <a href="{{ route('pembayaran.create') }}"
-               class="btn btn-moza">
-                + Tambah Pembayaran
+            <a href="{{ route('pembayaran.create') }}" class="btn btn-moza">
+                + Tambah Transaksi
             </a>
         </div>
     </div>
@@ -199,20 +185,15 @@
 
     {{-- FILTER TANGGAL --}}
     <div class="mb-3">
-        <form action="{{ route('pembayaran.index') }}"
-              method="GET"
-              class="d-flex flex-wrap align-items-end gap-2">
+        <form action="{{ route('pembayaran.index') }}" method="GET" class="d-flex flex-wrap align-items-end gap-2">
 
             <div>
                 <label for="tanggal" class="form-label text-secondary">
                     Cari Transaksi Berdasarkan Tanggal
                 </label>
 
-                <input type="date"
-                       name="tanggal"
-                       id="tanggal"
-                       class="form-control date-box"
-                       value="{{ request('tanggal') }}">
+                <input type="date" name="tanggal" id="tanggal" class="form-control date-box"
+                    value="{{ request('tanggal') }}">
             </div>
 
             <button type="submit" class="btn btn-moza">
@@ -221,8 +202,7 @@
             </button>
 
             @if (request('tanggal'))
-                <a href="{{ route('pembayaran.index') }}"
-                   class="btn btn-outline-secondary">
+                <a href="{{ route('pembayaran.index') }}" class="btn btn-outline-secondary">
                     Reset
                 </a>
             @endif
@@ -231,16 +211,8 @@
 
     {{-- PENCARIAN DAN TOTAL TRANSAKSI --}}
     <div class="d-flex justify-content-between align-items-center mb-3">
-<<<<<<< HEAD
         <div style="width: 350px; max-width: 100%;">
-            <input type="text"
-                   id="searchPembayaran"
-                   class="form-control search-box"
-                   placeholder="Cari transaksi...">
-=======
-        <div style="width: 500px; max-width: 100%;">
-            <input type="text" id="searchPembayaran" class="form-control search-box" placeholder="Cari pembayaran...">
->>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
+            <input type="text" id="searchPembayaran" class="form-control search-box" placeholder="Cari transaksi...">
         </div>
 
         <div class="text-secondary">
@@ -274,11 +246,7 @@
                             <tr>
                                 {{-- NOMOR URUT --}}
                                 <td>
-<<<<<<< HEAD
                                     {{ $pembayarans->firstItem() + $loop->index }}
-=======
-                                    {{ $pembayaran->pembeli->nama ?? ($pembayaran->pembeli->email ?? '-') }}
->>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
                                 </td>
 
                                 {{-- ID PESANAN --}}
@@ -306,24 +274,13 @@
                                 {{-- STATUS PEMBAYARAN --}}
                                 <td>
                                     @if ($pembayaran->status_pembayaran === 'Dibayar')
-                                        <span class="badge bg-success">
-                                            Dibayar
-                                        </span>
-
+                                        <span class="badge bg-success">Dibayar</span>
                                     @elseif ($pembayaran->status_pembayaran === 'Gagal')
-                                        <span class="badge bg-danger">
-                                            Gagal
-                                        </span>
-
+                                        <span class="badge bg-danger">Gagal</span>
                                     @elseif ($pembayaran->status_pembayaran === 'Menunggu Pembayaran')
-                                        <span class="badge bg-warning text-dark">
-                                            Menunggu Pembayaran
-                                        </span>
-
+                                        <span class="badge bg-warning text-dark">Menunggu Pembayaran</span>
                                     @else
-                                        <span class="badge bg-secondary">
-                                            Belum Dibayar
-                                        </span>
+                                        <span class="badge bg-secondary">Belum Dibayar</span>
                                     @endif
                                 </td>
 
@@ -340,35 +297,22 @@
                                 <td>
                                     <div class="d-flex gap-1">
                                         <a href="{{ route('pembayaran.show', $pembayaran->id_pesanan) }}"
-<<<<<<< HEAD
-                                           class="btn btn-sm btn-info text-white">
+                                            class="btn btn-sm btn-info text-white">
                                             Detail
                                         </a>
 
                                         <a href="{{ route('pembayaran.edit', $pembayaran->id_pesanan) }}"
-                                           class="btn btn-sm btn-warning">
+                                            class="btn btn-sm btn-warning">
                                             Edit
                                         </a>
 
                                         <form action="{{ route('pembayaran.destroy', $pembayaran->id_pesanan) }}"
-                                              method="POST"
-                                              onsubmit="return confirm('Yakin ingin menghapus data pembayaran ini?')">
-
-=======
-                                            class="btn btn-sm btn-info text-white">Detail</a>
-
-                                        <a href="{{ route('pembayaran.edit', $pembayaran->id_pesanan) }}"
-                                            class="btn btn-sm btn-warning">Edit</a>
-
-                                        <form action="{{ route('pembayaran.destroy', $pembayaran->id_pesanan) }}"
                                             method="POST"
                                             onsubmit="return confirm('Yakin ingin menghapus data pembayaran ini?')">
->>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
                                             @csrf
                                             @method('DELETE')
 
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-danger">
+                                            <button type="submit" class="btn btn-sm btn-danger">
                                                 Hapus
                                             </button>
                                         </form>
@@ -378,8 +322,7 @@
 
                         @empty
                             <tr>
-                                <td colspan="8"
-                                    class="text-center py-5 text-secondary">
+                                <td colspan="8" class="text-center py-5 text-secondary">
                                     Belum ada data transaksi.
                                 </td>
                             </tr>
@@ -388,7 +331,7 @@
                 </table>
             </div>
 
-            {{-- PAGINATION TANPA TULISAN TAMBAHAN --}}
+            {{-- PAGINATION --}}
             @if ($pembayarans->hasPages())
                 <div class="d-flex justify-content-end mt-4">
                     <nav aria-label="Navigasi halaman transaksi">
@@ -401,8 +344,7 @@
                                 </li>
                             @else
                                 <li class="page-item">
-                                    <a class="page-link"
-                                       href="{{ $pembayarans->previousPageUrl() }}">
+                                    <a class="page-link" href="{{ $pembayarans->previousPageUrl() }}">
                                         &lsaquo;
                                     </a>
                                 </li>
@@ -411,8 +353,7 @@
                             {{-- NOMOR HALAMAN --}}
                             @foreach (range(1, $pembayarans->lastPage()) as $page)
                                 <li class="page-item {{ $pembayarans->currentPage() == $page ? 'active' : '' }}">
-                                    <a class="page-link"
-                                       href="{{ $pembayarans->url($page) }}">
+                                    <a class="page-link" href="{{ $pembayarans->url($page) }}">
                                         {{ $page }}
                                     </a>
                                 </li>
@@ -421,8 +362,7 @@
                             {{-- SELANJUTNYA --}}
                             @if ($pembayarans->hasMorePages())
                                 <li class="page-item">
-                                    <a class="page-link"
-                                       href="{{ $pembayarans->nextPageUrl() }}">
+                                    <a class="page-link" href="{{ $pembayarans->nextPageUrl() }}">
                                         &rsaquo;
                                     </a>
                                 </li>
@@ -443,22 +383,8 @@
 @endsection
 
 @push('scripts')
-<<<<<<< HEAD
-<script>
-    // Pencarian transaksi pada halaman yang sedang dibuka
-    document.getElementById('searchPembayaran').addEventListener('keyup', function () {
-        const keyword = this.value.toLowerCase();
-
-        document.querySelectorAll('#tabelPembayaran tr').forEach(function (row) {
-            row.style.display = row.textContent.toLowerCase().includes(keyword)
-                ? ''
-                : 'none';
-        });
-    });
-</script>
-=======
     <script>
-        // Search pembayaran
+        // Pencarian transaksi pada halaman yang sedang dibuka
         document.getElementById('searchPembayaran').addEventListener('keyup', function() {
             const keyword = this.value.toLowerCase();
 
@@ -467,5 +393,4 @@
             });
         });
     </script>
->>>>>>> 6d9204d (Update tampilan dan fitur Pizza Moza)
 @endpush

@@ -46,6 +46,12 @@
             --bs-danger-rgb: 202, 66, 56;
         }
 
+        /* Teks abu-abu mengikuti tema (maroon lembut) */
+        .text-secondary,
+        .text-muted {
+            color: var(--bs-secondary-color) !important;
+        }
+
         /* ===== SIDEBAR ===== */
         .sidebar {
             --bs-offcanvas-width: 250px;
@@ -214,6 +220,41 @@
             --bs-pagination-active-bg: var(--moza-orange);
             --bs-pagination-active-border-color: var(--moza-orange);
             --bs-pagination-active-color: #fff;
+        }
+
+        /* ===== DROPDOWN: semua <select> punya panah + daftar krem ===== */
+        html body select,
+        html body select.form-control,
+        html body select.form-select {
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            background-color: #fff !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236A0801' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 0.85rem center !important;
+            background-size: 16px 12px !important;
+            padding-right: 2.5rem !important;
+            color: var(--moza-maroon) !important;
+            border: 1px solid rgba(106, 8, 1, 0.2) !important;
+            border-radius: 8px;
+            color-scheme: light;
+            cursor: pointer;
+        }
+
+        html body select:hover {
+            border-color: var(--moza-orange) !important;
+        }
+
+        html body select:focus {
+            border-color: var(--moza-orange) !important;
+            box-shadow: 0 0 0 .2rem rgba(222, 120, 1, 0.2) !important;
+            outline: none;
+        }
+
+        html body select option {
+            background: var(--moza-cream-card) !important;
+            color: var(--moza-maroon) !important;
         }
     </style>
 
