@@ -16,12 +16,17 @@ use Illuminate\Support\Facades\Route;
 
 
 // ==========================================================
-// ROUTE UMUM
+// ROUTE UMUM / BERANDA PUBLIK
 // ==========================================================
 
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+
+    $products = \App\Models\Product::latest()->get();
+
+    return view('beranda', compact('products'));
+
+})->name('home');
+
 
 
 // ==========================================================

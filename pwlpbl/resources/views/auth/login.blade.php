@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -9,149 +10,259 @@
     <style>
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: Arial, sans-serif;
-            background-image: url('/images/pizza.jpg');
+            background: #fffaf4;
+            color: #222;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 85px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            border-bottom: 1px solid #eeeeee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #bd001c;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            font-size: 36px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #222;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #d00020;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-right a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .btn-order {
+            background: #c90024;
+            color: white !important;
+            padding: 14px 25px;
+            border-radius: 8px;
+        }
+
+        .btn-order:hover {
+            background: #a9001c;
+        }
+
+        /* HERO BANNER */
+
+        .hero {
+            min-height: 520px;
+            background:
+                linear-gradient(90deg,
+                    rgba(190, 0, 20, 0.98) 0%,
+                    rgba(190, 0, 20, 0.88) 42%,
+                    rgba(190, 0, 20, 0.1) 100%),
+                url('/images/pizza.jpg');
+
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
             display: flex;
-            justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            padding: 55px 7%;
             position: relative;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.35);
-            z-index: -1;
+        .hero-content {
+            max-width: 570px;
+            color: white;
         }
 
-        .card {
-            background: rgba(209, 120, 79, 0.8);
-            padding: 32px;
-            border-radius: 15px;
+        .hero-label {
+            display: inline-block;
+            background: #ffcf45;
+            color: #9e0016;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 9px 17px;
+            border-radius: 30px;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 {
+            font-size: 65px;
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .hero h2 {
+            font-size: 27px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 17px;
+            line-height: 1.7;
+            color: #ffe6e6;
+            margin-bottom: 28px;
+        }
+
+        .hero-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #ffca40;
+            color: #920017;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 7px;
+            transition: 0.3s;
+        }
+
+        .hero-button:hover {
+            background: white;
+            transform: translateY(-3px);
+        }
+
+        /* LOGIN SECTION */
+
+        .login-section {
+            padding: 65px 20px;
+            display: flex;
+            justify-content: center;
+            background: #fffaf4;
+        }
+
+        .login-card {
             width: 100%;
-            max-width: 380px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            max-width: 440px;
+            background: white;
+            padding: 38px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.10);
+            border-top: 5px solid #c90024;
         }
 
-        h2 {
-            margin: 0 0 25px;
+        .login-card h2 {
             text-align: center;
-            color: #ffffff;
-            font-size: 28px;
+            color: #a9001c;
+            font-size: 29px;
+            margin-bottom: 10px;
+        }
+
+        .login-description {
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 28px;
         }
 
         label {
             display: block;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
             font-size: 14px;
-            color: #ffffff;
+            font-weight: bold;
+            color: #333;
         }
 
         input {
             width: 100%;
-            padding: 11px;
-            margin-bottom: 16px;
-            border: none;
+            padding: 13px;
+            border: 1px solid #ddd;
             border-radius: 7px;
             font-size: 14px;
-            background: #d9d9d9;
-            color: #222222;
+            margin-bottom: 20px;
+            outline: none;
+            background: #fff;
         }
 
         input:focus {
-            outline: 2px solid #a85f43;
+            border-color: #c90024;
+            box-shadow: 0 0 0 3px rgba(201,0,36,0.08);
         }
-
-        /* PASSWORD */
 
         .password-wrapper {
             position: relative;
         }
 
         .password-wrapper input {
-            padding-right: 42px;
+            padding-right: 45px;
         }
 
         .toggle-password {
             position: absolute;
-
-            right: 10px;
-            top: 50%;
-            transform: translateY(-80%);
-            width: 24px;
-            height: 24px;
-            padding: 0;
-            background: transparent;
-            color: #222222;
+            right: 12px;
+            top: 12px;
             border: none;
-            border-radius: 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .toggle-password:hover {
             background: transparent;
+            cursor: pointer;
+            font-size: 19px;
         }
 
-        .toggle-password svg {
-            width: 20px;
-            height: 20px;
-            display: block;
-        }
-
-        /* TOMBOL LOGIN */
-
-        button[type="submit"] {
+        .login-button {
             width: 100%;
-            padding: 12px;
-            background: #000000;
-            color: #ffffff;
+            padding: 14px;
+            background: #c90024;
+            color: white;
             border: none;
-            border-radius: 20px;
-            font-size: 15px;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            margin-top: 3px;
+            transition: 0.3s;
         }
 
-        /* SAAT MOUSE DIARAHKAN */
-        button[type="submit"]:hover {
-            background: #000000;
-            color: #ffffff;
+        .login-button:hover {
+            background: #a9001c;
         }
-
-        /* ERROR */
-
-        .error {
-            background: #fee2e2;
-            color: #b91c1c;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            font-size: 14px;
-        }
-
-        /* REGISTER */
 
         .bawah {
             text-align: center;
-            margin-top: 18px;
+            margin-top: 23px;
             font-size: 14px;
-            color: #ffffff;
+            color: #666;
         }
 
         .bawah a {
-            color: #0222c2;
+            color: #c90024;
+            font-weight: bold;
             text-decoration: none;
         }
 
@@ -159,12 +270,133 @@
             text-decoration: underline;
         }
 
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        /* LAYANAN */
+
+        .services {
+            padding: 0 5% 55px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+            border: 1px solid #eee;
+        }
+
+        .service-icon {
+            font-size: 38px;
+        }
+
+        .service-card h3 {
+            font-size: 19px;
+            color: #222;
+        }
+
+        .service-card p {
+            font-size: 13px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #a9001c;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+        }
+
         /* RESPONSIVE */
 
-        @media (max-width: 480px) {
-            .card {
-                width: 90%;
-                padding: 28px 24px;
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 0 3%;
+            }
+
+            .nav-menu {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 48px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .navbar {
+                height: auto;
+                padding: 18px;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 21px;
+            }
+
+            .nav-menu {
+                width: 100%;
+                justify-content: center;
+                gap: 18px;
+                order: 3;
+            }
+
+            .nav-menu a {
+                font-size: 12px;
+            }
+
+            .nav-right {
+                gap: 10px;
+            }
+
+            .btn-order {
+                padding: 10px 13px;
+                font-size: 12px !important;
+            }
+
+            .hero {
+                min-height: 430px;
+                padding: 45px 25px;
+                background-position: center;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero h2 {
+                font-size: 21px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+                padding: 0 20px 40px;
+            }
+
+            .login-card {
+                padding: 28px 22px;
             }
         }
     </style>
@@ -172,176 +404,204 @@
 
 <body>
 
-    <div class="card">
+    <!-- NAVBAR -->
 
-        <h2>Login</h2>
+    <header class="navbar">
 
-        @if (session('error'))
-            <div class="error">
-                {{ session('error') }}
-            </div>
-        @endif
+        <div class="logo">
+            <span class="logo-icon">🍕</span>
+            <span>PIZZA MOZA</span>
+        </div>
 
-        @if ($errors->any())
-            <div class="error">
-                {{ $errors->first() }}
-            </div>
-        @endif
+        <nav class="nav-menu">
+            <a href="/">HOME</a>
+            <a href="#menu">MENU</a>
+            <a href="#tentang">TENTANG KAMI</a>
+        </nav>
 
-        <form action="{{ route('login.proses') }}" method="POST">
+        <div class="nav-right">
+            <a href="{{ route('login') }}">Login / Sign Up</a>
+            <a href="#login" class="btn-order">Order Now</a>
+        </div>
 
-            @csrf
+    </header>
 
-            <!-- EMAIL -->
 
-            <label for="email">
-                Email
-            </label>
+    <!-- HERO BANNER -->
 
-            <input
-                type="email"
-                id="email"
-                name="email"
-                value="{{ old('email') }}"
-                required
-                autofocus
-            >
+    <section class="hero" id="menu">
 
-            <!-- PASSWORD -->
+        <div class="hero-content">
 
-            <label for="password">
-                Password
-            </label>
+            <span class="hero-label">
+                🍕 SPECIAL MENU PIZZA MOZA
+            </span>
 
-            <div class="password-wrapper">
+            <h1>
+                PIZZA MOZA
+            </h1>
 
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    required
-                >
+            <h2>
+                RASA JUARA, HARGA BERSAHABAT!
+            </h2>
 
-                <button
-                    type="button"
-                    class="toggle-password"
-                    onclick="togglePassword()"
-                >
+            <p>
+                Nikmati kelezatan pizza dengan topping pilihan,
+                keju melimpah, dan cita rasa yang bikin ketagihan.
+                Pesan sekarang dan nikmati favoritmu!
+            </p>
 
-                    <!-- ICON MATA -->
-
-                    <span id="eyeIcon">
-
-                        <svg viewBox="0 0 24 24">
-
-                            <path
-                                d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            />
-
-                            <circle
-                                cx="12"
-                                cy="12"
-                                r="3"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            />
-
-                        </svg>
-
-                    </span>
-
-                    <!-- ICON MATA DICORET -->
-
-                    <span
-                        id="eyeSlashIcon"
-                        style="display: none;"
-                    >
-
-                        <svg viewBox="0 0 24 24">
-
-                            <path
-                                d="M3 3l18 18"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            />
-
-                            <path
-                                d="M10.6 6.2A10.7 10.7 0 0 1 12 6c6.5 0 10 6 10 6a18.5 18.5 0 0 1-3.1 3.7"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            />
-
-                            <path
-                                d="M6.2 8.2C3.6 9.8 2 12 2 12s3.5 6 10 6c1.1 0 2.1-.2 3-.5"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            />
-
-                        </svg>
-
-                    </span>
-
-                </button>
-
-            </div>
-
-            <!-- TOMBOL LOGIN -->
-
-            <button type="submit">
-                Login
-            </button>
-
-        </form>
-
-        <!-- LINK REGISTER -->
-
-        <div class="bawah">
-
-            Belum punya akun?
-
-            <a href="{{ route('register') }}">
-                Register
+            <a href="#login" class="hero-button">
+                ORDER NOW →
             </a>
 
         </div>
 
-    </div>
+    </section>
 
-    <!-- SCRIPT SHOW / HIDE PASSWORD -->
+
+    <!-- LOGIN -->
+
+    <section class="login-section" id="login">
+
+        <div class="login-card">
+
+            <h2>Welcome Back!</h2>
+
+            <p class="login-description">
+                Login untuk mulai menikmati Pizza Moza.
+            </p>
+
+            @if (session('error'))
+                <div class="error">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="error">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form action="{{ route('login.proses') }}" method="POST">
+
+                @csrf
+
+                <label for="email">Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    placeholder="Masukkan email kamu"
+                    required
+                    autofocus
+                >
+
+                <label for="password">Password</label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Masukkan password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        onclick="togglePassword()"
+                        aria-label="Tampilkan password"
+                    >
+                        <span id="eyeIcon">👁</span>
+                    </button>
+
+                </div>
+
+                <button type="submit" class="login-button">
+                    LOGIN SEKARANG
+                </button>
+
+            </form>
+
+            <div class="bawah">
+                Belum punya akun?
+
+                <a href="{{ route('register') }}">
+                    Register
+                </a>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PILIHAN LAYANAN -->
+
+    <section class="services" id="tentang">
+
+        <div class="service-card">
+            <span class="service-icon">🛵</span>
+
+            <div>
+                <h3>Delivery</h3>
+                <p>Pizza favorit diantar ke tempatmu.</p>
+            </div>
+        </div>
+
+        <div class="service-card">
+            <span class="service-icon">🍕</span>
+
+            <div>
+                <h3>Takeaway</h3>
+                <p>Pesan dan ambil pesananmu langsung.</p>
+            </div>
+        </div>
+
+        <div class="service-card">
+            <span class="service-icon">🎉</span>
+
+            <div>
+                <h3>Party</h3>
+                <p>Temani momen spesial bersama Pizza Moza.</p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+        © {{ date('Y') }} Pizza Moza. All Rights Reserved.
+    </footer>
+
+
+    <!-- SHOW / HIDE PASSWORD -->
 
     <script>
-
         function togglePassword() {
 
-            const password =
-                document.getElementById('password');
-            const eyeIcon =
-                document.getElementById('eyeIcon');
-            const eyeSlashIcon =
-                document.getElementById('eyeSlashIcon');
+            const password = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
 
             if (password.type === 'password') {
                 password.type = 'text';
-                eyeIcon.style.display = 'none';
-                eyeSlashIcon.style.display = 'block';
-
+                eyeIcon.textContent = '🙈';
             } else {
                 password.type = 'password';
-                eyeIcon.style.display = 'block';
-                eyeSlashIcon.style.display = 'none';
-
+                eyeIcon.textContent = '👁';
             }
 
         }
-
     </script>
 
 </body>
 </html>
+
