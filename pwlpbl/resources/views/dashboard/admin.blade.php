@@ -88,6 +88,13 @@
             box-shadow: 0 4px 12px rgba(222, 120, 1, 0.3);
         }
 
+        /* Logout: tepat di bawah menu, dipisah garis tipis */
+        .sidebar-logout {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--bs-border-color);
+        }
+
         /* ===== TOMBOL ===== */
         .btn-moza,
         .btn-primary {
@@ -256,6 +263,50 @@
             background: var(--moza-cream-card) !important;
             color: var(--moza-maroon) !important;
         }
+
+
+        /* =================================
+   SIDEBAR TETAP SAAT HALAMAN DI-SCROLL
+================================= */
+
+        @media (min-width: 992px) {
+
+            .sidebar {
+                position: fixed !important;
+                top: 0;
+                left: 0;
+                bottom: 0;
+
+                width: 250px !important;
+                height: 100vh;
+
+                overflow-y: auto;
+                overflow-x: hidden;
+
+                z-index: 1030;
+            }
+
+            /* AREA KONTEN DI SEBELAH KANAN */
+            .sidebar+.flex-grow-1 {
+                margin-left: 250px;
+                min-width: 0;
+            }
+
+        }
+
+        /* SCROLLBAR SIDEBAR */
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #DE7801;
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #F7D991;
+        }
     </style>
 
     @stack('styles')
@@ -351,7 +402,8 @@
             </nav>
 
 
-            <form action="{{ route('logout') }}" method="POST" class="mt-auto">
+            {{-- LOGOUT: tepat di bawah menu (bukan menempel di dasar sidebar) --}}
+            <form action="{{ route('logout') }}" method="POST" class="sidebar-logout">
 
                 @csrf
 

@@ -12,34 +12,84 @@ class PesananController extends Controller
     /**
      * Menampilkan daftar pesanan.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $query = Pesanan::with([
-            'pembeli',
-            'detailPesanans.product'
-        ]);
-
-        // Pembeli hanya boleh melihat pesanan miliknya.
-        if (session('role') === 'pembeli') {
-            $query->where('pembeli_id', session('user_id'));
-        } elseif (session('role') !== 'admin') {
+        // Pastikan hanya admin dan pembeli yang bisa mengakses.
+        if (!in_array(session('role'), ['admin', 'pembeli'])) {
             abort(403);
         }
 
-        // Admin melihat maksimal 10 pesanan setiap halaman.
-        if (session('role') === 'admin') {
-            $pesanans = $query->latest()
-                ->paginate(10)
-                ->withQueryString();
+        /*
+        |--------------------------------------------------------------------------
+        | TAMPILAN PEMBELI
+        |--------------------------------------------------------------------------
+        */
 
-            return view('pesanans.indexAdmin', compact('pesanans'));
+        if (session('role') === 'pembeli') {
+
+            // Pembeli hanya melihat pesanan miliknya sendiri.
+            $pesanans = Pesanan::with([
+                'pembeli',
+                'detailPesanans.product'
+            ])
+                ->where('pembeli_id', session('user_id'))
+                ->latest()
+                ->get();
+
+            return view('pesanans.index', compact('pesanans'));
         }
 
-        // Tampilan pembeli tetap seperti sebelumnya.
-        $pesanans = $query->latest()->get();
+        /*
+        |--------------------------------------------------------------------------
+        | TAMPILAN ADMIN
+        |--------------------------------------------------------------------------
+        */
 
-        return view('pesanans.index', compact('pesanans'));
+        // Validasi tanggal pencarian.
+        $request->validate([
+            'tanggal' => 'nullable|date_format:Y-m-d',
+        ]);
+
+        // Jika belum memilih tanggal, tampilkan pesanan hari ini.
+        $tanggal = $request->input('tanggal') ?: now()->toDateString();
+
+        // Total seluruh pesanan.
+        $totalPesanan = Pesanan::count();
+
+        // Jumlah pesanan yang masuk hari ini.
+        $totalPesananHariIni = Pesanan::whereDate(
+            'created_at',
+            now()->toDateString()
+        )->count();
+
+        // Query pesanan berdasarkan tanggal yang dipilih.
+        $query = Pesanan::with([
+            'pembeli',
+            'detailPesanans.product'
+        ])->whereDate('created_at', $tanggal);
+
+        // Jumlah pesanan pada tanggal yang dipilih.
+        $jumlahPesananTanggal = (clone $query)->count();
+
+        // Total pendapatan pada tanggal yang dipilih.
+        $totalPendapatan = (clone $query)->sum('total_harga');
+
+        // Tampilkan pesanan dengan pagination 10 data per halaman.
+        $pesanans = $query->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        // Kirim data ke halaman Kelola Pesanan admin.
+        return view('pesanans.indexAdmin', compact(
+            'pesanans',
+            'tanggal',
+            'totalPesanan',
+            'totalPesananHariIni',
+            'jumlahPesananTanggal',
+            'totalPendapatan'
+        ));
     }
+
 
     /**
      * Menampilkan detail pesanan.
@@ -53,11 +103,13 @@ class PesananController extends Controller
 
         // Pembeli hanya boleh melihat pesanan miliknya.
         if (session('role') === 'pembeli') {
+
             abort_unless(
                 (int) $pesanan->pembeli_id === (int) session('user_id'),
                 403
             );
         } elseif (session('role') !== 'admin') {
+
             abort(403);
         }
 
@@ -68,6 +120,7 @@ class PesananController extends Controller
 
         return view('pesanans.show', compact('pesanan'));
     }
+
 
     /**
      * Membuat token pembayaran Midtrans.
@@ -90,12 +143,18 @@ class PesananController extends Controller
 
         // Periksa status pembayaran.
         if ($pesanan->status_pembayaran === 'Dibayar') {
-            return back()->with('error', 'Pesanan ini sudah dibayar.');
+            return back()->with(
+                'error',
+                'Pesanan ini sudah dibayar.'
+            );
         }
 
         // Periksa detail pesanan.
         if ($pesanan->detailPesanans->isEmpty()) {
-            return back()->with('error', 'Detail pesanan tidak ditemukan.');
+            return back()->with(
+                'error',
+                'Detail pesanan tidak ditemukan.'
+            );
         }
 
         $pembeli = $pesanan->pembeli;
@@ -110,10 +169,12 @@ class PesananController extends Controller
 
         // Konfigurasi Midtrans.
         Config::$serverKey = config('services.midtrans.server_key');
+
         Config::$isProduction = (bool) config(
             'services.midtrans.is_production',
             false
         );
+
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
@@ -121,8 +182,12 @@ class PesananController extends Controller
         $items = [];
 
         foreach ($pesanan->detailPesanans as $detail) {
+
             if (!$detail->product) {
-                return back()->with('error', 'Data produk tidak ditemukan.');
+                return back()->with(
+                    'error',
+                    'Data produk tidak ditemukan.'
+                );
             }
 
             $namaProduk = $detail->product->name
@@ -130,31 +195,39 @@ class PesananController extends Controller
                 ?? 'Produk';
 
             $items[] = [
-                'id'       => (string) $detail->product_id,
-                'price'    => (int) $detail->harga,
+                'id' => (string) $detail->product_id,
+                'price' => (int) $detail->harga,
                 'quantity' => (int) $detail->jumlah,
-                'name'     => mb_substr($namaProduk, 0, 50),
+                'name' => mb_substr($namaProduk, 0, 50),
             ];
         }
 
         // Data pelanggan.
         $customerDetails = array_filter([
-            'first_name' => $pesanan->nama_penerima ?: ($pembeli->nama ?? null) ?: 'Pembeli',
-            'email'      => $pembeli->email ?? null,
-            'phone'      => $pesanan->no_telp ?: ($pembeli->no_telp ?? null),
+            'first_name' => $pesanan->nama_penerima
+                ?: ($pembeli->nama ?? null)
+                ?: 'Pembeli',
+
+            'email' => $pembeli->email ?? null,
+
+            'phone' => $pesanan->no_telp
+                ?: ($pembeli->no_telp ?? null),
         ]);
 
         // Data transaksi Midtrans.
         $params = [
             'transaction_details' => [
-                'order_id'     => 'PZ-' . $pesanan->id_pesanan,
+                'order_id' => 'PZ-' . $pesanan->id_pesanan,
                 'gross_amount' => (int) $pesanan->total_harga,
             ],
+
             'item_details' => $items,
+
             'customer_details' => $customerDetails,
         ];
 
         try {
+
             // Buat token pembayaran.
             $token = Snap::getSnapToken($params);
 
@@ -168,6 +241,7 @@ class PesananController extends Controller
                 ->with('success', 'Token pembayaran berhasil dibuat.')
                 ->with('snap_token', $token);
         } catch (\Throwable $e) {
+
             report($e);
 
             return back()->with(
@@ -176,6 +250,7 @@ class PesananController extends Controller
             );
         }
     }
+
 
     /**
      * Menampilkan halaman edit pesanan khusus admin.
@@ -191,6 +266,7 @@ class PesananController extends Controller
 
         return view('pesanans.edit', compact('pesanan'));
     }
+
 
     /**
      * Memperbarui status pesanan oleh admin.

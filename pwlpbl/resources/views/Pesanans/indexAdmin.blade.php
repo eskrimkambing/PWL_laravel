@@ -4,7 +4,109 @@
 
 @push('styles')
     <style>
-        /* Pagination Pizza Moza */
+        /* KARTU RINGKASAN */
+        .summary-card {
+            background: #F7D991;
+            border: 1px solid rgba(106, 8, 1, 0.10);
+            border-radius: 14px;
+            padding: 18px 22px;
+            color: #6A0801;
+        }
+
+        .summary-label {
+            color: #9B5140;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .summary-value {
+            font-size: 23px;
+            font-weight: 700;
+            color: #6A0801;
+        }
+
+        /* KARTU TABEL */
+        .order-table-card {
+            background: #FFFAEE;
+            border: 1px solid rgba(106, 8, 1, 0.10);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 3px 10px rgba(106, 8, 1, 0.05);
+        }
+
+        #tabelPesanan {
+            margin-bottom: 0;
+            color: #6A0801;
+        }
+
+        #tabelPesanan thead th {
+            background: #F7D991;
+            color: #6A0801;
+            font-weight: 700;
+            padding: 13px 10px;
+            white-space: nowrap;
+            border-bottom: 1px solid rgba(106, 8, 1, 0.12);
+        }
+
+        #tabelPesanan tbody td {
+            padding: 12px 10px;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(106, 8, 1, 0.10);
+        }
+
+        #tabelPesanan tbody tr:hover {
+            background: #FFF3D5;
+        }
+
+        /* TOTAL PENDAPATAN */
+        .revenue-card {
+            background: #F7D991;
+            border: 1px solid rgba(106, 8, 1, 0.10);
+            border-radius: 14px;
+            padding: 20px 24px;
+            color: #6A0801;
+        }
+
+        .revenue-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            border: 2px solid #DE7801;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            color: #DE7801;
+        }
+
+        .revenue-label {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .revenue-value {
+            font-size: 27px;
+            font-weight: 800;
+            color: #6A0801;
+        }
+
+        /* TOMBOL CARI */
+        .btn-cari {
+            background: #DE7801;
+            color: white;
+            border: 1px solid #DE7801;
+            border-radius: 7px;
+            padding: 9px 22px;
+            font-weight: 600;
+        }
+
+        .btn-cari:hover {
+            background: #BD6200;
+            color: white;
+        }
+
+        /* PAGINATION */
         .pagination {
             gap: 4px;
             margin-bottom: 0;
@@ -14,10 +116,10 @@
             color: #6A0801;
             background-color: #FFFAEE;
             border: 1px solid rgba(106, 8, 1, 0.15);
-            border-radius: 5px;
-            min-width: 34px;
+            border-radius: 6px;
+            min-width: 36px;
             text-align: center;
-            padding: 7px 11px;
+            padding: 8px 12px;
             transition: all 0.2s ease;
         }
 
@@ -30,14 +132,13 @@
         .pagination .page-item.active .page-link {
             background-color: #DE7801;
             border-color: #DE7801;
-            color: #fff;
+            color: white;
             font-weight: 600;
         }
 
         .pagination .page-item.disabled .page-link {
             color: #b8a99a;
             background-color: #fffaf0;
-            border-color: rgba(106, 8, 1, 0.10);
         }
 
         .pagination-info {
@@ -45,8 +146,20 @@
             font-size: 13px;
         }
 
-        #tabelPesanan tbody tr {
-            transition: background-color 0.15s ease;
+        .filter-date {
+            max-width: 260px;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .revenue-value {
+                font-size: 22px;
+            }
+
+            .summary-value {
+                font-size: 20px;
+            }
         }
     </style>
 @endpush
@@ -73,41 +186,65 @@
         <div>
             <h2 class="fw-bold mb-1">Kelola Pesanan</h2>
             <p class="text-secondary mb-0">
-                Daftar semua pesanan yang masuk ke Pizza Moza
+                Daftar pesanan Pizza Moza per hari
             </p>
         </div>
 
-        <a href="{{ url('/admin/dashboard') }}" class="btn btn-secondary">
-            Kembali
-        </a>
-    </div>
-
-    {{-- PENCARIAN & TOTAL PESANAN --}}
-    <div class="row align-items-center mb-4 px-2">
-        <div class="col-md-7">
-            <input type="text" id="cariPesanan" class="form-control" placeholder="Cari pesanan (ID, pembeli, status)...">
-        </div>
-
-        <div class="col-md-5 text-md-end text-secondary mt-2 mt-md-0">
+        <div class="text-secondary">
             Total pesanan:
             <strong class="text-dark">
-                {{ $pesanans->total() }}
+                {{ number_format($totalPesanan, 0, ',', '.') }}
             </strong>
         </div>
     </div>
 
-    {{-- TABEL PESANAN --}}
-    <div class="card p-3">
-        <div class="table-responsive">
+    {{-- RINGKASAN HARI INI --}}
+    <div class="summary-card mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <div class="summary-label">Tanggal Hari Ini</div>
+                <div class="summary-value">
+                    {{ now()->format('d-m-Y') }}
+                </div>
+            </div>
 
+            <div class="text-end">
+                <div class="summary-label">Total Pesanan Hari Ini</div>
+                <div class="summary-value">
+                    {{ number_format($totalPesananHariIni, 0, ',', '.') }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- PENCARIAN BERDASARKAN TANGGAL --}}
+    <div class="mb-4">
+        <label class="form-label text-secondary">
+            Cari Pesanan Berdasarkan Tanggal
+        </label>
+
+        <form action="{{ url()->current() }}" method="GET" class="d-flex align-items-center gap-2 flex-wrap">
+
+            <input type="date" name="tanggal" class="form-control filter-date" value="{{ $tanggal }}" required>
+
+            <button type="submit" class="btn btn-cari">
+                Cari
+            </button>
+        </form>
+    </div>
+
+    {{-- TABEL PESANAN --}}
+    <div class="order-table-card">
+
+        <div class="table-responsive">
             <table class="table align-middle" id="tabelPesanan">
 
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>No.</th>
                         <th>ID Pesanan</th>
                         <th>Pembeli</th>
-                        <th>Tanggal</th>
+                        <th>Jam</th>
                         <th>Total</th>
                         <th>Pembayaran</th>
                         <th>Status</th>
@@ -124,7 +261,7 @@
 
                         <tr class="baris-pesanan">
 
-                            {{-- NOMOR URUT --}}
+                            {{-- NOMOR --}}
                             <td>
                                 {{ $pesanans->firstItem() + $loop->index }}
                             </td>
@@ -134,25 +271,27 @@
                                 #{{ $pesanan->id_pesanan }}
                             </td>
 
-                            {{-- NAMA PEMBELI --}}
+                            {{-- PEMBELI --}}
                             <td>
                                 {{ $pesanan->nama_penerima ?? ($pesanan->pembeli->nama ?? ($pesanan->pembeli->email ?? '-')) }}
                             </td>
 
-                            {{-- TANGGAL --}}
-                            <td>
-                                {{ $pesanan->created_at ? $pesanan->created_at->format('d/m/Y H:i') : '-' }}
+                            {{-- JAM SAJA, TANPA TANGGAL --}}
+                            <td class="text-nowrap">
+                                {{ $pesanan->created_at ? $pesanan->created_at->format('H:i') : '-' }}
                             </td>
 
                             {{-- TOTAL HARGA --}}
-                            <td class="fw-bold">
+                            <td class="fw-bold text-nowrap">
                                 Rp {{ number_format($pesanan->total_harga ?? 0, 0, ',', '.') }}
                             </td>
 
-                            {{-- STATUS PEMBAYARAN --}}
+                            {{-- PEMBAYARAN --}}
                             <td>
                                 @if (($pesanan->status_pembayaran ?? '') === 'Dibayar')
                                     <span class="badge bg-success">Dibayar</span>
+                                @elseif (($pesanan->status_pembayaran ?? '') === 'Gagal')
+                                    <span class="badge bg-danger">Gagal</span>
                                 @else
                                     <span class="badge bg-secondary">Belum Dibayar</span>
                                 @endif
@@ -175,7 +314,6 @@
 
                             {{-- AKSI --}}
                             <td class="text-end text-nowrap">
-
                                 <a href="{{ route('admin.pesanans.show', $pesanan->id_pesanan) }}"
                                     class="btn btn-sm btn-outline-info">
                                     Detail
@@ -185,7 +323,6 @@
                                     class="btn btn-sm btn-outline-primary">
                                     Edit
                                 </a>
-
                             </td>
 
                         </tr>
@@ -194,12 +331,13 @@
 
                         <tr>
                             <td colspan="8" class="text-center text-secondary py-5">
-                                Belum ada pesanan. Pesanan yang masuk akan tampil di halaman ini.
+                                Belum ada pesanan pada tanggal
+                                {{ \Carbon\Carbon::parse($tanggal)->format('d-m-Y') }}.
                             </td>
                         </tr>
                     @endforelse
 
-                    {{-- PESAN JIKA PENCARIAN TIDAK DITEMUKAN --}}
+                    {{-- PESAN JIKA PENCARIAN TEKS TIDAK DITEMUKAN --}}
                     <tr id="tidakDitemukan" style="display: none;">
                         <td colspan="8" class="text-center text-secondary py-4">
                             Pesanan yang dicari tidak ditemukan.
@@ -207,118 +345,92 @@
                     </tr>
 
                 </tbody>
-
             </table>
-
         </div>
 
         {{-- PAGINATION --}}
-        @if ($pesanans->total() > 0)
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3 pt-3 border-top">
 
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3 pt-3 border-top">
-
-                {{-- INFORMASI JUMLAH DATA --}}
-                <div class="pagination-info">
-                    Menampilkan
-                    <strong>{{ $pesanans->firstItem() }}</strong>
-                    sampai
-                    <strong>{{ $pesanans->lastItem() }}</strong>
-                    dari
-                    <strong>{{ $pesanans->total() }}</strong>
-                    pesanan
-                </div>
-
-                {{-- TOMBOL HALAMAN --}}
-                @if ($pesanans->hasPages())
-
-                    <nav aria-label="Navigasi halaman pesanan">
-                        <ul class="pagination">
-
-                            {{-- SEBELUMNYA --}}
-                            <li class="page-item {{ $pesanans->onFirstPage() ? 'disabled' : '' }}">
-
-                                @if ($pesanans->onFirstPage())
-                                    <span class="page-link">&lsaquo;</span>
-                                @else
-                                    <a class="page-link" href="{{ $pesanans->previousPageUrl() }}"
-                                        aria-label="Halaman sebelumnya">
-                                        &lsaquo;
-                                    </a>
-                                @endif
-
-                            </li>
-
-                            {{-- NOMOR HALAMAN --}}
-                            @foreach ($pesanans->getUrlRange(1, $pesanans->lastPage()) as $page => $url)
-                                <li class="page-item {{ $pesanans->currentPage() == $page ? 'active' : '' }}">
-
-                                    <a class="page-link" href="{{ $url }}"
-                                        @if ($pesanans->currentPage() == $page) aria-current="page" @endif>
-                                        {{ $page }}
-                                    </a>
-
-                                </li>
-                            @endforeach
-
-                            {{-- SELANJUTNYA --}}
-                            <li class="page-item {{ $pesanans->hasMorePages() ? '' : 'disabled' }}">
-
-                                @if ($pesanans->hasMorePages())
-                                    <a class="page-link" href="{{ $pesanans->nextPageUrl() }}"
-                                        aria-label="Halaman selanjutnya">
-                                        &rsaquo;
-                                    </a>
-                                @else
-                                    <span class="page-link">&rsaquo;</span>
-                                @endif
-
-                            </li>
-
-                        </ul>
-                    </nav>
-
-                @endif
-
+            <div class="pagination-info">
+                Menampilkan
+                <strong>{{ $pesanans->firstItem() ?? 0 }}</strong>
+                sampai
+                <strong>{{ $pesanans->lastItem() ?? 0 }}</strong>
+                dari
+                <strong>{{ $pesanans->total() }}</strong>
+                pesanan
             </div>
 
-        @endif
+            @if ($pesanans->hasPages())
+                <nav aria-label="Navigasi halaman pesanan">
+                    {{ $pesanans->links('pagination::bootstrap-5') }}
+                </nav>
+            @endif
 
+        </div>
+
+    </div>
+
+    {{-- TOTAL PENDAPATAN --}}
+    <div class="revenue-card mt-4">
+        <div class="d-flex align-items-center gap-4 flex-wrap">
+
+            <div class="revenue-icon">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+
+            <div>
+                <div class="revenue-label">
+                    Total Pendapatan
+                    {{ \Carbon\Carbon::parse($tanggal)->isToday()
+                        ? 'Hari Ini'
+                        : 'Tanggal ' . \Carbon\Carbon::parse($tanggal)->format('d-m-Y') }}
+                </div>
+
+                <div class="revenue-value">
+                    Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
+                </div>
+            </div>
+
+        </div>
     </div>
 
 @endsection
 
-
-{{-- SCRIPT PENCARIAN --}}
+{{-- SCRIPT PENCARIAN TEKS --}}
 @push('scripts')
     <script>
-        document.getElementById('cariPesanan').addEventListener('input', function() {
+        const inputCari = document.getElementById('cariPesanan');
 
-            const kata = this.value.toLowerCase().trim();
+        if (inputCari) {
+            inputCari.addEventListener('input', function() {
 
-            const baris = document.querySelectorAll('#tabelPesanan tbody tr.baris-pesanan');
+                const kata = this.value.toLowerCase().trim();
 
-            let jumlahDitemukan = 0;
+                const baris = document.querySelectorAll(
+                    '#tabelPesanan tbody tr.baris-pesanan'
+                );
 
-            baris.forEach(function(row) {
+                let jumlahDitemukan = 0;
 
-                const cocok = row.textContent.toLowerCase().includes(kata);
+                baris.forEach(function(row) {
 
-                row.style.display = cocok ? '' : 'none';
+                    const cocok = row.textContent.toLowerCase().includes(kata);
 
-                if (cocok) {
-                    jumlahDitemukan++;
+                    row.style.display = cocok ? '' : 'none';
+
+                    if (cocok) {
+                        jumlahDitemukan++;
+                    }
+                });
+
+                const pesanKosong = document.getElementById('tidakDitemukan');
+
+                if (pesanKosong) {
+                    pesanKosong.style.display =
+                        (kata !== '' && jumlahDitemukan === 0) ? '' : 'none';
                 }
-
             });
-
-            // Tampilkan pesan jika pencarian tidak menemukan hasil.
-            const pesanKosong = document.getElementById('tidakDitemukan');
-
-            if (pesanKosong) {
-                pesanKosong.style.display =
-                    (kata !== '' && jumlahDitemukan === 0) ? '' : 'none';
-            }
-
-        });
+        }
     </script>
 @endpush
