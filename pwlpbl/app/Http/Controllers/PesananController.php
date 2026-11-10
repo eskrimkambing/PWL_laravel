@@ -11,8 +11,6 @@ class PesananController extends Controller
 {
     /**
      * Menampilkan daftar pesanan.
-     * Admin melihat semua pesanan (view: pesanans.indexAdmin).
-     * Pembeli hanya melihat pesanannya sendiri (view: pesanans.index).
      */
     public function index()
     {
@@ -28,19 +26,23 @@ class PesananController extends Controller
             abort(403);
         }
 
-        $pesanans = $query->latest()->get();
-
-        // Pisahkan tampilan admin dan pembeli.
+        // Admin melihat maksimal 10 pesanan setiap halaman.
         if (session('role') === 'admin') {
+            $pesanans = $query->latest()
+                ->paginate(10)
+                ->withQueryString();
+
             return view('pesanans.indexAdmin', compact('pesanans'));
         }
+
+        // Tampilan pembeli tetap seperti sebelumnya.
+        $pesanans = $query->latest()->get();
 
         return view('pesanans.index', compact('pesanans'));
     }
 
     /**
      * Menampilkan detail pesanan.
-     * Admin memakai view pesanans.showAdmin, pembeli memakai pesanans.show.
      */
     public function show($id)
     {
@@ -49,7 +51,7 @@ class PesananController extends Controller
             'detailPesanans.product'
         ])->findOrFail($id);
 
-        // Pembeli hanya boleh melihat pesanannya sendiri.
+        // Pembeli hanya boleh melihat pesanan miliknya.
         if (session('role') === 'pembeli') {
             abort_unless(
                 (int) $pesanan->pembeli_id === (int) session('user_id'),
@@ -135,8 +137,7 @@ class PesananController extends Controller
             ];
         }
 
-        // Data pelanggan: pakai data penerima di pesanan,
-        // cadangan ke profil untuk pesanan lama.
+        // Data pelanggan.
         $customerDetails = array_filter([
             'first_name' => $pesanan->nama_penerima ?: ($pembeli->nama ?? null) ?: 'Pembeli',
             'email'      => $pembeli->email ?? null,
@@ -149,9 +150,7 @@ class PesananController extends Controller
                 'order_id'     => 'PZ-' . $pesanan->id_pesanan,
                 'gross_amount' => (int) $pesanan->total_harga,
             ],
-
             'item_details' => $items,
-
             'customer_details' => $customerDetails,
         ];
 
@@ -168,7 +167,6 @@ class PesananController extends Controller
                 ->route('pesanans.show', $pesanan->id_pesanan)
                 ->with('success', 'Token pembayaran berhasil dibuat.')
                 ->with('snap_token', $token);
-
         } catch (\Throwable $e) {
             report($e);
 
@@ -211,7 +209,6 @@ class PesananController extends Controller
             'status' => $request->status,
         ]);
 
-        // Kembali ke halaman kelola pesanan admin.
         return redirect()
             ->route('admin.pesanans.indexAdmin')
             ->with('success', 'Status pesanan berhasil diperbarui!');
