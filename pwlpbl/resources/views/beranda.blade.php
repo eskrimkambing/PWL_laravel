@@ -114,7 +114,6 @@
             padding: 65px 7%;
             display: flex;
             align-items: center;
-
             background:
                 linear-gradient(
                     90deg,
@@ -123,7 +122,6 @@
                     rgba(123, 22, 13, 0.05)
                 ),
                 url('{{ asset('images/pizza.jpg') }}');
-
             background-size: cover;
             background-position: center;
         }
@@ -172,44 +170,6 @@
             border-radius: 9px;
             font-weight: bold;
             transition: .2s;
-        }
-
-        /* LAYANAN */
-
-        .services {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 22px;
-            padding: 0 5%;
-            margin-top: -35px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .service-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 13px;
-            padding: 23px;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            box-shadow: 0 5px 15px rgba(80, 40, 10, .08);
-        }
-
-        .service-icon {
-            font-size: 38px;
-        }
-
-        .service-card h3 {
-            color: var(--brown);
-            font-size: 19px;
-        }
-
-        .service-card p {
-            color: #986b4f;
-            font-size: 12px;
-            margin-top: 6px;
         }
 
         /* MENU SECTION */
@@ -384,19 +344,478 @@
             color: #966b53;
         }
 
+        button.product-btn {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* MODAL PILIH UKURAN */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .55);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            position: relative;
+            background: white;
+            width: 100%;
+            max-width: 900px;
+            max-height: 92vh;
+            overflow-y: auto;
+            border-radius: 18px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            border: none;
+            background: none;
+            font-size: 30px;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--brown);
+        }
+
+        .modal-left img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: var(--beige);
+            margin-bottom: 18px;
+        }
+
+        .modal-left h3 {
+            font-size: 24px;
+            color: var(--brown);
+            margin-bottom: 8px;
+        }
+
+        .modal-left .modal-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--orange);
+            margin-bottom: 12px;
+        }
+
+        .modal-left p {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #966b53;
+        }
+
+        .modal-right {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-right h4 {
+            font-size: 22px;
+            color: var(--brown);
+            margin-bottom: 20px;
+            padding-right: 30px;
+        }
+
+        .modal-label {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .size-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .size-option {
+            border: 2px solid var(--border);
+            background: #FFFAF0;
+            border-radius: 12px;
+            padding: 14px 8px;
+            text-align: center;
+            cursor: pointer;
+            font-family: inherit;
+            color: var(--brown);
+        }
+
+        .size-option strong {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .size-option small {
+            display: block;
+            font-size: 12px;
+            color: #966b53;
+        }
+
+        .size-option:hover {
+            border-color: var(--orange);
+        }
+
+        .size-option.selected {
+            border-color: var(--orange);
+            background: #FFF0D6;
+        }
+
+        .modal-right textarea {
+            width: 100%;
+            height: 90px;
+            resize: none;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        .modal-right textarea:focus {
+            border-color: var(--orange);
+        }
+
+        .modal-footer {
+            margin-top: auto;
+        }
+
+        .modal-total-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .modal-total {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--brown);
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .qty-control button {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid var(--orange);
+            background: white;
+            color: var(--orange);
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .qty-control span {
+            min-width: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .modal-submit {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: var(--orange);
+            color: white;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .modal-submit:hover:not(:disabled) {
+            background: #CC6800;
+        }
+
+        .modal-submit:disabled {
+            background: #D6D6D6;
+            cursor: not-allowed;
+        }
+
+        /* KERANJANG */
+
+        .cart-fab {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 150;
+            border: none;
+            background: var(--orange);
+            color: white;
+            padding: 15px 22px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 8px 22px rgba(80, 40, 10, .35);
+        }
+
+        .cart-fab:hover {
+            background: #CC6800;
+        }
+
+        .cart-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .55);
+            z-index: 210;
+            justify-content: flex-end;
+        }
+
+        .cart-overlay.open {
+            display: flex;
+        }
+
+        .cart-drawer {
+            background: white;
+            width: 100%;
+            max-width: 430px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cart-head h3 {
+            color: var(--brown);
+            font-size: 21px;
+        }
+
+        .cart-head button {
+            border: none;
+            background: none;
+            font-size: 30px;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--brown);
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px 24px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            color: #966b53;
+            padding: 60px 10px;
+            font-size: 14px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cart-item img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+            background: var(--beige);
+        }
+
+        .cart-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cart-item-info strong {
+            display: block;
+            color: var(--brown);
+            font-size: 15px;
+            margin-bottom: 3px;
+        }
+
+        .cart-item-info small {
+            display: block;
+            color: #966b53;
+            font-size: 12px;
+            margin-bottom: 2px;
+            word-break: break-word;
+        }
+
+        .cart-item-price {
+            color: var(--orange);
+            font-weight: bold;
+            font-size: 14px;
+            margin: 4px 0 8px;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cart-remove {
+            border: none;
+            background: none;
+            color: #B3261E;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .cart-foot {
+            padding: 18px 24px 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            font-size: 16px;
+        }
+
+        .cart-total-row strong {
+            font-size: 22px;
+        }
+
+        .cart-add-more {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 10px;
+            border: 2px solid var(--orange);
+            background: white;
+            color: var(--orange);
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 90px;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--brown);
+            color: white;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            opacity: 0;
+            pointer-events: none;
+            transition: .25s;
+            z-index: 300;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
         /* FOOTER */
 
         footer {
             background: var(--brown);
             color: white;
-            text-align: center;
-            padding: 30px 15px;
-            line-height: 1.8;
+            padding: 25px 7% 15px;
+            line-height: 1.6;
         }
 
-        footer strong {
+        .footer-container {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .footer-brand h3 {
             color: var(--yellow);
-            font-size: 20px;
+            font-size: 22px;
+            margin-bottom: 7px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+        }
+
+        .footer-contact h3 {
+            color: var(--yellow);
+            font-size: 17px;
+            margin-bottom: 12px;
+        }
+
+        .contact-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .contact-item svg {
+            width: 21px;
+            height: 21px;
+            flex-shrink: 0;
+        }
+
+        .contact-item:hover {
+            color: var(--yellow);
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            max-width: 1100px;
+            margin: 20px auto 0;
+            padding-top: 13px;
+            border-top: 1px solid rgba(255,255,255,.2);
+            text-align: center;
+            font-size: 13px;
         }
 
         /* RESPONSIVE */
@@ -408,6 +827,18 @@
 
             .product-container {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media(max-width: 700px) {
+            .modal-box {
+                grid-template-columns: 1fr;
+                padding: 22px;
+                gap: 20px;
+            }
+
+            .modal-left img {
+                height: 180px;
             }
         }
 
@@ -457,13 +888,6 @@
                 font-size: 14px;
             }
 
-            .services {
-                grid-template-columns: 1fr;
-                padding: 0 20px;
-                margin-top: 20px;
-                gap: 12px;
-            }
-
             .menu-section {
                 padding: 45px 20px;
             }
@@ -479,6 +903,21 @@
 
             .product-image {
                 height: 230px;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 22px;
+            }
+
+            .contact-links {
+                justify-content: center;
+                gap: 15px;
+            }
+
+            footer {
+                padding: 25px 15px 15px;
             }
         }
     </style>
@@ -498,7 +937,6 @@
         <nav class="nav-menu">
             <a href="{{ route('home') }}">HOME</a>
             <a href="#menu">MENU</a>
-            <a href="#layanan">LAYANAN</a>
             <a href="#tentang">TENTANG KAMI</a>
         </nav>
 
@@ -513,7 +951,6 @@
         </div>
 
     </header>
-
 
     <!-- HERO BANNER -->
 
@@ -546,38 +983,6 @@
         </div>
 
     </section>
-
-
-    <!-- LAYANAN -->
-
-    <section class="services" id="layanan">
-
-        <div class="service-card">
-            <span class="service-icon">🛵</span>
-            <div>
-                <h3>Delivery</h3>
-                <p>Pesanan diantar ke tempatmu.</p>
-            </div>
-        </div>
-
-        <div class="service-card">
-            <span class="service-icon">🍕</span>
-            <div>
-                <h3>Takeaway</h3>
-                <p>Pesan dan ambil langsung.</p>
-            </div>
-        </div>
-
-        <div class="service-card">
-            <span class="service-icon">🎉</span>
-            <div>
-                <h3>Party</h3>
-                <p>Temani momen spesialmu.</p>
-            </div>
-        </div>
-
-    </section>
-
 
     <!-- DAFTAR MENU -->
 
@@ -643,7 +1048,6 @@
             </button>
 
         </div>
-
 
         <!-- PRODUCT -->
 
@@ -716,12 +1120,19 @@
                                 Rp{{ number_format($product->price, 0, ',', '.') }}
                             </div>
 
-                            <a
-                                href="{{ route('checkout.index', ['product' => $product->id]) }}"
+                            <button
+                                type="button"
                                 class="product-btn"
+                                data-id="{{ $product->id }}"
+                                data-nama="{{ $product->nama }}"
+                                data-kategori="{{ $product->kategori }}"
+                                data-deskripsi="{{ $product->deskripsi ?? 'Produk Pizza Moza' }}"
+                                data-price="{{ (int) $product->price }}"
+                                data-image="{{ $srcFoto }}"
+                                onclick="openOrderModal(this)"
                             >
                                 Pesan Sekarang →
-                            </a>
+                            </button>
 
                         </div>
 
@@ -733,7 +1144,6 @@
 
         </div>
 
-
         <!-- MENU TIDAK DITEMUKAN -->
 
         <div id="emptyMessage">
@@ -743,32 +1153,688 @@
 
     </section>
 
-
     <!-- FOOTER -->
 
     <footer id="tentang">
 
-        <strong>🍕 PIZZA MOZA</strong>
+        <div class="footer-container">
 
-        <p>
-            Rasa Juara, Harga Bersahabat!
-        </p>
+            <!-- BRAND PIZZA MOZA -->
 
-        <p>
+            <div class="footer-brand">
+
+                <h3>🍕 PIZZA MOZA</h3>
+
+                <p>
+                    Rasa Juara, Harga Bersahabat!
+                </p>
+
+            </div>
+
+            <!-- KONTAK -->
+
+            <div class="footer-contact">
+
+                <h3>Hubungi Kami</h3>
+
+                <div class="contact-links">
+
+                    <!-- INSTAGRAM -->
+
+                    <a href="https://www.instagram.com/pizzamozza2025/"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="contact-item">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+
+                            <path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm0 2h10c1.66 0 3 1.34 3 3v10c0 1.66-1.34 3-3 3H7c-1.66 0-3-1.34-3-3V7c0-1.66 1.34-3 3-3zm10.5 1.5a1 1 0 100 2 1 1 0 000-2zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
+
+                        </svg>
+
+                        <span>@pizzamozza2025</span>
+
+                    </a>
+
+                    <!-- WHATSAPP -->
+
+                    <a href="https://wa.me/6281520980818"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="contact-item">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+
+                            <path d="M20.52 3.48A11.8 11.8 0 0012.04 0C5.52 0 .22 5.3.22 11.82c0 2.08.54 4.11 1.57 5.9L.12 24l6.43-1.68a11.8 11.8 0 005.48 1.39h.01c6.52 0 11.82-5.3 11.82-11.82 0-3.16-1.23-6.13-3.34-8.41zM12.04 21.7a9.84 9.84 0 01-5.02-1.38l-.36-.21-3.82 1 1.02-3.72-.23-.38a9.84 9.84 0 01-1.51-5.19c0-5.46 4.45-9.91 9.92-9.91 2.65 0 5.14 1.03 7.01 2.9a9.85 9.85 0 012.9 7.01c0 5.47-4.45 9.92-9.91 9.92zm5.44-7.42c-.3-.15-1.77-.87-2.05-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.96 1.17-.18.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51h-.58c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.09 4.49.71.31 1.26.5 1.69.64.71.22 1.36.19 1.87.11.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.18-1.42-.08-.13-.28-.2-.58-.35z"/>
+
+                        </svg>
+
+                        <span>081520980818</span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- COPYRIGHT -->
+
+        <div class="footer-bottom">
             © {{ date('Y') }} Pizza Moza. All Rights Reserved.
-        </p>
+        </div>
 
     </footer>
 
+    <!-- MODAL PILIH UKURAN -->
+
+    <div class="modal-overlay" id="orderModal"
+         onclick="if (event.target === this) closeOrderModal()">
+
+        <div class="modal-box">
+
+            <button type="button"
+                    class="modal-close"
+                    onclick="closeOrderModal()"
+                    aria-label="Tutup">×</button>
+
+            <div class="modal-left">
+
+                <img id="modalImage" src="" alt="">
+
+                <h3 id="modalName"></h3>
+
+                <div class="modal-price" id="modalPrice"></div>
+
+                <p id="modalDesc"></p>
+
+            </div>
+
+            <div class="modal-right">
+
+                <h4>Atur pesananmu</h4>
+
+                <div id="sizeSection">
+
+                    <p class="modal-label">Pilih ukuran</p>
+
+                    <div class="size-options" id="sizeOptions"></div>
+
+                </div>
+
+                <p class="modal-label">Catatan</p>
+
+                <textarea id="modalNotes"
+                    placeholder="Contoh: tanpa bawang, extra saus..."></textarea>
+
+                <div class="modal-footer">
+
+                    <div class="modal-total-row">
+
+                        <div class="modal-total" id="modalTotal"></div>
+
+                        <div class="qty-control">
+
+                            <button type="button" onclick="changeQty(-1)">−</button>
+
+                            <span id="modalQty">1</span>
+
+                            <button type="button" onclick="changeQty(1)">+</button>
+
+                        </div>
+
+                    </div>
+
+                    <button type="button"
+                            class="modal-submit"
+                            id="modalSubmit"
+                            onclick="addToCart()"
+                            disabled>
+                        Tambah ke Keranjang
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- KERANJANG -->
+
+    <button type="button"
+            class="cart-fab"
+            id="cartFab"
+            onclick="openCart()"
+            style="display:none;">
+
+        🛒 <span id="cartCount">0</span> item ·
+        <span id="cartFabTotal"></span>
+
+    </button>
+
+    <div class="cart-overlay"
+         id="cartOverlay"
+         onclick="if (event.target === this) closeCart()">
+
+        <aside class="cart-drawer">
+
+            <div class="cart-head">
+
+                <h3>Keranjang Kamu 🛒</h3>
+
+                <button type="button"
+                        onclick="closeCart()"
+                        aria-label="Tutup">×</button>
+
+            </div>
+
+            <div class="cart-items" id="cartItems"></div>
+
+            <div class="cart-foot">
+
+                <div class="cart-total-row">
+
+                    <span>Total</span>
+
+                    <strong id="cartTotal">Rp0</strong>
+
+                </div>
+
+                <button type="button"
+                        class="cart-add-more"
+                        onclick="addMoreMenu()">
+                    + Tambah menu lain
+                </button>
+
+                <button type="button"
+                        class="modal-submit"
+                        id="cartCheckoutBtn"
+                        onclick="goCheckout()">
+                    Checkout
+                </button>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
 
     <!-- JAVASCRIPT SEARCH DAN FILTER -->
 
     <script>
 
+        /* ===== MODAL PILIH UKURAN ===== */
+
+        const checkoutUrl = "{{ route('checkout.index') }}";
+
+        // Harga database dianggap harga Medium.
+        const sizes = [
+            { key: 'Small', label: 'Small', add: -10000 },
+            { key: 'Medium', label: 'Medium', add: 0 },
+            { key: 'Large', label: 'Large', add: 15000 },
+        ];
+
+        let order = null;
+
+        function rupiah(n) {
+            return 'Rp' + n.toLocaleString('id-ID');
+        }
+
+        function openOrderModal(btn) {
+
+            const isPizza = btn.dataset.kategori.toLowerCase() === 'pizza';
+
+            order = {
+                id: btn.dataset.id,
+                nama: btn.dataset.nama,
+                image: btn.dataset.image,
+                base: parseInt(btn.dataset.price),
+                isPizza: isPizza,
+                size: null,
+                qty: 1,
+            };
+
+            document.getElementById('modalImage').src = btn.dataset.image;
+            document.getElementById('modalName').textContent = btn.dataset.nama;
+            document.getElementById('modalDesc').textContent = btn.dataset.deskripsi;
+            document.getElementById('modalNotes').value = '';
+            document.getElementById('modalQty').textContent = '1';
+
+            const sizeSection = document.getElementById('sizeSection');
+            const sizeBox = document.getElementById('sizeOptions');
+
+            sizeBox.innerHTML = '';
+
+            if (isPizza) {
+
+                sizeSection.style.display = '';
+
+                sizes.forEach(s => {
+
+                    const el = document.createElement('button');
+
+                    el.type = 'button';
+                    el.className = 'size-option';
+                    el.dataset.key = s.key;
+
+                    el.innerHTML =
+                        '<strong>' + s.label + '</strong><small>' +
+                        rupiah(order.base + s.add) + '</small>';
+
+                    el.onclick = () => selectSize(s.key);
+
+                    sizeBox.appendChild(el);
+
+                });
+
+            } else {
+
+                sizeSection.style.display = 'none';
+
+            }
+
+            updateModal();
+
+            document.getElementById('orderModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+
+        }
+
+        function closeOrderModal() {
+
+            document.getElementById('orderModal').classList.remove('open');
+            document.body.style.overflow = '';
+
+        }
+
+        function selectSize(key) {
+
+            order.size = key;
+
+            document.querySelectorAll('.size-option').forEach(el => {
+
+                el.classList.toggle(
+                    'selected',
+                    el.dataset.key === key
+                );
+
+            });
+
+            updateModal();
+
+        }
+
+        function unitPrice() {
+
+            if (!order.isPizza) return order.base;
+
+            const s = sizes.find(x => x.key === order.size)
+                || sizes.find(x => x.add === 0);
+
+            return order.base + s.add;
+
+        }
+
+        function changeQty(delta) {
+
+            order.qty = Math.max(1, order.qty + delta);
+
+            document.getElementById('modalQty').textContent = order.qty;
+
+            updateModal();
+
+        }
+
+        function updateModal() {
+
+            document.getElementById('modalPrice').textContent =
+                rupiah(unitPrice());
+
+            document.getElementById('modalTotal').textContent =
+                rupiah(unitPrice() * order.qty);
+
+            // Pizza wajib memilih ukuran terlebih dahulu.
+            document.getElementById('modalSubmit').disabled =
+                order.isPizza && !order.size;
+
+        }
+
+        /* ===== KERANJANG ===== */
+
+        const CART_KEY = 'moza_cart';
+
+        function loadCart() {
+
+            try {
+
+                const data = JSON.parse(localStorage.getItem(CART_KEY));
+
+                return Array.isArray(data) ? data : [];
+
+            } catch (e) {
+
+                return [];
+
+            }
+
+        }
+
+        function saveCart() {
+
+            try {
+
+                localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
+            } catch (e) {}
+
+        }
+
+        let cart = loadCart();
+
+        function sizeAdd(size) {
+
+            const s = sizes.find(x => x.key === size);
+
+            return s ? s.add : 0;
+
+        }
+
+        function lineUnit(item) {
+
+            return item.base + sizeAdd(item.size);
+
+        }
+
+        function cartTotal() {
+
+            return cart.reduce(
+                (sum, i) => sum + lineUnit(i) * i.qty,
+                0
+            );
+
+        }
+
+        function showToast(text) {
+
+            const t = document.getElementById('toast');
+
+            t.textContent = text;
+            t.classList.add('show');
+
+            clearTimeout(showToast.timer);
+
+            showToast.timer = setTimeout(
+                () => t.classList.remove('show'),
+                2200
+            );
+
+        }
+
+        function addToCart() {
+
+            const notes = document.getElementById('modalNotes').value.trim();
+
+            const size = order.isPizza ? order.size : null;
+
+            const existing = cart.find(i =>
+                i.id === order.id &&
+                i.size === size &&
+                i.notes === notes
+            );
+
+            if (existing) {
+
+                existing.qty += order.qty;
+
+            } else {
+
+                cart.push({
+                    id: order.id,
+                    nama: order.nama,
+                    image: order.image,
+                    base: order.base,
+                    size: size,
+                    notes: notes,
+                    qty: order.qty,
+                });
+
+            }
+
+            saveCart();
+            renderCart();
+            closeOrderModal();
+
+            showToast('✓ ' + order.nama + ' masuk keranjang');
+
+        }
+
+        function changeCartQty(index, delta) {
+
+            cart[index].qty = Math.max(1, cart[index].qty + delta);
+
+            saveCart();
+            renderCart();
+
+        }
+
+        function removeCartItem(index) {
+
+            cart.splice(index, 1);
+
+            saveCart();
+            renderCart();
+
+        }
+
+        function renderCart() {
+
+            const count = cart.reduce((sum, i) => sum + i.qty, 0);
+
+            const total = rupiah(cartTotal());
+
+            const fab = document.getElementById('cartFab');
+
+            fab.style.display = count > 0 ? '' : 'none';
+
+            document.getElementById('cartCount').textContent = count;
+            document.getElementById('cartFabTotal').textContent = total;
+            document.getElementById('cartTotal').textContent = total;
+
+            document.getElementById('cartCheckoutBtn').disabled =
+                count === 0;
+
+            const box = document.getElementById('cartItems');
+
+            box.innerHTML = '';
+
+            if (cart.length === 0) {
+
+                const empty = document.createElement('div');
+
+                empty.className = 'cart-empty';
+
+                empty.textContent =
+                    'Keranjang masih kosong. Yuk pilih menu favoritmu!';
+
+                box.appendChild(empty);
+
+                return;
+
+            }
+
+            cart.forEach((item, index) => {
+
+                const row = document.createElement('div');
+
+                row.className = 'cart-item';
+
+                const img = document.createElement('img');
+
+                img.src = item.image;
+                img.alt = item.nama;
+
+                const info = document.createElement('div');
+
+                info.className = 'cart-item-info';
+
+                const name = document.createElement('strong');
+
+                name.textContent = item.nama;
+
+                info.appendChild(name);
+
+                if (item.size) {
+
+                    const sz = document.createElement('small');
+
+                    sz.textContent = 'Ukuran: ' + item.size;
+
+                    info.appendChild(sz);
+
+                }
+
+                if (item.notes) {
+
+                    const nt = document.createElement('small');
+
+                    nt.textContent = 'Catatan: ' + item.notes;
+
+                    info.appendChild(nt);
+
+                }
+
+                const price = document.createElement('div');
+
+                price.className = 'cart-item-price';
+
+                price.textContent =
+                    rupiah(lineUnit(item) * item.qty);
+
+                info.appendChild(price);
+
+                const actions = document.createElement('div');
+
+                actions.className = 'cart-item-actions';
+
+                const qty = document.createElement('div');
+
+                qty.className = 'qty-control';
+
+                const minus = document.createElement('button');
+
+                minus.type = 'button';
+                minus.textContent = '−';
+                minus.onclick = () => changeCartQty(index, -1);
+
+                const num = document.createElement('span');
+
+                num.textContent = item.qty;
+
+                const plus = document.createElement('button');
+
+                plus.type = 'button';
+                plus.textContent = '+';
+                plus.onclick = () => changeCartQty(index, 1);
+
+                qty.appendChild(minus);
+                qty.appendChild(num);
+                qty.appendChild(plus);
+
+                const remove = document.createElement('button');
+
+                remove.type = 'button';
+                remove.className = 'cart-remove';
+                remove.textContent = 'Hapus';
+                remove.onclick = () => removeCartItem(index);
+
+                actions.appendChild(qty);
+                actions.appendChild(remove);
+
+                info.appendChild(actions);
+
+                row.appendChild(img);
+                row.appendChild(info);
+
+                box.appendChild(row);
+
+            });
+
+        }
+
+        function openCart() {
+
+            document.getElementById('cartOverlay').classList.add('open');
+
+            document.body.style.overflow = 'hidden';
+
+        }
+
+        function closeCart() {
+
+            document.getElementById('cartOverlay').classList.remove('open');
+
+            document.body.style.overflow = '';
+
+        }
+
+        function addMoreMenu() {
+
+            closeCart();
+
+            document.getElementById('menu').scrollIntoView({
+                behavior: 'smooth'
+            });
+
+        }
+
+        function goCheckout() {
+
+            if (cart.length === 0) return;
+
+            const payload = cart.map(i => ({
+
+                id: i.id,
+                size: i.size,
+                qty: i.qty,
+                notes: i.notes,
+
+            }));
+
+            window.location.href = checkoutUrl + '?cart=' +
+                encodeURIComponent(JSON.stringify(payload));
+
+        }
+
+        document.addEventListener('keydown', function (e) {
+
+            if (e.key === 'Escape') {
+
+                closeOrderModal();
+                closeCart();
+
+            }
+
+        });
+
+        renderCart();
+
+        /* ===== SEARCH DAN FILTER ===== */
+
         function filterCategory(category, button) {
 
             document.querySelectorAll('.category-btn').forEach(btn => {
+
                 btn.classList.remove('active');
+
             });
 
             button.classList.add('active');
@@ -795,8 +1861,8 @@
 
             document.getElementById('emptyMessage').style.display =
                 visibleCount === 0 ? 'block' : 'none';
-        }
 
+        }
 
         function searchProducts() {
 
@@ -823,9 +1889,11 @@
 
             document.getElementById('emptyMessage').style.display =
                 visibleCount === 0 ? 'block' : 'none';
+
         }
 
     </script>
 
 </body>
 </html>
+

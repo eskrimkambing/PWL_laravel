@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
-    // Menampilkan daftar produk + data penerima (diambil dari data pembeli)
+    // Menampilkan halaman checkout
     public function index()
     {
         $products = Product::latest()->get();
@@ -20,15 +20,20 @@ class CheckoutController extends Controller
         return view('checkout.index', compact('products', 'pembeli'));
     }
 
-    // Menyimpan pesanan dari pembeli
+    // Menyimpan pesanan
     public function store(Request $request)
     {
         $request->validate([
             'products'          => 'required|array',
+            'products.*'        => 'required|integer|min:1',
+            'sizes'             => 'nullable|array',
+            'sizes.*'           => 'nullable|in:Small,Medium,Large',
+
             'nama_penerima'     => 'required|string|max:100',
             'no_telp'           => 'required|string|max:20',
-            'alamat'            => 'required|string|max:500',
+            'alamat'            => 'nullable|string|max:500',
             'catatan'           => 'nullable|string|max:500',
+
             'jenis_pesanan'     => 'required|in:Makan di tempat,Dibungkus',
             'metode_pembayaran' => 'required|in:Cash,Midtrans',
         ]);
@@ -51,55 +56,75 @@ class CheckoutController extends Controller
             $request,
             $pembeli
         ) {
-
             $totalHarga = 0;
             $daftarProduk = [];
 
-            foreach ($produkDipilih as $productId => $jumlah) {
+            $tambahanUkuran = [
+                'Small' => -10000,
+                'Medium' => 0,
+                'Large' => 15000,
+            ];
 
+            foreach ($produkDipilih as $productId => $jumlah) {
                 $product = Product::findOrFail($productId);
 
                 $jumlah = (int) $jumlah;
 
-                $subtotal = $product->price * $jumlah;
+                $kategori = strtolower((string) $product->kategori);
+
+                $hargaSatuan = (float) $product->price;
+
+                if ($kategori === 'pizza') {
+                    $size = $request->input(
+                        "sizes.$productId",
+                        'Medium'
+                    );
+
+                    $hargaSatuan += $tambahanUkuran[$size] ?? 0;
+                }
+
+                $subtotal = $hargaSatuan * $jumlah;
 
                 $totalHarga += $subtotal;
 
                 $daftarProduk[] = [
                     'product' => $product,
                     'jumlah' => $jumlah,
+                    'harga' => $hargaSatuan,
                     'subtotal' => $subtotal,
                 ];
             }
 
             $pesanan = Pesanan::create([
-                'pembeli_id'        => $pembeli->id_pembeli,
+                'pembeli_id' => $pembeli->id_pembeli,
 
-                // Data penerima: disalin ke pesanan (boleh berbeda dari profil)
-                'nama_penerima'     => $request->nama_penerima,
-                'no_telp'           => $request->no_telp,
-                'alamat'            => $request->alamat,
-                'catatan'           => $request->catatan,
+                'nama_penerima' => $request->nama_penerima,
+                'no_telp' => $request->no_telp,
+                'alamat' => $request->alamat,
+                'catatan' => $request->catatan,
 
-                'total_harga'       => $totalHarga,
-                'jenis_pesanan'     => $request->jenis_pesanan,
-                'status'            => 'Menunggu',
+                'total_harga' => $totalHarga,
+                'jenis_pesanan' => $request->jenis_pesanan,
+
+                'status' => 'Menunggu',
+
                 'metode_pembayaran' => $request->metode_pembayaran,
-                'status_pembayaran' => $request->metode_pembayaran === 'Cash'
-                    ? 'Belum Dibayar'
-                    : 'Menunggu Pembayaran',
-                'dibayar_pada'      => null,
+
+                'status_pembayaran' =>
+                    $request->metode_pembayaran === 'Cash'
+                        ? 'Belum Dibayar'
+                        : 'Menunggu Pembayaran',
+
+                'dibayar_pada' => null,
             ]);
 
             foreach ($daftarProduk as $item) {
-
                 $pesanan->detailPesanans()->create([
                     'product_id' => $item['product']->getKey(),
                     'jumlah' => $item['jumlah'],
-                    'harga' => $item['product']->price,
+                    'harga' => $item['harga'],
                     'subtotal' => $item['subtotal'],
                 ]);
-
             }
 
             return $pesanan;
@@ -110,3 +135,4 @@ class CheckoutController extends Controller
             ->with('success', 'Pesanan berhasil dibuat!');
     }
 }
+

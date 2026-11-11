@@ -46,6 +46,19 @@
         flex-shrink: 0;
         border: 1px solid var(--bs-border-color);
     }
+
+    .back-arrow {
+        font-size: 32px;
+        color: #7f1d1d;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+
+    .back-arrow:hover {
+        color: #b91c1c;
+        transform: translateX(-3px);
+    }
 </style>
 @endpush
 
@@ -73,18 +86,35 @@
 
     {{-- JUDUL --}}
     <div class="mb-4">
-        <h2 class="fw-bold mb-1">Detail Pesanan</h2>
-        <p class="text-secondary mb-0">Informasi lengkap mengenai pesanan kamu.</p>
+        <div class="d-flex align-items-center gap-3 mb-1">
+
+            <a href="{{ route('pesanans.index') }}"
+                class="back-arrow"
+                title="Kembali ke Pesanan">
+                ←
+            </a>
+
+            <h2 class="fw-bold mb-0">Detail Pesanan</h2>
+
+        </div>
+
+        <p class="text-secondary mb-0">
+            Informasi lengkap mengenai pesanan kamu.
+        </p>
     </div>
 
     {{-- SUCCESS --}}
     @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
     @endif
 
     {{-- ERROR --}}
     @if (session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
     @endif
 
     {{-- ================= INFORMASI PESANAN ================= --}}
@@ -176,7 +206,9 @@
             <div class="col-12">
                 <div class="info-box">
                     <div class="info-label">Catatan</div>
-                    <div class="fw-semibold" style="white-space: pre-line;">{{ $pesanan->catatan ?: '-' }}</div>
+                    <div class="fw-semibold" style="white-space: pre-line;">
+                        {{ $pesanan->catatan ?: '-' }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -206,8 +238,7 @@
                             $produk = $detail->product;
                             $namaProduk = $produk->nama ?? null;
 
-                            // 1. Pakai gambar dari database (lewat asset()) kalau ada
-                            // 2. Kalau kosong, pakai foto cadangan di folder public/images
+                            // Pakai gambar dari database kalau tersedia
                             if ($produk && !empty($produk->image)) {
                                 if (\Illuminate\Support\Str::startsWith($produk->image, ['http://', 'https://'])) {
                                     $srcFoto = $produk->image;
@@ -222,6 +253,7 @@
                                 } else {
                                     $pathFoto = 'images/pizza.jpg';
                                 }
+
                                 $srcFoto = asset($pathFoto);
                             }
                         @endphp
@@ -232,21 +264,25 @@
 
                                     {{-- GAMBAR PRODUK --}}
                                     <img src="{{ $srcFoto }}"
-                                         alt="{{ $namaProduk ?? 'Produk' }}"
-                                         class="order-thumb"
-                                         onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
+                                        alt="{{ $namaProduk ?? 'Produk' }}"
+                                        class="order-thumb"
+                                        onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
 
                                     <span>{{ $namaProduk ?? 'Produk tidak ditemukan' }}</span>
                                 </div>
                             </td>
+
                             <td class="text-center">{{ $detail->jumlah }}</td>
+
                             <td class="text-end">
                                 Rp {{ number_format($detail->harga, 0, ',', '.') }}
                             </td>
+
                             <td class="text-end price fw-semibold">
                                 Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
                             </td>
                         </tr>
+
                     @empty
                         <tr>
                             <td colspan="4" class="text-center text-secondary py-4">
@@ -280,7 +316,9 @@
 
             <form action="{{ route('pesanans.bayar', $pesanan->id_pesanan) }}" method="POST">
                 @csrf
-                <button type="submit" class="btn btn-moza px-4">💳 Bayar Sekarang</button>
+                <button type="submit" class="btn btn-moza px-4">
+                    💳 Bayar Sekarang
+                </button>
             </form>
         </div>
 
@@ -297,17 +335,6 @@
         </div>
 
     @endif
-
-    {{-- ================= TOMBOL ================= --}}
-    <div class="d-flex gap-2">
-        <a href="{{ route('pesanans.index') }}" class="btn btn-outline-secondary">
-            ← Kembali ke Pesanan
-        </a>
-
-        <a href="{{ route('checkout.index') }}" class="btn btn-moza">
-            + Buat Pesanan Lagi
-        </a>
-    </div>
 
 @endsection
 
@@ -333,12 +360,15 @@
                         onSuccess: function () {
                             window.location.reload();
                         },
+
                         onPending: function () {
                             window.location.reload();
                         },
+
                         onError: function () {
                             alert('Pembayaran gagal.');
                         },
+
                         onClose: function () {
                             console.log('Halaman pembayaran ditutup.');
                         }
