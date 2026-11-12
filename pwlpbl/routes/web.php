@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\ProductController;
@@ -20,12 +21,24 @@ use Illuminate\Support\Facades\Route;
 // ==========================================================
 
 Route::get('/', function () {
-
     $products = \App\Models\Product::latest()->get();
 
     return view('beranda', compact('products'));
 })->name('home');
 
+
+// ==========================================================
+// CHECKOUT (BISA DIAKSES TANPA LOGIN)
+// ==========================================================
+
+Route::get('/checkout', [CheckoutController::class, 'index'])
+    ->name('checkout.index');
+
+Route::post('/checkout', [CheckoutController::class, 'store'])
+    ->name('checkout.store');
+
+Route::get('/checkout/selesai/{id}', [CheckoutController::class, 'selesai'])
+    ->name('checkout.selesai');
 
 
 // ==========================================================
@@ -73,13 +86,6 @@ Route::middleware('role:admin')->group(function () {
         ->name('admin.profil.update');
 
 
-    Route::post(
-        '/admin/pesanans/{id}/status-pembayaran',
-        [PesananController::class, 'updateStatusPembayaran']
-    )->name('admin.pesanans.updateStatusPembayaran');
-
-
-
     // ======================================================
     // PRODUK
     // ======================================================
@@ -116,7 +122,7 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/admin/pesanans', [PesananController::class, 'index'])
         ->name('admin.pesanans.indexAdmin');
 
-    // Detail pesanan (admin)
+    // Detail pesanan
     Route::get('/admin/pesanans/{id}', [PesananController::class, 'show'])
         ->name('admin.pesanans.show');
 
@@ -124,9 +130,15 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/admin/pesanans/{id}/edit', [PesananController::class, 'edit'])
         ->name('admin.pesanans.edit');
 
-    // Simpan perubahan pesanan
+    // Simpan perubahan status pesanan
     Route::put('/admin/pesanans/{id}', [PesananController::class, 'update'])
         ->name('admin.pesanans.update');
+
+    // Update status pembayaran
+    Route::post(
+        '/admin/pesanans/{id}/status-pembayaran',
+        [PesananController::class, 'updateStatusPembayaran']
+    )->name('admin.pesanans.updateStatusPembayaran');
 
 
     // ======================================================
@@ -177,14 +189,13 @@ Route::middleware('role:admin')->group(function () {
 
 
 // ==========================================================
-// ROUTE PEMBELI
+// ROUTE PEMBELI (WAJIB LOGIN)
 // ==========================================================
 
 Route::middleware('role:pembeli')->group(function () {
 
     // Dashboard Pembeli
     Route::get('/pembeli/dashboard', function () {
-
         $products = \App\Models\Product::latest()->get();
 
         return view('dashboard.pembeli', compact('products'));
@@ -222,18 +233,7 @@ Route::middleware('role:pembeli')->group(function () {
 
 
     // ======================================================
-    // CHECKOUT
-    // ======================================================
-
-    Route::get('/checkout', [CheckoutController::class, 'index'])
-        ->name('checkout.index');
-
-    Route::post('/checkout', [CheckoutController::class, 'store'])
-        ->name('checkout.store');
-
-
-    // ======================================================
-    // PROFIL
+    // PROFIL PEMBELI
     // ======================================================
 
     Route::get('/profil', [ProfilController::class, 'show'])
