@@ -28,6 +28,21 @@ Route::get('/', function () {
 })->name('home');
 
 
+// ==========================================================
+// CHECKOUT (BISA DIAKSES TANPA LOGIN, SEPERTI PIZZA HUT)
+// ==========================================================
+
+Route::get('/checkout', [CheckoutController::class, 'index'])
+    ->name('checkout.index');
+
+Route::post('/checkout', [CheckoutController::class, 'store'])
+    ->name('checkout.store');
+
+// Halaman "pesanan berhasil" untuk pembeli yang checkout tanpa login
+Route::get('/checkout/selesai/{id}', [CheckoutController::class, 'selesai'])
+    ->name('checkout.selesai');
+
+
 
 // ==========================================================
 // AUTH
@@ -172,7 +187,7 @@ Route::middleware('role:admin')->group(function () {
 
 
 // ==========================================================
-// ROUTE PEMBELI
+// ROUTE PEMBELI (WAJIB LOGIN)
 // ==========================================================
 
 Route::middleware('role:pembeli')->group(function () {
@@ -215,17 +230,6 @@ Route::middleware('role:pembeli')->group(function () {
 
     Route::post('/pesanans/{id}/bayar', [PesananController::class, 'bayar'])
         ->name('pesanans.bayar');
-
-
-    // ======================================================
-    // CHECKOUT
-    // ======================================================
-
-    Route::get('/checkout', [CheckoutController::class, 'index'])
-        ->name('checkout.index');
-
-    Route::post('/checkout', [CheckoutController::class, 'store'])
-        ->name('checkout.store');
 
 
     // ======================================================
