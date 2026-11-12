@@ -24,7 +24,6 @@ Route::get('/', function () {
     $products = \App\Models\Product::latest()->get();
 
     return view('beranda', compact('products'));
-
 })->name('home');
 
 
@@ -72,6 +71,13 @@ Route::middleware('role:admin')->group(function () {
 
     Route::put('/admin/profil', [ProfilAdminController::class, 'update'])
         ->name('admin.profil.update');
+
+
+    Route::post(
+        '/admin/pesanans/{id}/status-pembayaran',
+        [PesananController::class, 'updateStatusPembayaran']
+    )->name('admin.pesanans.updateStatusPembayaran');
+
 
 
     // ======================================================
@@ -167,7 +173,6 @@ Route::middleware('role:admin')->group(function () {
 
     Route::delete('/stoks/{stok}', [StokController::class, 'destroy'])
         ->name('stoks.destroy');
-
 });
 
 
@@ -183,7 +188,6 @@ Route::middleware('role:pembeli')->group(function () {
         $products = \App\Models\Product::latest()->get();
 
         return view('dashboard.pembeli', compact('products'));
-
     })->name('dashboard.pembeli');
 
 
@@ -243,5 +247,4 @@ Route::middleware('role:pembeli')->group(function () {
 
     Route::delete('/profil', [ProfilController::class, 'destroy'])
         ->name('profil.destroy');
-
 });

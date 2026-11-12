@@ -92,48 +92,36 @@
 
         </div>
 
-        {{-- ===== Produk terlaris, kategori, pengguna ===== --}}
+
+        {{-- ===== Produk Terlaris ===== --}}
         <div class="row g-3 mb-4">
 
-            <div class="col-lg-4">
+            <div class="col-lg-12">
                 <div class="card h-100">
                     <div class="card-body">
+
                         <h5 class="fw-bold mb-1">Produk Terlaris</h5>
-                        <small class="text-secondary d-block mb-3">Jumlah terjual (kecuali pesanan batal)</small>
+
+                        <small class="text-secondary d-block mb-3">
+                            Jumlah terjual (kecuali pesanan batal)
+                        </small>
+
                         @if (count($dataTerlaris))
-                            <div style="position:relative; height:240px;"><canvas id="chartTerlaris"></canvas></div>
+                            <div style="position:relative; height:300px;">
+                                <canvas id="chartTerlaris"></canvas>
+                            </div>
                         @else
-                            <div class="text-secondary text-center py-5">Belum ada penjualan.</div>
+                            <div class="text-secondary text-center py-5">
+                                Belum ada penjualan.
+                            </div>
                         @endif
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="fw-bold mb-1">Produk per Kategori</h5>
-                        <small class="text-secondary d-block mb-3">Sebaran menu berdasarkan kategori</small>
-                        @if (count($dataKategori))
-                            <div style="position:relative; height:240px;"><canvas id="chartKategori"></canvas></div>
-                        @else
-                            <div class="text-secondary text-center py-5">Belum ada produk.</div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="fw-bold mb-1">Pengguna</h5>
-                        <small class="text-secondary d-block mb-3">Admin dan pembeli terdaftar</small>
-                        <div style="position:relative; height:240px;"><canvas id="chartPengguna"></canvas></div>
                     </div>
                 </div>
             </div>
 
         </div>
+
 
         {{-- ===== Stok + Transaksi terakhir ===== --}}
         <div class="row g-3 mb-4">
@@ -213,7 +201,6 @@
         (function() {
             const rupiah = v => 'Rp ' + Number(v).toLocaleString('id-ID');
             const sum = arr => arr.reduce((a, b) => a + b, 0);
-            const palet = ['#DE7801', '#F7D991', '#c0392b', '#8e5a2b', '#e9a35b', '#6A0801'];
 
             // Ikut warna teks tema (gelap/terang) dari layout
             Chart.defaults.color = getComputedStyle(document.body).color;
@@ -351,16 +338,6 @@
                     }
                 });
             }
-
-            // ===== Produk per kategori =====
-            if (document.getElementById('chartKategori')) {
-                donat('chartKategori', @json($labelKategori), @json($dataKategori), palet);
-            }
-
-            // ===== Pengguna =====
-            donat('chartPengguna', ['Admin', 'Pembeli'], [{{ $totalAdmin }}, {{ $totalPembeli }}], ['#DE7801',
-                '#F7D991'
-            ]);
 
             // ===== Stok =====
             const elStok = document.getElementById('chartStok');

@@ -355,44 +355,52 @@
             </div>
 
 
+
             <nav class="nav flex-column">
 
+                {{-- BERANDA --}}
                 <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
                     href="{{ url('/admin/dashboard') }}">
                     <span>🏠</span>
                     Beranda
                 </a>
 
+                {{-- KELOLA PRODUK --}}
                 <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}"
                     href="{{ route('products.index') }}">
                     <span>🍕</span>
                     Kelola Produk
                 </a>
 
-                <a class="nav-link {{ request()->routeIs('admin.pesanans.*') ? 'active' : '' }}"
-                    href="{{ route('admin.pesanans.indexAdmin') }}">
-                    <span>📋</span>
-                    Kelola Pesanan
-                </a>
-
+                {{-- KELOLA KATEGORI --}}
                 <a class="nav-link {{ request()->routeIs('kategoris.*') ? 'active' : '' }}"
                     href="{{ route('kategoris.index') }}">
                     <span>📂</span>
                     Kelola Kategori
                 </a>
 
+                {{-- KELOLA STOK --}}
                 <a class="nav-link {{ request()->routeIs('stoks.*') ? 'active' : '' }}"
                     href="{{ route('stoks.index') }}">
                     <span>📦</span>
                     Kelola Stok
                 </a>
 
+                {{-- KELOLA PESANAN --}}
+                <a class="nav-link {{ request()->routeIs('admin.pesanans.*') ? 'active' : '' }}"
+                    href="{{ route('admin.pesanans.indexAdmin') }}">
+                    <span>📋</span>
+                    Kelola Pesanan
+                </a>
+
+                {{-- KELOLA TRANSAKSI --}}
                 <a class="nav-link {{ request()->routeIs('pembayaran.*') ? 'active' : '' }}"
                     href="{{ route('pembayaran.index') }}">
                     <span>💳</span>
                     Kelola Transaksi
                 </a>
 
+                {{-- KELOLA PENGGUNA --}}
                 <a class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}"
                     href="{{ route('pengguna.index') }}">
                     <span>👤</span>
@@ -400,6 +408,7 @@
                 </a>
 
             </nav>
+
 
 
             {{-- LOGOUT: tepat di bawah menu (bukan menempel di dasar sidebar) --}}
