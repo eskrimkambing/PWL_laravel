@@ -1,3 +1,4 @@
+
 <?php
  
 use App\Http\Controllers\ProductController;
@@ -21,15 +22,15 @@ use Illuminate\Support\Facades\Route;
 // ==========================================================
  
 Route::get('/', function () {
- 
+
     $products = \App\Models\Product::latest()->get();
  
     return view('beranda', compact('products'));
- 
+
 })->name('home');
- 
- 
- 
+
+
+
 // ==========================================================
 // AUTH
 // ==========================================================
@@ -110,7 +111,7 @@ Route::middleware('role:admin')->group(function () {
     // Menampilkan semua pesanan
     Route::get('/admin/pesanans', [PesananController::class, 'index'])
         ->name('admin.pesanans.indexAdmin');
- 
+
     // Detail pesanan (admin)
     Route::get('/admin/pesanans/{id}', [PesananController::class, 'show'])
         ->name('admin.pesanans.show');
@@ -118,23 +119,12 @@ Route::middleware('role:admin')->group(function () {
     // Halaman edit pesanan
     Route::get('/admin/pesanans/{id}/edit', [PesananController::class, 'edit'])
         ->name('admin.pesanans.edit');
- 
+
     // Simpan perubahan pesanan
     Route::put('/admin/pesanans/{id}', [PesananController::class, 'update'])
         ->name('admin.pesanans.update');
- 
- 
-    // ======================================================
-    // LAPORAN PENJUALAN
-    // ======================================================
- 
-    Route::get('/admin/laporan-penjualan', [LaporanPenjualanController::class, 'index'])
-        ->name('admin.laporan.index');
- 
-    Route::get('/admin/laporan-penjualan/export', [LaporanPenjualanController::class, 'export'])
-        ->name('admin.laporan.export');
- 
- 
+
+
     // ======================================================
     // PENGGUNA
     // ======================================================
@@ -179,23 +169,23 @@ Route::middleware('role:admin')->group(function () {
  
     Route::delete('/stoks/{stok}', [StokController::class, 'destroy'])
         ->name('stoks.destroy');
- 
+
 });
  
  
 // ==========================================================
-// ROUTE PEMBELI
+// ROUTE PEMBELI (WAJIB LOGIN)
 // ==========================================================
  
 Route::middleware('role:pembeli')->group(function () {
  
     // Dashboard Pembeli
     Route::get('/pembeli/dashboard', function () {
- 
+
         $products = \App\Models\Product::latest()->get();
  
         return view('dashboard.pembeli', compact('products'));
- 
+
     })->name('dashboard.pembeli');
  
  
@@ -232,14 +222,14 @@ Route::middleware('role:pembeli')->group(function () {
     // ======================================================
     // CHECKOUT
     // ======================================================
- 
+
     Route::get('/checkout', [CheckoutController::class, 'index'])
         ->name('checkout.index');
- 
+
     Route::post('/checkout', [CheckoutController::class, 'store'])
         ->name('checkout.store');
- 
- 
+
+
     // ======================================================
     // PROFIL
     // ======================================================
@@ -255,5 +245,5 @@ Route::middleware('role:pembeli')->group(function () {
  
     Route::delete('/profil', [ProfilController::class, 'destroy'])
         ->name('profil.destroy');
- 
+
 });

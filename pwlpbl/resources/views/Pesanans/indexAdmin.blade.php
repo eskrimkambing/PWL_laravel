@@ -58,6 +58,25 @@
             background: #FFF3D5;
         }
 
+        /* DROPDOWN STATUS */
+        .status-dropdown {
+            min-width: 145px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 25px 7px 10px;
+            cursor: pointer;
+            border: 1px solid rgba(106, 8, 1, 0.20);
+            background-color: #FFF3D5;
+            color: #6A0801;
+        }
+
+        .status-dropdown:focus {
+            border-color: #DE7801;
+            box-shadow: 0 0 0 0.15rem rgba(222, 120, 1, 0.15);
+            outline: none;
+        }
+
         /* TOTAL PENDAPATAN */
         .revenue-card {
             background: #F7D991;
@@ -235,10 +254,8 @@
 
     {{-- TABEL PESANAN --}}
     <div class="order-table-card">
-
         <div class="table-responsive">
             <table class="table align-middle" id="tabelPesanan">
-
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -253,12 +270,7 @@
                 </thead>
 
                 <tbody>
-
                     @forelse ($pesanans as $pesanan)
-                        @php
-                            $status = strtolower($pesanan->status ?? 'menunggu');
-                        @endphp
-
                         <tr class="baris-pesanan">
 
                             {{-- NOMOR --}}
@@ -276,7 +288,7 @@
                                 {{ $pesanan->nama_penerima ?? ($pesanan->pembeli->nama ?? ($pesanan->pembeli->email ?? '-')) }}
                             </td>
 
-                            {{-- JAM SAJA, TANPA TANGGAL --}}
+                            {{-- JAM --}}
                             <td class="text-nowrap">
                                 {{ $pesanan->created_at ? $pesanan->created_at->format('H:i') : '-' }}
                             </td>
@@ -286,49 +298,81 @@
                                 Rp {{ number_format($pesanan->total_harga ?? 0, 0, ',', '.') }}
                             </td>
 
-                            {{-- PEMBAYARAN --}}
+                            {{-- DROPDOWN PEMBAYARAN --}}
                             <td>
-                                @if (($pesanan->status_pembayaran ?? '') === 'Dibayar')
-                                    <span class="badge bg-success">Dibayar</span>
-                                @elseif (($pesanan->status_pembayaran ?? '') === 'Gagal')
-                                    <span class="badge bg-danger">Gagal</span>
-                                @else
-                                    <span class="badge bg-secondary">Belum Dibayar</span>
-                                @endif
+                                <form action="{{ route('admin.pesanans.updateStatusPembayaran', $pesanan->id_pesanan) }}"
+                                    method="POST">
+
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <select name="status_pembayaran" class="form-select status-dropdown"
+                                        onchange="this.form.submit()">
+
+                                        <option value="Belum Dibayar"
+                                            {{ ($pesanan->status_pembayaran ?? 'Belum Dibayar') === 'Belum Dibayar' ? 'selected' : '' }}>
+                                            Belum Dibayar
+                                        </option>
+
+                                        <option value="Menunggu Pembayaran"
+                                            {{ ($pesanan->status_pembayaran ?? '') === 'Menunggu Pembayaran' ? 'selected' : '' }}>
+                                            Menunggu Pembayaran
+                                        </option>
+
+                                        <option value="Dibayar"
+                                            {{ ($pesanan->status_pembayaran ?? '') === 'Dibayar' ? 'selected' : '' }}>
+                                            Dibayar
+                                        </option>
+
+                                        <option value="Gagal"
+                                            {{ ($pesanan->status_pembayaran ?? '') === 'Gagal' ? 'selected' : '' }}>
+                                            Gagal
+                                        </option>
+                                    </select>
+                                </form>
                             </td>
 
-                            {{-- STATUS PESANAN --}}
+
+                            {{-- DROPDOWN STATUS PESANAN --}}
                             <td>
-                                @if ($status === 'selesai')
-                                    <span class="badge bg-success">Selesai</span>
-                                @elseif ($status === 'diproses')
-                                    <span class="badge bg-warning text-dark">Diproses</span>
-                                @elseif ($status === 'dibatalkan')
-                                    <span class="badge bg-danger">Dibatalkan</span>
-                                @else
-                                    <span class="badge bg-secondary">
-                                        {{ ucfirst($status) }}
-                                    </span>
-                                @endif
+                                <form action="{{ route('admin.pesanans.update', $pesanan->id_pesanan) }}" method="POST">
+
+                                    @csrf
+                                    @method('PUT')
+
+                                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+
+                                        <option value="Menunggu" {{ $pesanan->status == 'Menunggu' ? 'selected' : '' }}>
+                                            Menunggu
+                                        </option>
+
+                                        <option value="Diproses" {{ $pesanan->status == 'Diproses' ? 'selected' : '' }}>
+                                            Diproses
+                                        </option>
+
+                                        <option value="Selesai" {{ $pesanan->status == 'Selesai' ? 'selected' : '' }}>
+                                            Selesai
+                                        </option>
+
+                                        <option value="Dibatalkan"
+                                            {{ $pesanan->status == 'Dibatalkan' ? 'selected' : '' }}>
+                                            Dibatalkan
+                                        </option>
+
+                                    </select>
+                                </form>
                             </td>
 
-                            {{-- AKSI --}}
+                            {{-- AKSI: HANYA DETAIL --}}
                             <td class="text-end text-nowrap">
                                 <a href="{{ route('admin.pesanans.show', $pesanan->id_pesanan) }}"
                                     class="btn btn-sm btn-outline-info">
                                     Detail
                                 </a>
-
-                                <a href="{{ route('admin.pesanans.edit', $pesanan->id_pesanan) }}"
-                                    class="btn btn-sm btn-outline-primary">
-                                    Edit
-                                </a>
                             </td>
-
                         </tr>
 
                     @empty
-
                         <tr>
                             <td colspan="8" class="text-center text-secondary py-5">
                                 Belum ada pesanan pada tanggal
@@ -343,14 +387,12 @@
                             Pesanan yang dicari tidak ditemukan.
                         </td>
                     </tr>
-
                 </tbody>
             </table>
         </div>
 
         {{-- PAGINATION --}}
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3 pt-3 border-top">
-
             <div class="pagination-info">
                 Menampilkan
                 <strong>{{ $pesanans->firstItem() ?? 0 }}</strong>
@@ -366,15 +408,12 @@
                     {{ $pesanans->links('pagination::bootstrap-5') }}
                 </nav>
             @endif
-
         </div>
-
     </div>
 
     {{-- TOTAL PENDAPATAN --}}
     <div class="revenue-card mt-4">
         <div class="d-flex align-items-center gap-4 flex-wrap">
-
             <div class="revenue-icon">
                 <i class="bi bi-cash-stack"></i>
             </div>
@@ -391,7 +430,6 @@
                     Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -404,7 +442,6 @@
 
         if (inputCari) {
             inputCari.addEventListener('input', function() {
-
                 const kata = this.value.toLowerCase().trim();
 
                 const baris = document.querySelectorAll(
@@ -414,7 +451,6 @@
                 let jumlahDitemukan = 0;
 
                 baris.forEach(function(row) {
-
                     const cocok = row.textContent.toLowerCase().includes(kata);
 
                     row.style.display = cocok ? '' : 'none';

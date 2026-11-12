@@ -353,52 +353,46 @@
                     data-bs-target="#sidebarMenu"></button>
  
             </div>
- 
- 
+
+
             <nav class="nav flex-column">
- 
+
                 <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
                     href="{{ url('/admin/dashboard') }}">
                     <span>🏠</span>
                     Beranda
                 </a>
- 
+
                 <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}"
                     href="{{ route('products.index') }}">
                     <span>🍕</span>
                     Kelola Produk
                 </a>
- 
+
                 <a class="nav-link {{ request()->routeIs('admin.pesanans.*') ? 'active' : '' }}"
                     href="{{ route('admin.pesanans.indexAdmin') }}">
                     <span>📋</span>
                     Kelola Pesanan
                 </a>
- 
+
                 <a class="nav-link {{ request()->routeIs('kategoris.*') ? 'active' : '' }}"
                     href="{{ route('kategoris.index') }}">
                     <span>📂</span>
                     Kelola Kategori
                 </a>
- 
+
                 <a class="nav-link {{ request()->routeIs('stoks.*') ? 'active' : '' }}"
                     href="{{ route('stoks.index') }}">
                     <span>📦</span>
                     Kelola Stok
                 </a>
- 
+
                 <a class="nav-link {{ request()->routeIs('pembayaran.*') ? 'active' : '' }}"
                     href="{{ route('pembayaran.index') }}">
                     <span>💳</span>
                     Kelola Transaksi
                 </a>
- 
-                <a class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}"
-                    href="{{ route('admin.laporan.index') }}">
-                    <span>📊</span>
-                    Laporan Penjualan
-                </a>
- 
+
                 <a class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}"
                     href="{{ route('pengguna.index') }}">
                     <span>👤</span>
@@ -406,8 +400,8 @@
                 </a>
  
             </nav>
- 
- 
+
+
             {{-- LOGOUT: tepat di bawah menu (bukan menempel di dasar sidebar) --}}
             <form action="{{ route('logout') }}" method="POST" class="sidebar-logout">
  

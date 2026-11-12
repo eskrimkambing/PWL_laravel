@@ -17,28 +17,55 @@
     .price {
         color: var(--moza-accent);
     }
+
+    .back-arrow {
+        font-size: 32px;
+        color: #7f1d1d;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+
+    .back-arrow:hover {
+        color: #b91c1c;
+        transform: translateX(-3px);
+    }
 </style>
 @endpush
 
 @section('content')
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mb-1">Pesanan Saya</h2>
-            <p class="text-secondary mb-0">Lihat dan pantau pesanan yang sudah kamu buat.</p>
+    {{-- JUDUL --}}
+    <div class="mb-4">
+        <div class="d-flex align-items-center gap-3 mb-1">
+
+            {{-- PANAH KEMBALI KE BERANDA --}}
+            <a href="{{ route('home') }}"
+                class="back-arrow"
+                title="Kembali ke Halaman Utama">
+                ←
+            </a>
+
+            <h2 class="fw-bold mb-0">Pesanan Saya</h2>
         </div>
 
-        <a href="{{ route('checkout.index') }}" class="btn btn-moza">+ Buat Pesanan</a>
+        <p class="text-secondary mb-0">
+            Lihat dan pantau pesanan yang sudah kamu buat.
+        </p>
     </div>
 
     {{-- SUCCESS --}}
     @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
     @endif
 
     {{-- ERROR --}}
     @if (session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
     @endif
 
     @forelse ($pesanans as $pesanan)
@@ -47,7 +74,10 @@
 
             <div class="d-flex justify-content-between align-items-start mb-3">
                 <div>
-                    <div class="fw-semibold fs-5">Pesanan #{{ $pesanan->id_pesanan }}</div>
+                    <div class="fw-semibold fs-5">
+                        Pesanan #{{ $pesanan->id_pesanan }}
+                    </div>
+
                     <small class="text-secondary">
                         {{ $pesanan->created_at ? $pesanan->created_at->format('d M Y, H:i') : '-' }}
                     </small>
@@ -63,11 +93,14 @@
                 @elseif ($pesanan->status === 'Dibatalkan')
                     <span class="badge bg-danger">Dibatalkan</span>
                 @else
-                    <span class="badge bg-secondary">{{ $pesanan->status }}</span>
+                    <span class="badge bg-secondary">
+                        {{ $pesanan->status }}
+                    </span>
                 @endif
             </div>
 
             <div class="row g-3 mb-3">
+
                 <div class="col-md-4">
                     <small class="text-secondary d-block">Jenis Pesanan</small>
                     <span>{{ $pesanan->jenis_pesanan }}</span>
@@ -84,24 +117,31 @@
                     @if ($pesanan->status_pembayaran === 'Dibayar')
                         <span class="badge bg-success">Dibayar</span>
                     @elseif ($pesanan->status_pembayaran === 'Menunggu Pembayaran')
-                        <span class="badge bg-warning text-dark">Menunggu Pembayaran</span>
+                        <span class="badge bg-warning text-dark">
+                            Menunggu Pembayaran
+                        </span>
                     @elseif ($pesanan->status_pembayaran === 'Gagal')
                         <span class="badge bg-danger">Gagal</span>
                     @else
-                        <span class="badge bg-secondary">{{ $pesanan->status_pembayaran ?? '-' }}</span>
+                        <span class="badge bg-secondary">
+                            {{ $pesanan->status_pembayaran ?? '-' }}
+                        </span>
                     @endif
                 </div>
+
             </div>
 
             <div class="border-top pt-3 d-flex justify-content-between align-items-center">
                 <div>
                     <small class="text-secondary d-block">Total Pesanan</small>
+
                     <span class="price fw-bold fs-5">
                         Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
                     </span>
                 </div>
 
-                <a href="{{ route('pesanans.show', $pesanan->id_pesanan) }}" class="btn btn-outline-light">
+                <a href="{{ route('pesanans.show', $pesanan->id_pesanan) }}"
+                    class="btn btn-outline-light">
                     Lihat Detail
                 </a>
             </div>
@@ -112,9 +152,12 @@
 
         <div class="order-card p-5 text-center">
             <div class="fs-1 mb-3">📋</div>
+
             <h5>Belum Ada Pesanan</h5>
-            <p class="text-secondary mb-4">Kamu belum membuat pesanan.</p>
-            <a href="{{ route('checkout.index') }}" class="btn btn-moza">Buat Pesanan</a>
+
+            <p class="text-secondary mb-0">
+                Kamu belum membuat pesanan.
+            </p>
         </div>
 
     @endforelse
