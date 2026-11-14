@@ -12,6 +12,7 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\PembeliController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\AnalisisKeputusanController;
 use App\Http\Controllers\LaporanPenjualanController;
 use Illuminate\Support\Facades\Route;
 
@@ -123,6 +124,17 @@ Route::middleware('role:admin')->group(function () {
     Route::put('/admin/pesanans/{id}', [PesananController::class, 'update'])
         ->name('admin.pesanans.update');
 
+    // ======================================================
+    // ANALISIS KEPUTUSAN (AHP DAN SAW)
+    // ======================================================
+
+    // Halaman utama analisis keputusan
+    Route::get('/admin/analisis-keputusan', [AnalisisKeputusanController::class, 'index'])
+        ->name('admin.analisis.index');
+
+    // Detail perhitungan AHP dan SAW
+    Route::get('/admin/analisis-keputusan/detail', [AnalisisKeputusanController::class, 'detail'])
+        ->name('admin.analisis.detail');
 
     // ======================================================
     // LAPORAN PENJUALAN
