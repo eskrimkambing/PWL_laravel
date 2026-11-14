@@ -19,15 +19,9 @@ class PesananController extends Controller
             abort(403);
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | TAMPILAN PEMBELI
-        |--------------------------------------------------------------------------
-        */
-
+        // TAMPILAN PEMBELI
         if (session('role') === 'pembeli') {
 
-            // Pembeli hanya melihat pesanan miliknya sendiri.
             $pesanans = Pesanan::with([
                 'pembeli',
                 'detailPesanans.product'
@@ -39,11 +33,7 @@ class PesananController extends Controller
             return view('pesanans.index', compact('pesanans'));
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | TAMPILAN ADMIN
-        |--------------------------------------------------------------------------
-        */
+        // TAMPILAN ADMIN
 
         // Validasi tanggal pencarian.
         $request->validate([
@@ -90,7 +80,6 @@ class PesananController extends Controller
         ));
     }
 
-
     /**
      * Menampilkan detail pesanan.
      */
@@ -120,7 +109,6 @@ class PesananController extends Controller
 
         return view('pesanans.show', compact('pesanan'));
     }
-
 
     /**
      * Membuat token pembayaran Midtrans.
@@ -251,7 +239,6 @@ class PesananController extends Controller
         }
     }
 
-
     /**
      * Menampilkan halaman edit pesanan khusus admin.
      */
@@ -266,7 +253,6 @@ class PesananController extends Controller
 
         return view('pesanans.edit', compact('pesanan'));
     }
-
 
     /**
      * Memperbarui status pesanan oleh admin.
@@ -288,5 +274,28 @@ class PesananController extends Controller
         return redirect()
             ->route('admin.pesanans.indexAdmin')
             ->with('success', 'Status pesanan berhasil diperbarui!');
+    }
+
+    /**
+     * Memperbarui status pembayaran pesanan oleh admin.
+     */
+    public function updateStatusPembayaran(Request $request, $id)
+    {
+        abort_unless(session('role') === 'admin', 403);
+
+        $request->validate([
+            'status_pembayaran' => 'required|in:Belum Dibayar,Menunggu Pembayaran,Dibayar,Gagal',
+        ]);
+
+        $pesanan = Pesanan::findOrFail($id);
+
+        $pesanan->update([
+            'status_pembayaran' => $request->status_pembayaran,
+        ]);
+
+        return back()->with(
+            'success',
+            'Status pembayaran berhasil diperbarui!'
+        );
     }
 }

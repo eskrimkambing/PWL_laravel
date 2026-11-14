@@ -13,6 +13,7 @@ use App\Http\Controllers\StokController;
 use App\Http\Controllers\PembeliController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\AnalisisKeputusanController;
+use App\Http\Controllers\LaporanPenjualanController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -136,6 +137,17 @@ Route::middleware('role:admin')->group(function () {
         ->name('admin.analisis.detail');
 
     // ======================================================
+    // LAPORAN PENJUALAN
+    // ======================================================
+
+    Route::get('/admin/laporan-penjualan', [LaporanPenjualanController::class, 'index'])
+        ->name('admin.laporan.index');
+
+    Route::get('/admin/laporan-penjualan/export', [LaporanPenjualanController::class, 'export'])
+        ->name('admin.laporan.export');
+
+
+    // ======================================================
     // PENGGUNA
     // ======================================================
 
@@ -184,7 +196,7 @@ Route::middleware('role:admin')->group(function () {
 
 
 // ==========================================================
-// ROUTE PEMBELI
+// ROUTE PEMBELI (WAJIB LOGIN)
 // ==========================================================
 
 Route::middleware('role:pembeli')->group(function () {

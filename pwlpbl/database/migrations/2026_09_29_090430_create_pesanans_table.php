@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('status', 50)
                 ->default('Menunggu');
 
-            $table->timestamps('created_at');
+            $table->timestamps();
         });
     }
 

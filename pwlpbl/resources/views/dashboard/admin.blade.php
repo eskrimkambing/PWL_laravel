@@ -388,9 +388,9 @@
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('pembayaran.*') ? 'active' : '' }}"
-                    href="{{ route('pembayaran.index') }}"
-                    <span>💳</span>
-                    Kelola Transaksi
+                 href="{{ route('pembayaran.index') }}">
+                 <span>💳</span>
+                 Kelola Transaksi
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('admin.analisis.*') ? 'active' : '' }}"
@@ -398,6 +398,13 @@
                      <span>📊</span>
                      Analisis Keputusan
                  </a>
+
+                <a class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}"
+                    href="{{ route('admin.laporan.index') }}">
+                    <span>📊</span>
+                    Laporan Penjualan
+                </a>
+
 
                 <a class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}"
                     href="{{ route('pengguna.index') }}">

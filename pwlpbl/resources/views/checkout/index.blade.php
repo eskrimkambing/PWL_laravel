@@ -66,6 +66,10 @@
         color: #f3e9e1;
     }
 
+    textarea.form-control {
+        resize: vertical;
+    }
+
     .choice-option {
         position: relative;
         background: var(--bs-body-bg);
@@ -94,12 +98,21 @@
         box-shadow: 0 0 0 3px rgba(240, 179, 107, .2);
     }
 
-    .choice-option:has(input[type="radio"]:checked) strong {
-        color: #f0b36b;
+    html body main .choice-option .form-check,
+    html body main .choice-option .form-check:has(input:checked),
+    html body main .choice-option label:has(input:checked) {
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
     }
 
-    .choice-option:has(input[type="radio"]:checked) .text-secondary {
-        color: #d9c3ab !important;
+    html body main .choice-option:has(input[type="radio"]:checked) strong {
+        color: var(--moza-maroon) !important;
+    }
+
+    html body main .choice-option:has(input[type="radio"]:checked) .text-secondary,
+    html body main .choice-option:has(input[type="radio"]:checked) small {
+        color: rgba(106, 8, 1, .8) !important;
     }
 
     .choice-option .form-check-input:checked {
@@ -240,6 +253,10 @@
         font-weight: 700;
     }
 
+    #alamatBox {
+        display: none;
+    }
+
     @media (min-width: 992px) {
         .sticky-side {
             position: sticky;
@@ -280,7 +297,7 @@
 
     $fotoDefault = asset('images/pizza.jpg');
 
-    $fotoProduk = function ($product) use ($fotoPizza, $fotoCemilan) {
+    $fotoProduk = function ($product) use ($fotoPizza, $fotoCemilan, $fotoDefault) {
         if (!empty($product->image)) {
             if (\Illuminate\Support\Str::startsWith(
                 $product->image,
@@ -330,7 +347,7 @@
             continue;
         }
 
-        $isPizza = strtolower((string) $p->kategori) === 'pizza';
+        $isPizza = strtolower(trim((string) $p->kategori)) === 'pizza';
 
         $size = null;
 
@@ -353,18 +370,41 @@
         ];
     }
 
-    $jenisLama = old('jenis_pesanan');
+    $jenisLama = old('jenis_pesanan', 'Makan di tempat');
+
+    $namaLengkap = old(
+        'nama_penerima',
+        optional($pembeli ?? null)->nama
+    );
+
+    $namaParts = preg_split('/\s+/', trim((string) $namaLengkap), 2);
+
+    $namaDepan = old('nama_depan', $namaParts[0] ?? '');
+    $namaBelakang = old('nama_belakang', $namaParts[1] ?? '');
+
+    $telpRaw = old(
+        'no_telp',
+        optional($pembeli ?? null)->no_telp
+    );
+
+    $telpTampil = preg_replace(
+        '/^(62|0)/',
+        '',
+        preg_replace('/\D/', '', (string) $telpRaw)
+    );
+
+    $emailAwal = old(
+        'email',
+        optional(auth()->user())->email
+            ?? optional($pembeli ?? null)->email
+    );
 @endphp
 
-{{-- JUDUL CHECKOUT --}}
 <div class="mb-4">
-
     <div class="d-flex align-items-center gap-3 mb-2">
-
         <a href="{{ url('/') }}#menu"
            class="checkout-back"
            aria-label="Kembali">
-
             <svg width="25" height="25"
                  viewBox="0 0 24 24"
                  fill="none"
@@ -375,20 +415,23 @@
                 <path d="M19 12H5"/>
                 <path d="M12 19l-7-7 7-7"/>
             </svg>
-
         </a>
 
         <h2 class="fw-bold mb-0">Checkout</h2>
-
     </div>
 
     <p class="text-secondary mb-0">
         Periksa pesananmu, lalu lengkapi data dan pembayaran.
     </p>
 
+    @if (empty($pembeli))
+        <p class="small mb-0 mt-1">
+            Tidak perlu daftar untuk memesan. Sudah punya akun?
+            <a href="{{ route('login') }}" class="fw-semibold">Login</a>
+        </p>
+    @endif
 </div>
 
-{{-- ERROR --}}
 @if (session('error'))
     <div class="alert alert-danger">
         {{ session('error') }}
@@ -398,7 +441,6 @@
 @if ($errors->any())
     <div class="alert alert-danger">
         <strong>Terjadi kesalahan:</strong>
-
         <ul class="mb-0 mt-2">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -429,128 +471,68 @@
 
     <div class="row g-3">
 
-        {{-- KOLOM KIRI --}}
         <div class="col-lg-7">
 
-            {{-- JENIS PESANAN --}}
+            {{-- INFORMASI PESANAN --}}
             <div class="checkout-box">
-
-                <div class="section-title">
-                    Informasi Pesanan
-                </div>
+                <div class="section-title">Informasi Pesanan</div>
 
                 <label class="form-label text-secondary small">
                     Jenis Pesanan
                 </label>
 
-                <div class="choice-option">
-                    <div class="form-check">
+                @foreach ([
+                    'Makan di tempat' => 'Dinikmati langsung di Pizza Moza.',
+                    'Dibungkus' => 'Ambil sendiri di outlet.',
+                    'Delivery' => 'Pesanan diantar ke alamat kamu.'
+                ] as $value => $description)
 
-                        <input class="form-check-input"
-                               type="radio"
-                               name="jenis_pesanan"
-                               id="jenis_makan"
-                               value="Makan di tempat"
-                               {{ $jenisLama == 'Makan di tempat' ? 'checked' : '' }}
-                               required>
+                    <div class="choice-option">
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="jenis_pesanan"
+                                   id="jenis_{{ $loop->index }}"
+                                   value="{{ $value }}"
+                                   {{ $jenisLama == $value ? 'checked' : '' }}
+                                   required>
 
-                        <label class="form-check-label w-100"
-                               for="jenis_makan">
-
-                            <strong>Makan di tempat</strong>
-
-                            <div class="text-secondary small">
-                                Dinikmati langsung di Pizza Moza.
-                            </div>
-
-                        </label>
-
+                            <label class="form-check-label w-100"
+                                   for="jenis_{{ $loop->index }}">
+                                <strong>{{ $value }}</strong>
+                                <div class="text-secondary small">
+                                    {{ $description }}
+                                </div>
+                            </label>
+                        </div>
                     </div>
+                @endforeach
+
+                <div id="alamatBox" class="mt-3">
+                    <label for="alamat" class="field-label">
+                        Alamat Pengiriman <span class="req">*</span>
+                    </label>
+
+                    <textarea name="alamat"
+                              id="alamat"
+                              class="form-control field-input"
+                              rows="3"
+                              maxlength="500"
+                              placeholder="Masukkan alamat lengkap">{{ old('alamat') }}</textarea>
                 </div>
-
-                <div class="choice-option mb-0">
-                    <div class="form-check">
-
-                        <input class="form-check-input"
-                               type="radio"
-                               name="jenis_pesanan"
-                               id="jenis_bungkus"
-                               value="Dibungkus"
-                               {{ $jenisLama == 'Dibungkus' ? 'checked' : '' }}
-                               required>
-
-                        <label class="form-check-label w-100"
-                               for="jenis_bungkus">
-
-                            <strong>Dibungkus</strong>
-
-                            <div class="text-secondary small">
-                                Ambil sendiri di outlet.
-                            </div>
-
-                        </label>
-
-                    </div>
-                </div>
-
             </div>
 
             {{-- INFORMASI KONTAK --}}
             <div class="checkout-box">
-
-                <div class="section-title">
-                    Informasi Kontak
-                </div>
+                <div class="section-title">Informasi Kontak</div>
 
                 <p class="text-secondary small mb-3">
-                    Terisi otomatis dari profil kamu. Kalau diubah,
-                    hanya berlaku untuk pesanan ini.
+                    Isi data di bawah ini supaya pesananmu bisa kami proses.
                 </p>
-
-                @php
-                    $namaLengkap = old(
-                        'nama_penerima',
-                        optional($pembeli ?? null)->nama
-                    );
-
-                    $namaParts = preg_split(
-                        '/\s+/',
-                        trim((string) $namaLengkap),
-                        2
-                    );
-
-                    $namaDepan = old(
-                        'nama_depan',
-                        $namaParts[0] ?? ''
-                    );
-
-                    $namaBelakang = old(
-                        'nama_belakang',
-                        $namaParts[1] ?? ''
-                    );
-
-                    $telpRaw = old(
-                        'no_telp',
-                        optional($pembeli ?? null)->no_telp
-                    );
-
-                    $telpTampil = preg_replace(
-                        '/^(62|0)/',
-                        '',
-                        preg_replace('/\D/', '', (string) $telpRaw)
-                    );
-
-                    $emailAwal = old(
-                        'email',
-                        optional(auth()->user())->email
-                            ?? optional($pembeli ?? null)->email
-                    );
-                @endphp
 
                 <div class="row g-3">
 
                     <div class="col-md-6">
-
                         <label for="nama_depan" class="field-label">
                             Nama Depan <span class="req">*</span>
                         </label>
@@ -562,11 +544,9 @@
                                value="{{ $namaDepan }}"
                                placeholder="Nama depan kamu"
                                required>
-
                     </div>
 
                     <div class="col-md-6">
-
                         <label for="nama_belakang" class="field-label">
                             Nama Belakang
                         </label>
@@ -577,20 +557,16 @@
                                class="form-control field-input"
                                value="{{ $namaBelakang }}"
                                placeholder="Nama belakang kamu">
-
                     </div>
 
                     <div class="col-12">
-
                         <label for="telp_input" class="field-label">
                             Nomor HP <span class="req">*</span>
                         </label>
 
                         <div class="phone-group">
-
                             <span class="phone-prefix">
-                                <span>🇮🇩</span>
-                                <span>+62</span>
+                                🇮🇩 +62
                             </span>
 
                             <input type="tel"
@@ -599,13 +575,10 @@
                                    value="{{ $telpTampil }}"
                                    placeholder="81212345678"
                                    required>
-
                         </div>
-
                     </div>
 
                     <div class="col-12">
-
                         <label for="email" class="field-label">
                             Email <span class="req">*</span>
                         </label>
@@ -617,7 +590,19 @@
                                value="{{ $emailAwal }}"
                                placeholder="contoh: pizzamoza@mail.com"
                                required>
+                    </div>
 
+                    <div class="col-12">
+                        <label for="catatan" class="field-label">
+                            Catatan Pesanan
+                        </label>
+
+                        <textarea name="catatan"
+                                  id="catatan"
+                                  class="form-control field-input"
+                                  rows="2"
+                                  maxlength="500"
+                                  placeholder="Catatan tambahan (opsional)">{{ old('catatan') }}</textarea>
                     </div>
 
                     <input type="hidden"
@@ -629,16 +614,13 @@
                            name="no_telp"
                            id="no_telp"
                            value="{{ $telpRaw }}">
-
                 </div>
-
             </div>
 
             {{-- RINGKASAN PESANAN --}}
             <div class="checkout-box">
 
                 <div class="d-flex justify-content-between align-items-center mb-2">
-
                     <div class="section-title mb-0">
                         Ringkasan Pesanan
                     </div>
@@ -647,13 +629,11 @@
                        class="btn btn-sm btn-outline-secondary">
                         + Tambah menu
                     </a>
-
                 </div>
 
                 <div id="cartRows">
 
                     @foreach ($rows as $i => $r)
-
                         @php
                             $p = $r['product'];
                         @endphp
@@ -672,36 +652,26 @@
                             <div class="flex-grow-1" style="min-width:0;">
 
                                 <div class="d-flex justify-content-between gap-2">
-
                                     <strong>{{ $p->nama }}</strong>
-
                                     <span class="price fw-semibold line-total"></span>
-
                                 </div>
 
                                 <small class="text-secondary d-block mb-2 unit-text"></small>
 
-                                {{-- UKURAN PIZZA --}}
                                 @if ($r['isPizza'])
-
-                                    <select name="sizes[{{ $p->id }}]"
+                                    <select name="items[{{ $i }}][size]"
                                             class="form-select form-select-sm size-select mb-2"
                                             style="max-width:200px;">
 
                                         @foreach ($tambahanUkuran as $nama => $tambah)
-
                                             <option value="{{ $nama }}"
                                                 {{ $r['size'] === $nama ? 'selected' : '' }}>
                                                 Ukuran {{ $nama }}
                                             </option>
-
                                         @endforeach
-
                                     </select>
-
                                 @endif
 
-                                {{-- CATATAN --}}
                                 <input type="text"
                                        name="items[{{ $i }}][notes]"
                                        class="form-control form-control-sm notes-input mb-2"
@@ -709,100 +679,71 @@
                                        placeholder="Catatan untuk menu ini (opsional)"
                                        value="{{ $r['notes'] }}">
 
-                                {{-- ID PRODUK --}}
                                 <input type="hidden"
                                        name="items[{{ $i }}][product_id]"
                                        value="{{ $p->id }}">
 
-                                {{-- JUMLAH PRODUK UNTUK CONTROLLER --}}
                                 <input type="hidden"
-                                       name="products[{{ $p->id }}]"
+                                       name="items[{{ $i }}][qty]"
                                        class="qty-input"
                                        value="{{ $r['qty'] }}">
 
                                 <div class="d-flex justify-content-between align-items-center">
-
                                     <button type="button" class="remove-btn">
                                         Hapus
                                     </button>
 
                                     <div class="qty-box">
-
                                         <button type="button"
                                                 class="btn-minus"
-                                                aria-label="Kurangi">
-                                            −
-                                        </button>
+                                                aria-label="Kurangi">−</button>
 
-                                        <span class="qty-num">
-                                            {{ $r['qty'] }}
-                                        </span>
+                                        <span class="qty-num">{{ $r['qty'] }}</span>
 
                                         <button type="button"
                                                 class="btn-plus"
-                                                aria-label="Tambah">
-                                            +
-                                        </button>
-
+                                                aria-label="Tambah">+</button>
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     @endforeach
 
                 </div>
-
             </div>
 
         </div>
 
         {{-- KOLOM KANAN --}}
         <div class="col-lg-5">
-
             <div class="sticky-side">
 
                 {{-- METODE PEMBAYARAN --}}
                 <div class="checkout-box">
-
-                    <div class="section-title">
-                        Metode Pembayaran
-                    </div>
+                    <div class="section-title">Metode Pembayaran</div>
 
                     <div class="choice-option">
-
                         <div class="form-check">
-
                             <input class="form-check-input"
                                    type="radio"
                                    name="metode_pembayaran"
                                    id="cash"
                                    value="Cash"
-                                   {{ old('metode_pembayaran') == 'Cash' ? 'checked' : '' }}
+                                   {{ old('metode_pembayaran', 'Cash') == 'Cash' ? 'checked' : '' }}
                                    required>
 
                             <label class="form-check-label w-100"
                                    for="cash">
-
                                 <strong>Cash</strong>
-
                                 <div class="text-secondary small">
                                     Bayar langsung kepada kasir.
                                 </div>
-
                             </label>
-
                         </div>
-
                     </div>
 
                     <div class="choice-option mb-0">
-
                         <div class="form-check">
-
                             <input class="form-check-input"
                                    type="radio"
                                    name="metode_pembayaran"
@@ -813,48 +754,34 @@
 
                             <label class="form-check-label w-100"
                                    for="midtrans">
-
                                 <strong>Midtrans</strong>
-
                                 <div class="text-secondary small">
-                                    Bayar online lewat halaman pembayaran Midtrans.
+                                    Bayar online melalui halaman pembayaran Midtrans.
                                 </div>
-
                             </label>
-
                         </div>
-
                     </div>
 
+                    <small class="text-secondary d-block mt-2">
+                        Pembayaran online akan diproses setelah integrasi Midtrans diaktifkan.
+                    </small>
                 </div>
 
                 {{-- RINGKASAN PEMBAYARAN --}}
                 <div class="checkout-box">
-
-                    <div class="section-title">
-                        Ringkasan Pembayaran
-                    </div>
+                    <div class="section-title">Ringkasan Pembayaran</div>
 
                     <div class="summary-row">
-
                         <span class="text-secondary">
                             Subtotal (<span id="sumCount">0</span> item)
                         </span>
 
-                        <span id="sumSubtotal">
-                            Rp 0
-                        </span>
-
+                        <span id="sumSubtotal">Rp 0</span>
                     </div>
 
                     <div class="summary-total">
-
                         <span>Total Pembayaran</span>
-
-                        <span class="price" id="sumTotal">
-                            Rp 0
-                        </span>
-
+                        <span class="price" id="sumTotal">Rp 0</span>
                     </div>
 
                     <button type="submit"
@@ -867,15 +794,12 @@
                        class="btn btn-outline-secondary w-100 mt-2">
                         Kembali
                     </a>
-
                 </div>
 
             </div>
-
         </div>
 
     </div>
-
 </form>
 
 <script>
@@ -886,6 +810,7 @@
 
     const rowsBox = document.getElementById('cartRows');
     const btnSubmit = document.getElementById('btnSubmit');
+    const form = document.getElementById('checkoutForm');
 
     function rupiah(n) {
         return 'Rp ' + n.toLocaleString('id-ID');
@@ -899,14 +824,12 @@
     }
 
     function syncStorage() {
-
         const lines = [];
         const full = [];
 
         rowsBox.querySelectorAll('.cart-row').forEach(row => {
 
             const sel = row.querySelector('.size-select');
-
             const size = sel ? sel.value : null;
 
             const qty = parseInt(
@@ -931,7 +854,6 @@
                 notes: notes,
                 qty: qty
             });
-
         });
 
         try {
@@ -946,11 +868,9 @@
         try {
             localStorage.setItem(CART_KEY, JSON.stringify(full));
         } catch (e) {}
-
     }
 
     function recalc() {
-
         let total = 0;
         let count = 0;
 
@@ -972,7 +892,6 @@
 
             total += unit * qty;
             count += qty;
-
         });
 
         document.getElementById('sumCount').textContent = count;
@@ -986,10 +905,9 @@
         btnSubmit.disabled = count === 0;
 
         syncStorage();
-
     }
 
-    // TOMBOL JUMLAH DAN HAPUS
+    // Tombol jumlah dan hapus produk.
     rowsBox.addEventListener('click', function (e) {
 
         const row = e.target.closest('.cart-row');
@@ -1000,7 +918,11 @@
 
         if (e.target.closest('.btn-plus')) {
 
-            qtyInput.value = parseInt(qtyInput.value) + 1;
+            const qty = parseInt(qtyInput.value);
+
+            if (qty < 99) {
+                qtyInput.value = qty + 1;
+            }
 
             recalc();
 
@@ -1018,35 +940,29 @@
             row.remove();
 
             if (rowsBox.querySelectorAll('.cart-row').length === 0) {
-
                 try {
                     localStorage.removeItem(CART_KEY);
                 } catch (err) {}
 
                 window.location.href = "{{ url('/') }}#menu";
-
                 return;
             }
 
             recalc();
-
         }
-
     });
 
-    // PERUBAHAN UKURAN
+    // Perubahan ukuran.
     rowsBox.addEventListener('change', recalc);
 
-    // CATATAN PRODUK
+    // Catatan produk.
     rowsBox.addEventListener('input', function (e) {
-
         if (e.target.classList.contains('notes-input')) {
             syncStorage();
         }
-
     });
 
-    // SINKRONISASI KONTAK
+    // Sinkronisasi nama dan nomor telepon.
     const namaDepan = document.getElementById('nama_depan');
     const namaBelakang = document.getElementById('nama_belakang');
     const namaHidden = document.getElementById('nama_penerima');
@@ -1066,19 +982,59 @@
             .replace(/^(62|0)/, '');
 
         telpHidden.value = digits ? '0' + digits : '';
-
     }
 
     [namaDepan, namaBelakang, telpInput].forEach(el => {
         el.addEventListener('input', syncKontak);
     });
 
-    document.getElementById('checkoutForm')
-        .addEventListener('submit', syncKontak);
+    // Tampilkan alamat jika memilih Delivery.
+    const jenisRadios = document.querySelectorAll(
+        'input[name="jenis_pesanan"]'
+    );
+
+    const alamatBox = document.getElementById('alamatBox');
+    const alamatInput = document.getElementById('alamat');
+
+    function toggleAlamat() {
+
+        const selected = document.querySelector(
+            'input[name="jenis_pesanan"]:checked'
+        );
+
+        const delivery = selected && selected.value === 'Delivery';
+
+        alamatBox.style.display = delivery ? 'block' : 'none';
+        alamatInput.required = !!delivery;
+    }
+
+    jenisRadios.forEach(radio => {
+        radio.addEventListener('change', toggleAlamat);
+    });
+
+    // Saat formulir dikirim.
+    form.addEventListener('submit', function (e) {
+
+        syncKontak();
+
+        if (!namaHidden.value.trim() || !telpHidden.value.trim()) {
+            e.preventDefault();
+            alert('Lengkapi nama dan nomor HP terlebih dahulu.');
+            return;
+        }
+
+        if (rowsBox.querySelectorAll('.cart-row').length === 0) {
+            e.preventDefault();
+            alert('Keranjang pesanan masih kosong.');
+            return;
+        }
+
+        // Jangan hapus localStorage sebelum server berhasil menerima
+        // pesanan agar keranjang tidak hilang jika validasi gagal.
+    });
 
     syncKontak();
-
-    // HITUNG SAAT HALAMAN DIBUKA
+    toggleAlamat();
     recalc();
 
 })();
