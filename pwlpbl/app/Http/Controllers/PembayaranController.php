@@ -7,36 +7,42 @@ use Illuminate\Http\Request;
 
 class PembayaranController extends Controller
 {
-    // Menampilkan semua data transaksi dengan filter tanggal dan pagination
+    // Menampilkan transaksi berdasarkan tanggal pembayaran
     public function index(Request $request)
     {
         $request->validate([
             'tanggal' => 'nullable|date',
         ]);
 
+        // Jika tanggal tidak dipilih, gunakan tanggal hari ini
+        $tanggal = $request->filled('tanggal')
+            ? $request->input('tanggal')
+            : today()->format('Y-m-d');
+
+        // Mengambil transaksi yang sudah dibayar sesuai tanggal
         $query = Pesanan::with('pembeli')
-            ->whereNotNull('metode_pembayaran');
+            ->whereNotNull('metode_pembayaran')
+            ->where('status_pembayaran', 'Dibayar')
+            ->whereNotNull('dibayar_pada')
+            ->whereDate('dibayar_pada', $tanggal);
 
-        // Filter transaksi berdasarkan tanggal pesanan dibuat
-        if ($request->filled('tanggal')) {
-            $query->whereDate('created_at', $request->tanggal);
-        }
-
-        // Menampilkan maksimal 10 transaksi per halaman
+        // Maksimal 10 transaksi per halaman
         $pembayarans = $query
             ->orderBy('id_pesanan', 'asc')
             ->paginate(10)
-             ->withQueryString();
+            ->withQueryString();
 
-        // Menghitung total transaksi hari ini
-        // Tidak terpengaruh oleh filter tanggal
+        // Menghitung total transaksi yang dibayar hari ini
         $totalTransaksiHariIni = Pesanan::whereNotNull('metode_pembayaran')
-            ->whereDate('created_at', today())
+            ->where('status_pembayaran', 'Dibayar')
+            ->whereNotNull('dibayar_pada')
+            ->whereDate('dibayar_pada', today())
             ->count();
 
         return view('pembayaran.index', compact(
             'pembayarans',
-            'totalTransaksiHariIni'
+            'totalTransaksiHariIni',
+            'tanggal'
         ));
     }
 

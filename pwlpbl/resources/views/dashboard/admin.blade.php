@@ -388,10 +388,16 @@
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('pembayaran.*') ? 'active' : '' }}"
-                    href="{{ route('pembayaran.index') }}">
+                    href="{{ route('pembayaran.index') }}"
                     <span>💳</span>
                     Kelola Transaksi
                 </a>
+
+                <a class="nav-link {{ request()->routeIs('admin.analisis.*') ? 'active' : '' }}"
+                    href="{{ route('admin.analisis.index') }}">
+                     <span>📊</span>
+                     Analisis Keputusan
+                 </a>
 
                 <a class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}"
                     href="{{ route('pengguna.index') }}">

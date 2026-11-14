@@ -192,8 +192,8 @@
                     Cari Transaksi Berdasarkan Tanggal
                 </label>
 
-                <input type="date" name="tanggal" id="tanggal" class="form-control date-box"
-                    value="{{ request('tanggal') }}">
+               <input type="date" name="tanggal" id="tanggal" class="form-control date-box"
+                value="{{ request('tanggal', now()->format('Y-m-d')) }}">
             </div>
 
             <button type="submit" class="btn btn-moza">
