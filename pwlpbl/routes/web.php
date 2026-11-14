@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\ProductController;
@@ -23,12 +24,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-    $products = \App\Models\Product::latest()->get();
+    $products = \App\Models\Product::withStok()->latest()->get();
 
     return view('beranda', compact('products'));
-
 })->name('home');
-
 
 
 // ==========================================================
@@ -124,6 +123,11 @@ Route::middleware('role:admin')->group(function () {
     Route::put('/admin/pesanans/{id}', [PesananController::class, 'update'])
         ->name('admin.pesanans.update');
 
+    // Update status pembayaran
+    Route::patch('/admin/pesanans/{id}/status-pembayaran', [PembayaranController::class, 'updateStatusPembayaran'])
+        ->name('admin.pesanans.updateStatusPembayaran');
+
+
     // ======================================================
     // ANALISIS KEPUTUSAN (AHP DAN SAW)
     // ======================================================
@@ -135,6 +139,7 @@ Route::middleware('role:admin')->group(function () {
     // Detail perhitungan AHP dan SAW
     Route::get('/admin/analisis-keputusan/detail', [AnalisisKeputusanController::class, 'detail'])
         ->name('admin.analisis.detail');
+
 
     // ======================================================
     // LAPORAN PENJUALAN
@@ -192,6 +197,9 @@ Route::middleware('role:admin')->group(function () {
     Route::delete('/stoks/{stok}', [StokController::class, 'destroy'])
         ->name('stoks.destroy');
 
+    // Atur stok produk ke angka tertentu (termasuk 0 = Sold Out)
+    Route::put('/stoks/produk/{product}', [StokController::class, 'atur'])
+        ->name('stoks.atur');
 });
 
 
@@ -204,10 +212,9 @@ Route::middleware('role:pembeli')->group(function () {
     // Dashboard Pembeli
     Route::get('/pembeli/dashboard', function () {
 
-        $products = \App\Models\Product::latest()->get();
+        $products = \App\Models\Product::withStok()->latest()->get();
 
         return view('dashboard.pembeli', compact('products'));
-
     })->name('dashboard.pembeli');
 
 
@@ -267,5 +274,4 @@ Route::middleware('role:pembeli')->group(function () {
 
     Route::delete('/profil', [ProfilController::class, 'destroy'])
         ->name('profil.destroy');
-
 });

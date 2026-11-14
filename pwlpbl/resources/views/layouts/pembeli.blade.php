@@ -13,7 +13,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-
         /* ===== PALET: dominan krem, aksen oranye & maroon =====
 
            Krem #F7D991 | Oranye #DE7801 | Merah #CA4238 | Maroon #6A0801
@@ -94,7 +93,7 @@
 
         }
 
-/* ===== TOMBOL ===== */
+        /* ===== TOMBOL ===== */
 
         .btn-moza,
 
@@ -859,7 +858,6 @@
             background: rgba(247, 217, 145, 0.35) !important;
 
         }
-
     </style>
 
     @stack('styles')
@@ -905,18 +903,22 @@
                     {{-- FOTO / AVATAR --}}
 
                     @if ($fotoPembeli)
-
                         <img src="{{ $fotoPembeli }}" alt="Foto {{ $namaPembeli }}" class="avatar-img">
-
                     @else
-
                         <div class="avatar d-flex align-items-center justify-content-center">
 
                             {{ strtoupper(substr($pembeliLogin->nama ?? ($emailPembeli ?? 'P'), 0, 1)) }}
 
                         </div>
-
                     @endif
+
+                    {{-- LOGOUT --}}
+                    <form action="{{ route('logout') }}" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-danger btn-sm px-3 py-2 fw-semibold">
+                            ⏻ <span class="d-none d-sm-inline">Logout</span>
+                        </button>
+                    </form>
 
                 </div>
 
@@ -941,4 +943,3 @@
 </body>
 
 </html>
-

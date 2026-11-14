@@ -17,7 +17,7 @@ class ProductController extends Controller
     // Menampilkan produk khusus pembeli
     public function pembeli()
     {
-        $products = Product::latest()->get();
+        $products = Product::withStok()->latest()->get();
 
         return view('pembelis.products', compact('products'));
     }

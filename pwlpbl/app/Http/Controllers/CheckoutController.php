@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Pesanan;
 use App\Models\Pembeli;
+use App\Models\Stok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
@@ -89,6 +91,60 @@ class CheckoutController extends Controller
 
         // Simpan pesanan dan detail pesanan dalam satu transaksi database.
         $pesanan = DB::transaction(function () use ($request, $pembeli) {
+
+            // ------------------------------------------------------
+            // VALIDASI STOK
+            // Jumlah per produk dijumlahkan dulu (produk yang sama bisa
+            // muncul di beberapa baris dengan ukuran/catatan berbeda).
+            // ------------------------------------------------------
+            $kebutuhan = [];
+
+            foreach ($request->items as $item) {
+                $idProduk = (int) $item['product_id'];
+
+                $kebutuhan[$idProduk] = ($kebutuhan[$idProduk] ?? 0)
+                    + (int) $item['qty'];
+            }
+
+            ksort($kebutuhan);
+
+            // Kunci baris produk (urut ID) supaya dua pembeli yang memesan
+            // stok terakhir secara bersamaan tidak sama-sama lolos.
+            $produkTerkunci = Product::whereIn('id', array_keys($kebutuhan))
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            $pesanError = [];
+
+            foreach ($kebutuhan as $idProduk => $jumlahDipesan) {
+
+                $produk = $produkTerkunci->get($idProduk);
+
+                abort_if($produk === null, 404);
+
+                $stokTersisa = max(
+                    0,
+                    (int) Stok::where('product_id', $idProduk)->sum('jumlah_stok')
+                );
+
+                if ($stokTersisa <= 0) {
+                    $pesanError['stok_' . $idProduk] = $produk->nama
+                        . ' sedang Stok Habis dan tidak dapat dipesan. '
+                        . 'Hapus dari pesanan atau tunggu stok tersedia kembali.';
+                } elseif ($jumlahDipesan > $stokTersisa) {
+                    $pesanError['stok_' . $idProduk] = 'Jumlah pesanan ' . $produk->nama
+                        . ' (' . $jumlahDipesan . ') melebihi stok yang tersisa ('
+                        . $stokTersisa . '). Kurangi jumlah pesanan.';
+                }
+            }
+
+            // Ada yang bermasalah: batalkan semua, pesanan tidak dibuat
+            // dan stok tidak berkurang.
+            if (!empty($pesanError)) {
+                throw ValidationException::withMessages($pesanError);
+            }
 
             $totalHarga = 0;
             $daftarProduk = [];
@@ -179,6 +235,20 @@ class CheckoutController extends Controller
                 ]);
             }
 
+            // ------------------------------------------------------
+            // KURANGI STOK sesuai jumlah yang berhasil dipesan.
+            // Dicatat sebagai baris stok bernilai minus (status "Terjual"),
+            // sehingga total stok di halaman admin ikut berkurang.
+            // ------------------------------------------------------
+            foreach ($kebutuhan as $idProduk => $jumlahDipesan) {
+                Stok::create([
+                    'product_id'   => $idProduk,
+                    'tanggal_stok' => now()->toDateString(),
+                    'jumlah_stok'  => -$jumlahDipesan,
+                    'status_stok'  => 'Terjual',
+                ]);
+            }
+
             return $pesanan;
         });
 
@@ -235,4 +305,3 @@ class CheckoutController extends Controller
         ));
     }
 }
-

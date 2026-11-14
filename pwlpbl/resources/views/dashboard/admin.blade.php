@@ -355,6 +355,7 @@
             </div>
 
 
+
             <nav class="nav flex-column">
 
                 <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
@@ -369,12 +370,6 @@
                     Kelola Produk
                 </a>
 
-                <a class="nav-link {{ request()->routeIs('admin.pesanans.*') ? 'active' : '' }}"
-                    href="{{ route('admin.pesanans.indexAdmin') }}">
-                    <span>📋</span>
-                    Kelola Pesanan
-                </a>
-
                 <a class="nav-link {{ request()->routeIs('kategoris.*') ? 'active' : '' }}"
                     href="{{ route('kategoris.index') }}">
                     <span>📂</span>
@@ -387,24 +382,30 @@
                     Kelola Stok
                 </a>
 
+                {{-- KELOLA PESANAN --}}
+                <a class="nav-link {{ request()->routeIs('admin.pesanans.*') ? 'active' : '' }}"
+                    href="{{ route('admin.pesanans.indexAdmin') }}">
+                    <span>📋</span>
+                    Kelola Pesanan
+                </a>
+
                 <a class="nav-link {{ request()->routeIs('pembayaran.*') ? 'active' : '' }}"
-                 href="{{ route('pembayaran.index') }}">
-                 <span>💳</span>
-                 Kelola Transaksi
+                    href="{{ route('pembayaran.index') }}">
+                    <span>💳</span>
+                    Kelola Transaksi
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('admin.analisis.*') ? 'active' : '' }}"
                     href="{{ route('admin.analisis.index') }}">
-                     <span>📊</span>
-                     Analisis Keputusan
-                 </a>
+                    <span>📊</span>
+                    Analisis Keputusan
+                </a>
 
                 <a class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}"
                     href="{{ route('admin.laporan.index') }}">
                     <span>📊</span>
                     Laporan Penjualan
                 </a>
-
 
                 <a class="nav-link {{ request()->routeIs('pengguna.*') ? 'active' : '' }}"
                     href="{{ route('pengguna.index') }}">
@@ -413,6 +414,7 @@
                 </a>
 
             </nav>
+
 
 
             {{-- LOGOUT: tepat di bawah menu (bukan menempel di dasar sidebar) --}}

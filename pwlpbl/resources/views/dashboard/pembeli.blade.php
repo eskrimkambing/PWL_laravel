@@ -3,6 +3,7 @@
 @section('title', 'Beranda')
 
 @push('styles')
+    @include('partials.sold-out-style')
     <style>
         .category-btn {
             border: 1px solid var(--bs-border-color);
@@ -74,6 +75,18 @@
         <p class="text-secondary mb-0">Pilih menu favorit kamu dan pesan sekarang.</p>
     </div>
 
+    @php
+        $produkHabis = $products->filter(fn($p) => $p->isSoldOut());
+    @endphp
+
+    @if ($produkHabis->isNotEmpty())
+        <div class="sold-out-notice mb-3" role="alert">
+            <strong>Perhatian:</strong> produk dengan stok 0 (Sold Out) tidak dapat dipesan sampai stok
+            tersedia kembali.
+            <span class="d-block small mt-1">Sedang habis: {{ $produkHabis->pluck('nama')->implode(', ') }}</span>
+        </div>
+    @endif
+
     <input type="text" id="searchInput" class="form-control mb-3" style="max-width: 360px;" placeholder="Cari menu..."
         onkeyup="searchProducts()">
 
@@ -105,19 +118,27 @@
                     }
                     $srcFoto = asset($pathFoto);
                 }
+
+                $habis = $product->isSoldOut();
             @endphp
 
             <div class="col-xl-4 col-lg-6 col-md-6 product-item" data-name="{{ strtolower($product->nama) }}"
                 data-category="{{ strtolower($product->kategori) }}">
 
-                <div class="card h-100 overflow-hidden">
+                <div class="card h-100 overflow-hidden {{ $habis ? 'is-sold-out' : '' }}">
 
-                    <img src="{{ $srcFoto }}" alt="{{ $product->nama }}" class="product-image"
-                        onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
+                    <div class="product-media">
+                        @if ($habis)
+                            <span class="sold-out-badge">Sold Out</span>
+                        @endif
+
+                        <img src="{{ $srcFoto }}" alt="{{ $product->nama }}" class="product-image"
+                            onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
+                    </div>
 
                     <div class="card-body d-flex flex-column">
                         <small class="text-secondary">{{ $product->kategori }}</small>
-                        <div class="fs-5 fw-bold mb-1">{{ $product->nama }}</div>
+                        <div class="fs-5 fw-bold mb-1 {{ $habis ? 'sold-dim' : '' }}">{{ $product->nama }}</div>
                         <div class="product-description text-secondary mb-3">
                             {{ $product->deskripsi ?? 'Produk Pizza Moza' }}
                         </div>
@@ -126,12 +147,16 @@
                             <small class="text-secondary mb-2">Porsi: {{ $product->portion }}</small>
                         @endif
 
-                        <div class="price mb-3">
+                        <div class="price mb-3 {{ $habis ? 'sold-dim' : '' }}">
                             Rp{{ number_format($product->price, 0, ',', '.') }}
                         </div>
 
-                        <a href="{{ route('checkout.index', ['product' => $product->id]) }}"
-                            class="btn btn-moza w-100 mt-auto">Pesan</a>
+                        @if ($habis)
+                            <button type="button" class="btn btn-soldout mt-auto" disabled>Stok Habis</button>
+                        @else
+                            <a href="{{ route('checkout.index', ['product' => $product->id]) }}"
+                                class="btn btn-moza w-100 mt-auto">Pesan</a>
+                        @endif
                     </div>
                 </div>
             </div>

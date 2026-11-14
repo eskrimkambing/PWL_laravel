@@ -3,20 +3,21 @@
 @section('title', 'Produk')
 
 @push('styles')
-<style>
-    .product-image {
-        width: 100%;
-        height: 170px;
-        object-fit: cover;
-        background: var(--bs-tertiary-bg);
-    }
+    @include('partials.sold-out-style')
+    <style>
+        .product-image {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            background: var(--bs-tertiary-bg);
+        }
 
-    .product-description {
-        font-size: 14px;
-        line-height: 1.5;
-        min-height: 42px;
-    }
-</style>
+        .product-description {
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 42px;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -45,14 +46,13 @@
     </div>
 
     {{-- SEARCH --}}
-    <input type="text" id="search" class="form-control mb-4"
-           style="max-width: 450px;" placeholder="Cari produk..." onkeyup="cariProduk()">
+    <input type="text" id="search" class="form-control mb-4" style="max-width: 450px;" placeholder="Cari produk..."
+        onkeyup="cariProduk()">
 
     {{-- PRODUCTS --}}
     <div class="row g-3" id="productList">
 
         @forelse ($products as $product)
-
             @php
                 // 1. Pakai gambar dari database kalau ada
                 // 2. Kalau tidak ada, pakai foto cadangan di folder public/images
@@ -68,17 +68,24 @@
                     }
                     $srcFoto = asset($pathFoto);
                 }
+
+                $habis = $product->isSoldOut();
             @endphp
 
             <div class="col-sm-6 col-lg-4 col-xxl-3 product-item">
-                <div class="card h-100 overflow-hidden">
+                <div class="card h-100 overflow-hidden {{ $habis ? 'is-sold-out' : '' }}">
 
-                    <img src="{{ $srcFoto }}"
-                         alt="{{ $product->nama }}"
-                         class="product-image">
+                    <div class="product-media">
+                        @if ($habis)
+                            <span class="sold-out-badge">Sold Out</span>
+                        @endif
+
+                        <img src="{{ $srcFoto }}" alt="{{ $product->nama }}" class="product-image">
+                    </div>
 
                     <div class="card-body d-flex flex-column">
-                        <div class="product-name fs-5 fw-bold mb-1">{{ $product->nama }}</div>
+                        <div class="product-name fs-5 fw-bold mb-1 {{ $habis ? 'sold-dim' : '' }}">{{ $product->nama }}
+                        </div>
                         <small class="text-secondary mb-2">{{ $product->kategori }}</small>
 
                         <div class="product-description text-secondary">
@@ -86,11 +93,15 @@
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mt-auto pt-3">
-                            <div class="fw-bold">
+                            <div class="fw-bold {{ $habis ? 'sold-dim' : '' }}">
                                 Rp {{ number_format($product->price, 0, ',', '.') }}
                             </div>
 
-                            <a href="{{ route('checkout.index') }}" class="btn btn-moza btn-sm">Pesan</a>
+                            @if ($habis)
+                                <button type="button" class="btn btn-soldout btn-sm" disabled>Stok Habis</button>
+                            @else
+                                <a href="{{ route('checkout.index') }}" class="btn btn-moza btn-sm">Pesan</a>
+                            @endif
                         </div>
                     </div>
 
@@ -102,7 +113,6 @@
             <div class="col-12 text-secondary py-4">
                 Belum ada produk yang tersedia.
             </div>
-
         @endforelse
 
     </div>
@@ -110,14 +120,14 @@
 @endsection
 
 @push('scripts')
-<script>
-    function cariProduk() {
-        const input = document.getElementById('search').value.toLowerCase();
+    <script>
+        function cariProduk() {
+            const input = document.getElementById('search').value.toLowerCase();
 
-        document.querySelectorAll('.product-item').forEach(function (item) {
-            const nama = item.querySelector('.product-name').textContent.toLowerCase();
-            item.style.display = nama.includes(input) ? '' : 'none';
-        });
-    }
-</script>
+            document.querySelectorAll('.product-item').forEach(function(item) {
+                const nama = item.querySelector('.product-name').textContent.toLowerCase();
+                item.style.display = nama.includes(input) ? '' : 'none';
+            });
+        }
+    </script>
 @endpush

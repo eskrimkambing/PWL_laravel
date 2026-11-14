@@ -21,9 +21,17 @@
             gap: 24px;
         }
 
-        .ph-slide.s1 { background: linear-gradient(110deg, #6A0801 0%, #CA4238 60%, #DE7801 130%); }
-        .ph-slide.s2 { background: linear-gradient(110deg, #3a0400 0%, #6A0801 70%, #CA4238 160%); }
-        .ph-slide.s3 { background: linear-gradient(110deg, #DE7801 0%, #F7D991 150%); }
+        .ph-slide.s1 {
+            background: linear-gradient(110deg, #6A0801 0%, #CA4238 60%, #DE7801 130%);
+        }
+
+        .ph-slide.s2 {
+            background: linear-gradient(110deg, #3a0400 0%, #6A0801 70%, #CA4238 160%);
+        }
+
+        .ph-slide.s3 {
+            background: linear-gradient(110deg, #DE7801 0%, #F7D991 150%);
+        }
 
         .ph-slide .tag {
             display: inline-block;
@@ -85,8 +93,13 @@
         }
 
         @media (max-width: 575.98px) {
-            .ph-slide { padding: 24px; }
-            .ph-slide img { display: none; }
+            .ph-slide {
+                padding: 24px;
+            }
+
+            .ph-slide img {
+                display: none;
+            }
         }
 
         /* ===== INFO STRIP ===== */
@@ -121,7 +134,9 @@
             scrollbar-width: none;
         }
 
-        .ph-tabs::-webkit-scrollbar { display: none; }
+        .ph-tabs::-webkit-scrollbar {
+            display: none;
+        }
 
         .ph-tab {
             background: transparent;
@@ -137,7 +152,9 @@
             white-space: nowrap;
         }
 
-        .ph-tab:hover { color: var(--moza-orange); }
+        .ph-tab:hover {
+            color: var(--moza-orange);
+        }
 
         .ph-tab.active {
             color: var(--moza-orange);
@@ -213,7 +230,9 @@
             color: #fff;
         }
 
-        #emptyMessage { display: none; }
+        #emptyMessage {
+            display: none;
+        }
     </style>
 @endpush
 
@@ -288,9 +307,15 @@
 
     {{-- ===== INFO STRIP ===== --}}
     <div class="ph-info row g-0 mb-4">
-        <div class="col-md-4 item"><span class="ico">🛵</span><div><strong>Delivery</strong><br><small class="text-secondary">Diantar ke alamatmu</small></div></div>
-        <div class="col-md-4 item"><span class="ico">🔥</span><div><strong>Selalu Hangat</strong><br><small class="text-secondary">Dipanggang saat dipesan</small></div></div>
-        <div class="col-md-4 item"><span class="ico">💳</span><div><strong>Bayar Mudah</strong><br><small class="text-secondary">Cash atau Midtrans</small></div></div>
+        <div class="col-md-4 item"><span class="ico">🛵</span>
+            <div><strong>Delivery</strong><br><small class="text-secondary">Diantar ke alamatmu</small></div>
+        </div>
+        <div class="col-md-4 item"><span class="ico">🔥</span>
+            <div><strong>Selalu Hangat</strong><br><small class="text-secondary">Dipanggang saat dipesan</small></div>
+        </div>
+        <div class="col-md-4 item"><span class="ico">💳</span>
+            <div><strong>Bayar Mudah</strong><br><small class="text-secondary">Cash atau Midtrans</small></div>
+        </div>
     </div>
 
     {{-- ===== TAB KATEGORI + PENCARIAN ===== --}}
@@ -302,8 +327,8 @@
         <button type="button" class="ph-tab" onclick="filterCategory('Minuman', this)">Minuman</button>
     </div>
 
-    <input type="text" id="searchInput" class="form-control form-control-lg rounded-pill mb-4"
-        style="max-width: 420px;" placeholder="🔍 Cari menu..." onkeyup="searchProducts()">
+    <input type="text" id="searchInput" class="form-control form-control-lg rounded-pill mb-4" style="max-width: 420px;"
+        placeholder="🔍 Cari menu..." onkeyup="searchProducts()">
 
     <div class="row g-4" id="productContainer">
         @foreach ($products as $product)
