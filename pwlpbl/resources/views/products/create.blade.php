@@ -156,7 +156,7 @@
                             >
 
                             <small class="text-secondary">
-                                Opsional. Format JPG, PNG, atau WEBP. Maksimal 1 MB.
+                                Opsional. Format JPG, PNG, atau WEBP. Maksimal 5 MB.
                             </small>
 
                             @error('image')

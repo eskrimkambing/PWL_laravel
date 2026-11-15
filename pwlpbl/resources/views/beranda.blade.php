@@ -450,6 +450,66 @@
             color: white;
         }
 
+        /* ===== SOLD OUT ===== */
+        .product-media {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sold-out-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 3;
+            background: #C62828;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .3px;
+            line-height: 1;
+            padding: 6px 12px;
+            border-radius: 999px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+        }
+
+        .product-card.is-sold-out {
+            cursor: not-allowed;
+        }
+
+        .product-card.is-sold-out:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .is-sold-out .product-image {
+            filter: grayscale(1);
+            opacity: .8;
+        }
+
+        .is-sold-out .product-media::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: rgba(110, 110, 110, .45);
+        }
+
+        .is-sold-out .sold-dim {
+            color: #9C928A !important;
+        }
+
+        .sold-btn {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            border-radius: 9px;
+            background: #BDBDBD;
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: not-allowed;
+        }
+
         #emptyMessage {
             display: none;
             text-align: center;
@@ -1087,9 +1147,19 @@
         </nav>
 
         <div class="nav-actions">
-            <a href="{{ route('login') }}" class="login-link">
-                Login / Register
-            </a>
+            @if (session('role') === 'pembeli')
+                <a href="{{ route('pesanans.index') }}" class="login-link">Pesanan Saya</a>
+                <a href="{{ route('profil.show') }}" class="login-link">Profil</a>
+                <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+                    @csrf
+                    <button type="submit" class="login-link"
+                        style="background:none;border:0;cursor:pointer;font-family:inherit;">Logout</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="login-link">
+                    Login / Register
+                </a>
+            @endif
 
             <a href="#menu" class="order-btn">
                 Order Now
@@ -1232,21 +1302,31 @@
                                 }
                             @endphp
 
+                            @php $habis = $product->isSoldOut(); @endphp
+
                             <div class="product-item" data-name="{{ strtolower($product->nama) }}">
 
-                                <div class="product-card" role="button" tabindex="0" data-id="{{ $product->id }}"
+                                <div class="product-card {{ $habis ? 'is-sold-out' : '' }}" data-id="{{ $product->id }}"
                                     data-nama="{{ $product->nama }}" data-kategori="{{ $product->kategori }}"
                                     data-deskripsi="{{ $product->deskripsi ?? 'Produk Pizza Moza' }}"
                                     data-price="{{ (int) $product->price }}" data-image="{{ $srcFoto }}"
+                                    @if ($habis) aria-disabled="true"
+                                    @else
+                                    role="button" tabindex="0"
                                     onclick="openOrderModal(this)"
-                                    onkeydown="if (event.key === 'Enter') openOrderModal(this)">
+                                    onkeydown="if (event.key === 'Enter') openOrderModal(this)" @endif>
 
-                                    <img src="{{ $srcFoto }}" alt="{{ $product->nama }}" class="product-image"
-                                        onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
+                                    <div class="product-media">
+                                        @if ($habis)
+                                            <span class="sold-out-badge">Sold Out</span>
+                                        @endif
+                                        <img src="{{ $srcFoto }}" alt="{{ $product->nama }}" class="product-image"
+                                            onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
+                                    </div>
 
                                     <div class="product-info">
 
-                                        <h3 class="product-name">
+                                        <h3 class="product-name {{ $habis ? 'sold-dim' : '' }}">
                                             {{ $product->nama }}
                                         </h3>
 
@@ -1260,11 +1340,15 @@
                                             </p>
                                         @endif
 
-                                        <div class="price">
+                                        <div class="price {{ $habis ? 'sold-dim' : '' }}">
                                             Rp{{ number_format($product->price, 0, ',', '.') }}
                                         </div>
 
-                                        <span class="add-btn">+ Tambah</span>
+                                        @if ($habis)
+                                            <span class="sold-btn">Stok Habis</span>
+                                        @else
+                                            <span class="add-btn">+ Tambah</span>
+                                        @endif
 
                                     </div>
 
@@ -1463,6 +1547,9 @@
 
         const checkoutUrl = "{{ route('checkout.index') }}";
 
+        // ID produk yang stoknya habis (Sold Out)
+        const soldOutIds = @json($products->filter(fn($p) => $p->isSoldOut())->pluck('id')->map(fn($id) => (string) $id)->values());
+
         // Tambahan harga per ukuran (harga di database dianggap harga Medium).
         // Ubah angkanya sesuai kebutuhan.
         const sizes = [{
@@ -1489,6 +1576,8 @@
         }
 
         function openOrderModal(btn) {
+            if (soldOutIds.includes(String(btn.dataset.id))) return;
+
             const isPizza = btn.dataset.kategori.toLowerCase() === 'pizza';
 
             order = {
@@ -1589,6 +1678,19 @@
         }
 
         let cart = loadCart();
+
+        // Buang dari keranjang produk yang sekarang stoknya habis
+        (function bersihkanKeranjangHabis() {
+            const habis = cart.filter(i => soldOutIds.includes(String(i.id)));
+            if (habis.length === 0) return;
+
+            cart = cart.filter(i => !soldOutIds.includes(String(i.id)));
+            saveCart();
+
+            setTimeout(() => showToast(
+                habis.map(i => i.nama).join(', ') + ' sudah Sold Out dan dihapus dari keranjang'
+            ), 400);
+        })();
 
         function sizeAdd(size) {
             const s = sizes.find(x => x.key === size);

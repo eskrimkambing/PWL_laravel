@@ -16,7 +16,7 @@ class AuthController extends Controller
         }
 
         if (session('role') === 'pembeli') {
-            return redirect()->route('dashboard.pembeli');
+            return redirect()->intended(route('home'));
         }
 
         return view('auth.login');
@@ -44,6 +44,8 @@ class AuthController extends Controller
                 'email' => $admin->email,
             ]);
 
+            session()->forget('url.intended');
+
             return redirect()->route('dashboard.admin');
         }
 
@@ -59,7 +61,9 @@ class AuthController extends Controller
                 'email' => $pembeli->email,
             ]);
 
-            return redirect()->route('dashboard.pembeli');
+            // Kembali ke halaman awal pemesanan (atau checkout bila tadi
+            // pembeli menekan Checkout sebelum login).
+            return redirect()->intended(route('home'));
         }
 
         // 3. Jika email atau password salah
@@ -97,7 +101,7 @@ class AuthController extends Controller
             'email' => $pembeli->email,
         ]);
 
-        return redirect()->route('dashboard.pembeli');
+        return redirect()->intended(route('home'));
     }
 
     public function logout(Request $request)

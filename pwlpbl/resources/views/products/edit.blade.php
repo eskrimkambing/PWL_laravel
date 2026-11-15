@@ -140,7 +140,7 @@
                             >
 
                             <small class="text-secondary">
-                                Kosongkan jika tidak ingin mengganti gambar. Format JPG, PNG, atau WEBP, maksimal 1 MB.
+                                Kosongkan jika tidak ingin mengganti gambar. Format JPG, PNG, atau WEBP, maksimal 5 MB.
                             </small>
 
                             @error('image')

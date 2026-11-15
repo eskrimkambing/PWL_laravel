@@ -30,7 +30,7 @@ class ProfilController extends Controller
             'nama'    => 'required|string|max:100',
             'no_telp' => 'required|string|max:20',
             'alamat'  => 'required|string',
-            'foto'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024', // maks 1 MB
+            'foto'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120', // maks 5 MB
         ]);
 
         $pembeli = Pembeli::findOrFail(session('user_id'));

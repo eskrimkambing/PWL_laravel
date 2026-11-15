@@ -210,11 +210,9 @@ Route::middleware('role:admin')->group(function () {
 Route::middleware('role:pembeli')->group(function () {
 
     // Dashboard Pembeli
+    // Tampilan pemesanan pembeli sama dengan beranda ('/'), jadi diarahkan ke sana.
     Route::get('/pembeli/dashboard', function () {
-
-        $products = \App\Models\Product::withStok()->latest()->get();
-
-        return view('dashboard.pembeli', compact('products'));
+        return redirect()->route('home');
     })->name('dashboard.pembeli');
 
 

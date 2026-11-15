@@ -102,7 +102,7 @@
                         <input type="file" name="foto" id="fotoInput" class="form-control"
                                accept="image/png, image/jpeg, image/webp">
                         <div class="text-secondary small mt-1">
-                            Format JPG, PNG, atau WEBP. Maksimal 1 MB.
+                            Format JPG, PNG, atau WEBP. Maksimal 5 MB.
                         </div>
                     </div>
 
@@ -160,8 +160,8 @@
 
         if (!file) return;
 
-        if (file.size > 1024 * 1024) {
-            alert('Ukuran foto maksimal 1 MB.');
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Ukuran foto maksimal 5 MB.');
             this.value = '';
             return;
         }

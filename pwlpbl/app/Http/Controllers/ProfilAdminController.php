@@ -24,7 +24,7 @@ class ProfilAdminController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024', // maks 1 MB
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120', // maks 5 MB
         ]);
 
         $admin = Admin::findOrFail(session('user_id'));

@@ -39,7 +39,7 @@ class ProductController extends Controller
             'price'     => 'required|numeric|min:0',
             'portion'   => 'required|string',
             'deskripsi' => 'nullable|string',
-            'image'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
+            'image'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         // Gambar opsional: hanya diubah ke base64 kalau ada file yang diupload
@@ -73,7 +73,7 @@ class ProductController extends Controller
             'price'     => 'required|numeric|min:0',
             'portion'   => 'required|string',
             'deskripsi' => 'nullable|string',
-            'image'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
+            'image'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         // Kalau tidak upload gambar baru, gambar lama tetap dipakai
