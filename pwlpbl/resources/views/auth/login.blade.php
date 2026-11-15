@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Login - Pizza Moza</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         * {
@@ -15,8 +18,8 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #fffaf4;
+            font-family: 'Raleway', system-ui, sans-serif;
+            background: #FDF8EE;
             color: #222;
         }
 
@@ -39,7 +42,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            color: #bd001c;
+            color: #7A160D;
             font-size: 25px;
             font-weight: bold;
         }
@@ -63,7 +66,7 @@
         }
 
         .nav-menu a:hover {
-            color: #d00020;
+            color: #8B1A10;
         }
 
         .nav-right {
@@ -80,14 +83,14 @@
         }
 
         .btn-order {
-            background: #c90024;
+            background: #8B1A10;
             color: white !important;
             padding: 14px 25px;
             border-radius: 8px;
         }
 
         .btn-order:hover {
-            background: #a9001c;
+            background: #6E1209;
         }
 
         /* HERO BANNER */
@@ -117,7 +120,7 @@
         .hero-label {
             display: inline-block;
             background: #ffcf45;
-            color: #9e0016;
+            color: #6E1209;
             font-size: 15px;
             font-weight: bold;
             padding: 9px 17px;
@@ -149,7 +152,7 @@
             display: inline-block;
             padding: 15px 30px;
             background: #ffca40;
-            color: #920017;
+            color: #6E1209;
             text-decoration: none;
             font-weight: bold;
             border-radius: 7px;
@@ -167,7 +170,7 @@
             padding: 65px 20px;
             display: flex;
             justify-content: center;
-            background: #fffaf4;
+            background: #FDF8EE;
         }
 
         .login-card {
@@ -177,12 +180,12 @@
             padding: 38px;
             border-radius: 15px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.10);
-            border-top: 5px solid #c90024;
+            border-top: 5px solid #8B1A10;
         }
 
         .login-card h2 {
             text-align: center;
-            color: #a9001c;
+            color: #6E1209;
             font-size: 29px;
             margin-bottom: 10px;
         }
@@ -214,7 +217,7 @@
         }
 
         input:focus {
-            border-color: #c90024;
+            border-color: #8B1A10;
             box-shadow: 0 0 0 3px rgba(201,0,36,0.08);
         }
 
@@ -239,7 +242,7 @@
         .login-button {
             width: 100%;
             padding: 14px;
-            background: #c90024;
+            background: #8B1A10;
             color: white;
             border: none;
             border-radius: 7px;
@@ -250,7 +253,7 @@
         }
 
         .login-button:hover {
-            background: #a9001c;
+            background: #6E1209;
         }
 
         .bawah {
@@ -261,7 +264,7 @@
         }
 
         .bawah a {
-            color: #c90024;
+            color: #8B1A10;
             font-weight: bold;
             text-decoration: none;
         }
@@ -317,7 +320,7 @@
         /* FOOTER */
 
         footer {
-            background: #a9001c;
+            background: #6E1209;
             color: white;
             text-align: center;
             padding: 25px;

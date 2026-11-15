@@ -21,7 +21,7 @@
         }
 
         .stok-table thead th {
-            background: #FBE6B0;
+            background: #F9ECE8;
             color: var(--moza-maroon);
             font-weight: 700;
             text-align: center;
@@ -33,11 +33,11 @@
         .stok-table tbody td {
             vertical-align: middle;
             padding: .75rem;
-            border-color: rgba(106, 8, 1, 0.08);
+            border-color: rgba(139, 26, 16, 0.08);
         }
 
         .stok-table tbody td+td {
-            border-left: 1px solid rgba(106, 8, 1, 0.08);
+            border-left: 1px solid rgba(139, 26, 16, 0.08);
         }
 
         .stok-table .col-aksi {
@@ -76,7 +76,7 @@
         }
 
         .btn-aksi-edit {
-            background: #FCE7B2;
+            background: #F9ECE8;
             color: var(--moza-maroon);
         }
 

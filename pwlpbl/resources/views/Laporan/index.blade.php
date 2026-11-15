@@ -17,12 +17,12 @@
 
         .tab-tabel .btn:not(.aktif) {
             background: transparent;
-            border: 1px solid rgba(106, 8, 1, 0.35);
+            border: 1px solid rgba(139, 26, 16, 0.35);
             color: var(--moza-maroon);
         }
 
         .tab-tabel .btn:not(.aktif):hover {
-            background: rgba(106, 8, 1, 0.08);
+            background: rgba(139, 26, 16, 0.08);
         }
 
         .daftar-produk {

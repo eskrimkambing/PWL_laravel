@@ -74,15 +74,15 @@
                         </div>
                         <div class="row text-center mt-3 g-2">
                             <div class="col-4">
-                                <div class="fs-4 fw-bold" style="color:#DE7801;">{{ $pesananSelesai }}</div>
+                                <div class="fs-4 fw-bold" style="color:#E8751A;">{{ $pesananSelesai }}</div>
                                 <small class="text-secondary">Selesai</small>
                             </div>
                             <div class="col-4">
-                                <div class="fs-4 fw-bold" style="color:#F7D991;">{{ $pesananBelum }}</div>
+                                <div class="fs-4 fw-bold" style="color:#F2B134;">{{ $pesananBelum }}</div>
                                 <small class="text-secondary">Belum selesai</small>
                             </div>
                             <div class="col-4">
-                                <div class="fs-4 fw-bold" style="color:#c0392b;">{{ $pesananBatal }}</div>
+                                <div class="fs-4 fw-bold" style="color:#D2392B;">{{ $pesananBatal }}</div>
                                 <small class="text-secondary">Dibatalkan</small>
                             </div>
                         </div>
@@ -244,7 +244,7 @@
                     datasets: [{
                         label: 'Pendapatan',
                         data: dataHari,
-                        backgroundColor: '#DE7801',
+                        backgroundColor: '#E8751A',
                         borderRadius: 6
                     }]
                 },
@@ -297,7 +297,7 @@
             donat('chartPesanan',
                 ['Selesai', 'Belum selesai', 'Dibatalkan'],
                 [{{ $pesananSelesai }}, {{ $pesananBelum }}, {{ $pesananBatal }}],
-                ['#DE7801', '#F7D991', '#c0392b']);
+                ['#E8751A', '#F2B134', '#D2392B']);
 
             // ===== Produk terlaris =====
             const elTerlaris = document.getElementById('chartTerlaris');
@@ -309,7 +309,7 @@
                         datasets: [{
                             label: 'Terjual',
                             data: @json($dataTerlaris),
-                            backgroundColor: '#DE7801',
+                            backgroundColor: '#E8751A',
                             borderRadius: 6
                         }]
                     },

@@ -14,7 +14,7 @@
         .search-box,
         .date-box {
             background: #fff;
-            border: 1px solid rgba(106, 8, 1, 0.2);
+            border: 1px solid rgba(139, 26, 16, 0.2);
             color: var(--bs-body-color);
             border-radius: 8px;
         }
@@ -24,11 +24,11 @@
             background: #fff;
             color: var(--bs-body-color);
             border-color: var(--moza-orange);
-            box-shadow: 0 0 0 .2rem rgba(222, 120, 1, 0.2);
+            box-shadow: 0 0 0 .2rem rgba(232, 117, 26, 0.2);
         }
 
         .search-box::placeholder {
-            color: rgba(106, 8, 1, 0.4);
+            color: rgba(139, 26, 16, 0.4);
         }
 
         .date-box {
@@ -69,13 +69,13 @@
 
         .table tbody td {
             color: var(--moza-maroon);
-            border-bottom: 1px solid rgba(106, 8, 1, 0.15);
+            border-bottom: 1px solid rgba(139, 26, 16, 0.15);
             padding: 14px 10px;
             vertical-align: middle;
         }
 
         .table tbody tr:hover td {
-            background: rgba(247, 217, 145, 0.35);
+            background: rgba(139, 26, 16, 0.05);
         }
 
         /* Tombol aksi tidak melebar / turun baris */
@@ -117,7 +117,7 @@
 
         .pagination .page-item.disabled .page-link {
             background: transparent;
-            color: rgba(106, 8, 1, 0.35);
+            color: rgba(139, 26, 16, 0.35);
         }
     </style>
 @endpush

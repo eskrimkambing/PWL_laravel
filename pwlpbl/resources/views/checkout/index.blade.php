@@ -38,7 +38,7 @@
 
     .checkout-back:hover {
         background: rgba(240, 179, 107, .2);
-        color: #c8102e;
+        color: #8B1A10;
     }
 
     .form-control,
@@ -112,7 +112,7 @@
 
     html body main .choice-option:has(input[type="radio"]:checked) .text-secondary,
     html body main .choice-option:has(input[type="radio"]:checked) small {
-        color: rgba(106, 8, 1, .8) !important;
+        color: rgba(139, 26, 16, .8) !important;
     }
 
     .choice-option .form-check-input:checked {
@@ -187,7 +187,7 @@
     }
 
     .field-label .req {
-        color: #c8102e;
+        color: #8B1A10;
     }
 
     .field-input {

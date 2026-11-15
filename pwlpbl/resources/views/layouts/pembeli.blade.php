@@ -12,10 +12,14 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         /* ===== PALET: dominan krem, aksen oranye & maroon =====
 
-           Krem #F7D991 | Oranye #DE7801 | Merah #CA4238 | Maroon #6A0801
+           Krem #FBE7A1 | Oranye #E8751A | Merah #D2392B | Maroon #8B1A10
 
         */
 
@@ -25,49 +29,51 @@
 
         [data-bs-theme="dark"] {
 
-            --moza-cream: #F7D991;
+            --moza-cream: #FBE7A1;
 
-            --moza-cream-light: #FCF3DC;
+            --moza-cream-light: #FDF8EE;
 
-            --moza-cream-card: #FFFAEE;
+            --moza-cream-card: #FFFBF0;
 
-            --moza-cream-hover: #F9E9BD;
+            --moza-cream-hover: #FDF0C4;
 
             --moza-cream-selected: #FCE3B8;
 
-            --moza-orange: #DE7801;
+            --moza-orange: #E8751A;
 
-            --moza-red: #CA4238;
+            --moza-red: #D2392B;
 
-            --moza-maroon: #6A0801;
+            --moza-maroon: #8B1A10;
 
+            --moza-ink: #2B1B14;
+            --bs-body-font-family: 'Raleway', system-ui, sans-serif;
             --moza-accent: var(--moza-orange);
 
             --moza-accent-text: #fff;
 
             --bs-body-bg: var(--moza-cream-light);
 
-            --bs-body-color: var(--moza-maroon);
+            --bs-body-color: var(--moza-ink);
 
-            --bs-secondary-color: rgba(106, 8, 1, 0.65);
+            --bs-secondary-color: rgba(43, 27, 20, 0.65);
 
-            --bs-border-color: rgba(106, 8, 1, 0.12);
+            --bs-border-color: rgba(139, 26, 16, 0.12);
 
-            --bs-tertiary-bg: #F9E9BD;
+            --bs-tertiary-bg: #FDF0C4;
 
-            --bs-secondary-bg: #F9E9BD;
+            --bs-secondary-bg: #FDF0C4;
 
             --bs-card-bg: var(--moza-cream-card);
 
             --bs-table-bg: transparent;
 
-            --bs-table-color: var(--moza-maroon);
+            --bs-table-color: var(--moza-ink);
 
-            --bs-heading-color: var(--moza-maroon);
+            --bs-heading-color: var(--moza-ink);
 
             --bs-link-color: var(--moza-orange);
 
-            --bs-link-color-rgb: 222, 120, 1;
+            --bs-link-color-rgb: 232, 117, 26;
 
             --bs-link-hover-color: var(--moza-maroon);
 
@@ -157,7 +163,7 @@
 
             --bs-btn-color: var(--moza-maroon);
 
-            --bs-btn-border-color: rgba(106, 8, 1, 0.35);
+            --bs-btn-border-color: rgba(139, 26, 16, 0.35);
 
             --bs-btn-hover-bg: var(--moza-maroon);
 
@@ -197,7 +203,7 @@
 
             color: var(--moza-maroon) !important;
 
-            border: 1px solid rgba(106, 8, 1, 0.25) !important;
+            border: 1px solid rgba(139, 26, 16, 0.25) !important;
 
             border-radius: 12px;
 
@@ -339,7 +345,7 @@
 
             border-radius: 16px;
 
-            box-shadow: 0 2px 8px rgba(106, 8, 1, 0.05);
+            box-shadow: 0 2px 8px rgba(139, 26, 16, 0.05);
 
         }
 
@@ -367,7 +373,7 @@
 
             background-color: #fff;
 
-            border-color: rgba(106, 8, 1, 0.2);
+            border-color: rgba(139, 26, 16, 0.2);
 
             color: var(--moza-maroon);
 
@@ -383,13 +389,13 @@
 
             border-color: var(--moza-orange);
 
-            box-shadow: 0 0 0 .2rem rgba(222, 120, 1, 0.2);
+            box-shadow: 0 0 0 .2rem rgba(232, 117, 26, 0.2);
 
         }
 
         .form-control::placeholder {
 
-            color: rgba(106, 8, 1, 0.4);
+            color: rgba(139, 26, 16, 0.4);
 
         }
 
@@ -469,7 +475,7 @@
 
             border-radius: 16px;
 
-            box-shadow: 0 2px 8px rgba(106, 8, 1, 0.05);
+            box-shadow: 0 2px 8px rgba(139, 26, 16, 0.05);
 
             transition: all .2s ease;
 
@@ -541,7 +547,7 @@
 
             color: var(--moza-maroon) !important;
 
-            border-color: rgba(222, 120, 1, 0.5) !important;
+            border-color: rgba(232, 117, 26, 0.5) !important;
 
         }
 
@@ -581,7 +587,7 @@
 
             border: 1px solid var(--moza-orange) !important;
 
-            box-shadow: 0 0 0 2px rgba(222, 120, 1, 0.25) !important;
+            box-shadow: 0 0 0 2px rgba(232, 117, 26, 0.25) !important;
 
             color: var(--moza-maroon) !important;
 
@@ -657,7 +663,7 @@
 
         main .payment-option:has(input:checked) p {
 
-            color: rgba(106, 8, 1, 0.8) !important;
+            color: rgba(139, 26, 16, 0.8) !important;
 
         }
 
@@ -761,7 +767,7 @@
 
         html body main label span:not(.badge) {
 
-            color: rgba(106, 8, 1, 0.8) !important;
+            color: rgba(139, 26, 16, 0.8) !important;
 
             opacity: 1 !important;
 
@@ -845,7 +851,7 @@
 
         html body main .table tbody td {
 
-            border-bottom: 1px solid rgba(106, 8, 1, 0.15) !important;
+            border-bottom: 1px solid rgba(139, 26, 16, 0.15) !important;
 
             background: transparent !important;
 

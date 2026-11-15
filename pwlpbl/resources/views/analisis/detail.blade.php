@@ -154,7 +154,7 @@
                 setiap kriteria yang dikalikan dengan bobot AHP.
             </p>
 
-            <div class="p-3 rounded" style="background: #F7D991;">
+            <div class="p-3 rounded" style="background: #F9ECE8;">
                 <strong>
                     Nilai Akhir =
                     (0,2605 × C1) +

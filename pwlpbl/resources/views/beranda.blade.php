@@ -7,14 +7,19 @@
 
     <title>Pizza Moza - Pesan Pizza Favoritmu</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --cream: #FFF4DC;
-            --beige: #F8EED7;
-            --orange: #E87900;
-            --yellow: #F7D98C;
-            --brown: #7B160D;
-            --border: #E8D6B5;
+            --cream: #FDF8EE;
+            --beige: #FBF0D5;
+            --orange: #E8751A;
+            --yellow: #FBE7A1;
+            --brown: #8B1A10;
+            --ink: #2B1B14;
+            --border: #EBDDBA;
             --white: #FFFFFF;
         }
 
@@ -29,9 +34,9 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Raleway', system-ui, sans-serif;
             background: var(--cream);
-            color: var(--brown);
+            color: var(--ink);
         }
 
         /* NAVBAR */
@@ -104,7 +109,7 @@
 
         .order-btn:hover,
         .primary-btn:hover {
-            background: #CC6800;
+            background: #C95F0F;
         }
 
         /* BANNER SLIDER */
@@ -133,13 +138,13 @@
 
         .slide-1 {
             background-image:
-                linear-gradient(90deg, rgba(123, 22, 13, 0.88), rgba(123, 22, 13, 0.50), rgba(123, 22, 13, 0.05)),
+                linear-gradient(90deg, rgba(139, 26, 16, 0.88), rgba(139, 26, 16, 0.50), rgba(139, 26, 16, 0.05)),
                 url('{{ asset('images/pizza.jpg') }}');
         }
 
         .slide-2 {
             background-image:
-                linear-gradient(90deg, rgba(232, 121, 0, 0.92), rgba(232, 121, 0, 0.55), rgba(232, 121, 0, 0.08)),
+                linear-gradient(90deg, rgba(232, 117, 26, 0.92), rgba(232, 117, 26, 0.55), rgba(232, 117, 26, 0.08)),
                 url('{{ asset('images/pizza.jpg') }}');
             background-position: left center;
         }
@@ -177,7 +182,7 @@
             line-height: 1.7;
             font-size: 16px;
             margin-bottom: 24px;
-            color: #fff4dc;
+            color: #FDF8EE;
         }
 
         .primary-btn {
@@ -261,7 +266,7 @@
         }
 
         .slide-1 .primary-btn:hover {
-            background: #CC6800;
+            background: #C95F0F;
             color: white;
         }
 
@@ -366,7 +371,7 @@
 
         .product-card {
             height: 100%;
-            background: #FFFAF0;
+            background: #FFFBF0;
             border: 1px solid var(--border);
             border-radius: 14px;
             overflow: hidden;
@@ -557,7 +562,7 @@
 
         .size-option {
             border: 2px solid var(--border);
-            background: #FFFAF0;
+            background: #FFFBF0;
             border-radius: 12px;
             padding: 14px 8px;
             text-align: center;
@@ -659,7 +664,7 @@
         }
 
         .modal-submit:hover:not(:disabled) {
-            background: #CC6800;
+            background: #C95F0F;
         }
 
         .modal-submit:disabled {
@@ -686,7 +691,7 @@
         }
 
         .cart-fab:hover {
-            background: #CC6800;
+            background: #C95F0F;
         }
 
         .cart-overlay {

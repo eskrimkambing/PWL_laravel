@@ -80,7 +80,7 @@
         background: #FDECEA;
         border: 1px solid #E5A19A;
         border-left: 5px solid #C62828;
-        color: #6A0801;
+        color: #8B1A10;
         border-radius: 10px;
         padding: 12px 16px;
         font-size: 14px;

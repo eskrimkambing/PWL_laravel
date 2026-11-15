@@ -11,7 +11,7 @@
         .form-control,
         .form-select {
             background-color: #fff;
-            border: 1px solid rgba(106, 8, 1, 0.2);
+            border: 1px solid rgba(139, 26, 16, 0.2);
             color: var(--moza-maroon);
         }
 
@@ -20,7 +20,7 @@
             background-color: #fff;
             color: var(--moza-maroon);
             border-color: var(--moza-orange);
-            box-shadow: 0 0 0 .2rem rgba(222, 120, 1, 0.2);
+            box-shadow: 0 0 0 .2rem rgba(232, 117, 26, 0.2);
         }
 
         .info-box {

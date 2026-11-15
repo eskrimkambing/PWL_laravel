@@ -6,11 +6,11 @@
     <style>
         /* KARTU RINGKASAN */
         .summary-card {
-            background: #F7D991;
-            border: 1px solid rgba(106, 8, 1, 0.10);
+            background: #F9ECE8;
+            border: 1px solid rgba(139, 26, 16, 0.10);
             border-radius: 14px;
             padding: 18px 22px;
-            color: #6A0801;
+            color: #8B1A10;
         }
 
         .summary-label {
@@ -22,40 +22,40 @@
         .summary-value {
             font-size: 23px;
             font-weight: 700;
-            color: #6A0801;
+            color: #8B1A10;
         }
 
         /* KARTU TABEL */
         .order-table-card {
-            background: #FFFAEE;
-            border: 1px solid rgba(106, 8, 1, 0.10);
+            background: #FFFFFF;
+            border: 1px solid rgba(139, 26, 16, 0.10);
             border-radius: 16px;
             padding: 16px;
-            box-shadow: 0 3px 10px rgba(106, 8, 1, 0.05);
+            box-shadow: 0 3px 10px rgba(139, 26, 16, 0.05);
         }
 
         #tabelPesanan {
             margin-bottom: 0;
-            color: #6A0801;
+            color: #8B1A10;
         }
 
         #tabelPesanan thead th {
-            background: #F7D991;
-            color: #6A0801;
+            background: #F9ECE8;
+            color: #8B1A10;
             font-weight: 700;
             padding: 13px 10px;
             white-space: nowrap;
-            border-bottom: 1px solid rgba(106, 8, 1, 0.12);
+            border-bottom: 1px solid rgba(139, 26, 16, 0.12);
         }
 
         #tabelPesanan tbody td {
             padding: 12px 10px;
             vertical-align: middle;
-            border-bottom: 1px solid rgba(106, 8, 1, 0.10);
+            border-bottom: 1px solid rgba(139, 26, 16, 0.10);
         }
 
         #tabelPesanan tbody tr:hover {
-            background: #FFF3D5;
+            background: #FDF3F0;
         }
 
         /* DROPDOWN STATUS */
@@ -66,36 +66,36 @@
             font-weight: 600;
             padding: 7px 25px 7px 10px;
             cursor: pointer;
-            border: 1px solid rgba(106, 8, 1, 0.20);
-            background-color: #FFF3D5;
-            color: #6A0801;
+            border: 1px solid rgba(139, 26, 16, 0.20);
+            background-color: #FDF3F0;
+            color: #8B1A10;
         }
 
         .status-dropdown:focus {
-            border-color: #DE7801;
-            box-shadow: 0 0 0 0.15rem rgba(222, 120, 1, 0.15);
+            border-color: #E8751A;
+            box-shadow: 0 0 0 0.15rem rgba(232, 117, 26, 0.15);
             outline: none;
         }
 
         /* TOTAL PENDAPATAN */
         .revenue-card {
-            background: #F7D991;
-            border: 1px solid rgba(106, 8, 1, 0.10);
+            background: #F9ECE8;
+            border: 1px solid rgba(139, 26, 16, 0.10);
             border-radius: 14px;
             padding: 20px 24px;
-            color: #6A0801;
+            color: #8B1A10;
         }
 
         .revenue-icon {
             width: 58px;
             height: 58px;
             border-radius: 50%;
-            border: 2px solid #DE7801;
+            border: 2px solid #E8751A;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 27px;
-            color: #DE7801;
+            color: #E8751A;
         }
 
         .revenue-label {
@@ -107,21 +107,21 @@
         .revenue-value {
             font-size: 27px;
             font-weight: 800;
-            color: #6A0801;
+            color: #8B1A10;
         }
 
         /* TOMBOL CARI */
         .btn-cari {
-            background: #DE7801;
+            background: #E8751A;
             color: white;
-            border: 1px solid #DE7801;
+            border: 1px solid #E8751A;
             border-radius: 7px;
             padding: 9px 22px;
             font-weight: 600;
         }
 
         .btn-cari:hover {
-            background: #BD6200;
+            background: #C95F0F;
             color: white;
         }
 
@@ -132,9 +132,9 @@
         }
 
         .pagination .page-link {
-            color: #6A0801;
-            background-color: #FFFAEE;
-            border: 1px solid rgba(106, 8, 1, 0.15);
+            color: #8B1A10;
+            background-color: #FFFFFF;
+            border: 1px solid rgba(139, 26, 16, 0.15);
             border-radius: 6px;
             min-width: 36px;
             text-align: center;
@@ -143,25 +143,25 @@
         }
 
         .pagination .page-link:hover {
-            color: #6A0801;
-            background-color: #F7D991;
-            border-color: #DE7801;
+            color: #8B1A10;
+            background-color: #F9ECE8;
+            border-color: #E8751A;
         }
 
         .pagination .page-item.active .page-link {
-            background-color: #DE7801;
-            border-color: #DE7801;
+            background-color: #E8751A;
+            border-color: #E8751A;
             color: white;
             font-weight: 600;
         }
 
         .pagination .page-item.disabled .page-link {
             color: #b8a99a;
-            background-color: #fffaf0;
+            background-color: #FFFFFF;
         }
 
         .pagination-info {
-            color: rgba(106, 8, 1, 0.7);
+            color: rgba(139, 26, 16, 0.7);
             font-size: 13px;
         }
 

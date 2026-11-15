@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu - Pizza Moza</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         * {
@@ -16,7 +18,7 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Raleway', system-ui, sans-serif;
             background: #fff;
             color: #333;
         }
@@ -36,7 +38,7 @@
         .logo {
             font-size: 25px;
             font-weight: 800;
-            color: #d62828;
+            color: #8B1A10;
         }
 
         .logo span {
@@ -51,7 +53,7 @@
         }
 
         .navbar a:hover {
-            color: #d62828;
+            color: #8B1A10;
         }
 
         .page-header {
@@ -94,9 +96,9 @@
         }
 
         .category-btn {
-            border: 1px solid #d62828;
+            border: 1px solid #8B1A10;
             background: white;
-            color: #d62828;
+            color: #8B1A10;
             padding: 9px 20px;
             border-radius: 25px;
             cursor: pointer;
@@ -106,7 +108,7 @@
 
         .category-btn.active,
         .category-btn:hover {
-            background: #d62828;
+            background: #8B1A10;
             color: white;
         }
 
@@ -146,7 +148,7 @@
         }
 
         .price {
-            color: #d62828;
+            color: #8B1A10;
             font-size: 17px;
             font-weight: 800;
             margin-bottom: 15px;
@@ -155,7 +157,7 @@
         .order-btn {
             width: 100%;
             border: none;
-            background: #d62828;
+            background: #8B1A10;
             color: white;
             padding: 11px;
             border-radius: 25px;
@@ -165,7 +167,7 @@
         }
 
         .order-btn:hover {
-            background: #a71919;
+            background: #6E1209;
         }
 
         .empty {
@@ -235,7 +237,7 @@
         }
 
         .add-btn {
-            background: #d62828;
+            background: #8B1A10;
             color: white;
         }
 
@@ -244,7 +246,7 @@
             position: fixed;
             bottom: 25px;
             right: 25px;
-            background: #d62828;
+            background: #8B1A10;
             color: white;
             padding: 14px 22px;
             border-radius: 30px;
@@ -281,7 +283,7 @@
         .cart-item button {
             margin-top: 5px;
             border: none;
-            background: #d62828;
+            background: #8B1A10;
             color: white;
             padding: 5px 10px;
             border-radius: 5px;
@@ -290,7 +292,7 @@
 
         .checkout-btn {
             width: 100%;
-            background: #d62828;
+            background: #8B1A10;
             color: white;
             border: none;
             padding: 12px;

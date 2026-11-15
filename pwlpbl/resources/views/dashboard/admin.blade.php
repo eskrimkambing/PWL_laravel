@@ -9,35 +9,41 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        /* ===== PALET: dominan krem, aksen oranye & maroon =====
-           Krem #F7D991 | Oranye #DE7801 | Merah #CA4238 | Maroon #6A0801
-        */
+        /* ===== PALET WARNA ===== */
+
         :root,
         [data-bs-theme="light"],
         [data-bs-theme="dark"] {
-            --moza-cream: #F7D991;
-            --moza-cream-light: #FCF3DC;
-            --moza-cream-card: #FFFAEE;
-            --moza-orange: #DE7801;
-            --moza-red: #CA4238;
-            --moza-maroon: #6A0801;
+            --moza-cream: #F9ECE8;
+            --moza-cream-light: #FAF7F4;
+            --moza-cream-card: #FFFFFF;
+            --moza-orange: #E8751A;
+            --moza-red: #D2392B;
+            --moza-maroon: #8B1A10;
 
+            --moza-ink: #2B1B14;
+
+            --bs-body-font-family: 'Raleway', system-ui, sans-serif;
             --moza-accent: var(--moza-orange);
             --moza-accent-text: #fff;
 
             --bs-body-bg: var(--moza-cream-light);
-            --bs-body-color: var(--moza-maroon);
-            --bs-secondary-color: rgba(106, 8, 1, 0.65);
-            --bs-border-color: rgba(106, 8, 1, 0.12);
-            --bs-tertiary-bg: #F9E9BD;
-            --bs-secondary-bg: #F9E9BD;
+            --bs-body-color: var(--moza-ink);
+            --bs-secondary-color: rgba(43, 27, 20, 0.65);
+            --bs-border-color: rgba(139, 26, 16, 0.12);
+            --bs-tertiary-bg: #F9ECE8;
+            --bs-secondary-bg: #F9ECE8;
             --bs-card-bg: var(--moza-cream-card);
             --bs-table-bg: transparent;
-            --bs-table-color: var(--moza-maroon);
-            --bs-heading-color: var(--moza-maroon);
+            --bs-table-color: var(--moza-ink);
+            --bs-heading-color: var(--moza-ink);
             --bs-link-color: var(--moza-orange);
-            --bs-link-color-rgb: 222, 120, 1;
+            --bs-link-color-rgb: 232, 117, 26;
             --bs-link-hover-color: var(--moza-maroon);
             --bs-link-hover-color-rgb: 106, 8, 1;
             --bs-primary: var(--moza-orange);
@@ -46,24 +52,34 @@
             --bs-danger-rgb: 202, 66, 56;
         }
 
-        /* Teks abu-abu mengikuti tema (maroon lembut) */
+        /* ===== TEKS SEKUNDER ===== */
+
         .text-secondary,
         .text-muted {
             color: var(--bs-secondary-color) !important;
         }
 
         /* ===== SIDEBAR ===== */
+
         .sidebar {
             --bs-offcanvas-width: 250px;
-            --bs-offcanvas-bg: var(--moza-cream);
-            --bs-offcanvas-color: var(--moza-maroon);
+            --bs-offcanvas-bg: var(--moza-maroon);
+            --bs-offcanvas-color: #fff;
 
             width: 250px;
             flex-shrink: 0;
-            background: var(--moza-cream);
-            border-right: 1px solid var(--bs-border-color);
+            background: var(--moza-maroon);
+            color: #8B1A10;
+            border-right: none;
         }
 
+        /* Tulisan logo dan admin panel */
+        .sidebar .fw-bold,
+        .sidebar small {
+            color: #8B1A10 !important;
+        }
+
+        /* Tulisan menu sidebar */
         .sidebar .nav-link {
             display: flex;
             align-items: center;
@@ -71,31 +87,49 @@
             padding: 12px 16px;
             margin-bottom: 6px;
             border-radius: 12px;
-            color: var(--moza-maroon);
+            color: #8B1A10 !important;
             font-size: 16px;
             transition: all .2s ease;
         }
 
+        /* Hover menu */
         .sidebar .nav-link:hover {
-            background: rgba(106, 8, 1, 0.08);
-            color: var(--moza-maroon);
+            background: rgba(255, 255, 255, 0.12);
+            color: #8B1A10 !important;
         }
 
+        /* Menu aktif */
         .sidebar .nav-link.active {
             background: var(--moza-orange);
-            color: #fff;
+            color: #FFFFFF !important;
             font-weight: 600;
-            box-shadow: 0 4px 12px rgba(222, 120, 1, 0.3);
+            box-shadow: 0 4px 12px rgba(232, 117, 26, 0.3);
         }
 
-        /* Logout: tepat di bawah menu, dipisah garis tipis */
+        /* ===== LOGOUT ===== */
+
         .sidebar-logout {
             margin-top: 1rem;
             padding-top: 1rem;
-            border-top: 1px solid var(--bs-border-color);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar .btn-outline-danger {
+            --bs-btn-color: #8B1A10;
+            --bs-btn-border-color: #8B1A10;
+            --bs-btn-hover-bg: #8B1A10;
+            --bs-btn-hover-color: #FFFFFF;
+            --bs-btn-hover-border-color: #8B1A10;
+            --bs-btn-active-bg: #8B1A10;
+            --bs-btn-active-color: #FFFFFF;
+        }
+
+        .sidebar .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
         }
 
         /* ===== TOMBOL ===== */
+
         .btn-moza,
         .btn-primary {
             --bs-btn-bg: var(--moza-orange);
@@ -107,6 +141,7 @@
             --bs-btn-active-bg: var(--moza-maroon);
             --bs-btn-active-border-color: var(--moza-maroon);
             --bs-btn-active-color: #fff;
+
             background: var(--moza-orange);
             color: #fff;
             border: none;
@@ -130,13 +165,14 @@
 
         .btn-outline-secondary {
             --bs-btn-color: var(--moza-maroon);
-            --bs-btn-border-color: rgba(106, 8, 1, 0.35);
+            --bs-btn-border-color: rgba(139, 26, 16, 0.35);
             --bs-btn-hover-bg: var(--moza-maroon);
             --bs-btn-hover-border-color: var(--moza-maroon);
             --bs-btn-hover-color: #fff;
         }
 
         /* ===== TOPBAR ===== */
+
         .topbar {
             background: var(--moza-cream-card);
             border-bottom: 1px solid var(--bs-border-color);
@@ -172,16 +208,17 @@
         }
 
         /* ===== KARTU, TABEL, FORM ===== */
+
         .card {
             background: var(--moza-cream-card);
             border-color: var(--bs-border-color);
             border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(106, 8, 1, 0.05);
+            box-shadow: 0 2px 8px rgba(139, 26, 16, 0.05);
         }
 
         .table {
-            --bs-table-striped-bg: rgba(247, 217, 145, 0.25);
-            --bs-table-hover-bg: rgba(247, 217, 145, 0.4);
+            --bs-table-striped-bg: rgba(139, 26, 16, 0.03);
+            --bs-table-hover-bg: rgba(139, 26, 16, 0.06);
             --bs-table-border-color: var(--bs-border-color);
         }
 
@@ -193,7 +230,7 @@
         .form-control,
         .form-select {
             background-color: #fff;
-            border-color: rgba(106, 8, 1, 0.2);
+            border-color: rgba(139, 26, 16, 0.2);
             color: var(--moza-maroon);
         }
 
@@ -202,11 +239,11 @@
             background-color: #fff;
             color: var(--moza-maroon);
             border-color: var(--moza-orange);
-            box-shadow: 0 0 0 .2rem rgba(222, 120, 1, 0.2);
+            box-shadow: 0 0 0 .2rem rgba(232, 117, 26, 0.2);
         }
 
         .form-control::placeholder {
-            color: rgba(106, 8, 1, 0.4);
+            color: rgba(139, 26, 16, 0.4);
         }
 
         .badge.bg-success {
@@ -229,7 +266,8 @@
             --bs-pagination-active-color: #fff;
         }
 
-        /* ===== DROPDOWN: semua <select> punya panah + daftar krem ===== */
+        /* ===== DROPDOWN ===== */
+
         html body select,
         html body select.form-control,
         html body select.form-select {
@@ -243,7 +281,7 @@
             background-size: 16px 12px !important;
             padding-right: 2.5rem !important;
             color: var(--moza-maroon) !important;
-            border: 1px solid rgba(106, 8, 1, 0.2) !important;
+            border: 1px solid rgba(139, 26, 16, 0.2) !important;
             border-radius: 8px;
             color-scheme: light;
             cursor: pointer;
@@ -255,7 +293,7 @@
 
         html body select:focus {
             border-color: var(--moza-orange) !important;
-            box-shadow: 0 0 0 .2rem rgba(222, 120, 1, 0.2) !important;
+            box-shadow: 0 0 0 .2rem rgba(232, 117, 26, 0.2) !important;
             outline: none;
         }
 
@@ -264,10 +302,7 @@
             color: var(--moza-maroon) !important;
         }
 
-
-        /* =================================
-   SIDEBAR TETAP SAAT HALAMAN DI-SCROLL
-================================= */
+        /* ===== SIDEBAR TETAP SAAT SCROLL ===== */
 
         @media (min-width: 992px) {
 
@@ -286,41 +321,42 @@
                 z-index: 1030;
             }
 
-            /* AREA KONTEN DI SEBELAH KANAN */
-            .sidebar+.flex-grow-1 {
+            .sidebar + .flex-grow-1 {
                 margin-left: 250px;
                 min-width: 0;
             }
-
         }
 
-        /* SCROLLBAR SIDEBAR */
+        /* ===== SCROLLBAR SIDEBAR ===== */
+
         .sidebar::-webkit-scrollbar {
             width: 5px;
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background: #DE7801;
+            background: #E8751A;
             border-radius: 10px;
         }
 
         .sidebar::-webkit-scrollbar-track {
-            background: #F7D991;
+            background: #6E1209;
         }
+
     </style>
 
     @stack('styles')
+
 </head>
 
 <body>
 
     @php
-        // Data admin yang sedang login (untuk nama & foto di topbar)
+        // Data admin yang sedang login
         $adminLogin = \App\Models\Admin::find(session('user_id'));
 
         $emailAdmin = $adminLogin->email ?? session('email');
 
-        // Pakai kolom "nama" jika ada, jika tidak pakai bagian email sebelum "@"
+        // Mengambil nama admin
         $namaAdmin = $adminLogin->nama ?? ucfirst(\Illuminate\Support\Str::before($emailAdmin ?? 'admin', '@'));
 
         $fotoAdmin = $adminLogin->foto ?? null;
@@ -329,6 +365,7 @@
     <div class="d-flex min-vh-100">
 
         {{-- SIDEBAR --}}
+
         <aside class="sidebar offcanvas-lg offcanvas-start p-3 d-flex flex-column" tabindex="-1" id="sidebarMenu">
 
             <div class="d-flex align-items-center justify-content-between px-2 pb-4">
@@ -338,6 +375,7 @@
                     <span class="fs-2">🍕</span>
 
                     <div>
+
                         <div class="fw-bold" style="letter-spacing:1px;">
                             PIZZA MOZA
                         </div>
@@ -345,6 +383,7 @@
                         <small style="letter-spacing:2px; font-size:11px; opacity:.7;">
                             ADMIN PANEL
                         </small>
+
                     </div>
 
                 </div>
@@ -353,8 +392,6 @@
                     data-bs-target="#sidebarMenu"></button>
 
             </div>
-
-
 
             <nav class="nav flex-column">
 
@@ -383,6 +420,7 @@
                 </a>
 
                 {{-- KELOLA PESANAN --}}
+
                 <a class="nav-link {{ request()->routeIs('admin.pesanans.*') ? 'active' : '' }}"
                     href="{{ route('admin.pesanans.indexAdmin') }}">
                     <span>📋</span>
@@ -415,9 +453,8 @@
 
             </nav>
 
+            {{-- LOGOUT --}}
 
-
-            {{-- LOGOUT: tepat di bawah menu (bukan menempel di dasar sidebar) --}}
             <form action="{{ route('logout') }}" method="POST" class="sidebar-logout">
 
                 @csrf
@@ -430,12 +467,12 @@
 
         </aside>
 
-
         {{-- AREA KANAN --}}
+
         <div class="flex-grow-1 d-flex flex-column" style="min-width:0;">
 
-
             {{-- TOPBAR --}}
+
             <header class="topbar d-flex align-items-center gap-3 px-3 px-lg-4 py-3">
 
                 <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas"
@@ -443,10 +480,10 @@
                     ☰
                 </button>
 
-
                 <div class="ms-auto d-flex align-items-center gap-3">
 
-                    {{-- NAMA, EMAIL & FOTO (klik untuk membuka profil admin) --}}
+                    {{-- NAMA, EMAIL & FOTO ADMIN --}}
+
                     <a href="{{ route('admin.profil.show') }}"
                         class="profil-link d-flex align-items-center gap-3 text-decoration-none text-reset"
                         title="Lihat profil">
@@ -463,13 +500,16 @@
 
                         </div>
 
-
                         @if ($fotoAdmin)
+
                             <img src="{{ $fotoAdmin }}" alt="Foto {{ $namaAdmin }}" class="avatar-img">
+
                         @else
+
                             <div class="avatar d-flex align-items-center justify-content-center">
                                 {{ strtoupper(substr($namaAdmin ?: 'A', 0, 1)) }}
                             </div>
+
                         @endif
 
                     </a>
@@ -478,19 +518,17 @@
 
             </header>
 
-
             {{-- ISI HALAMAN --}}
+
             <main class="p-3 p-lg-4">
 
                 @yield('content')
 
             </main>
 
-
         </div>
 
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
