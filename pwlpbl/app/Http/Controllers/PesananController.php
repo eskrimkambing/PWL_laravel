@@ -289,8 +289,14 @@ class PesananController extends Controller
 
         $pesanan = Pesanan::findOrFail($id);
 
+        // Kelola Transaksi membaca tanggal dari kolom dibayar_pada, jadi kolom ini
+        // harus ikut terisi saat admin menandai "Dibayar" (dan dikosongkan kembali
+        // kalau statusnya diubah menjadi bukan "Dibayar").
         $pesanan->update([
             'status_pembayaran' => $request->status_pembayaran,
+            'dibayar_pada' => $request->status_pembayaran === 'Dibayar'
+                ? ($pesanan->dibayar_pada ?? now())
+                : null,
         ]);
 
         return back()->with(

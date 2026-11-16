@@ -137,7 +137,7 @@ Route::middleware('role:admin')->group(function () {
         ->name('admin.pesanans.update');
 
     // Update status pembayaran
-    Route::patch('/admin/pesanans/{id}/status-pembayaran', [PembayaranController::class, 'updateStatusPembayaran'])
+    Route::patch('/admin/pesanans/{id}/status-pembayaran', [PesananController::class, 'updateStatusPembayaran'])
         ->name('admin.pesanans.updateStatusPembayaran');
 
 
