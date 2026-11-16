@@ -18,6 +18,16 @@ class Product extends Model
         'image',
     ];
 
+    public function sizes(): HasMany
+    {
+        return $this->hasMany(ProductSize::class)->orderBy('urutan')->orderBy('id');
+    }
+
+    public function isPizza(): bool
+    {
+        return strtolower(trim((string) $this->kategori)) === 'pizza';
+    }
+
     public function stoks(): HasMany
     {
         return $this->hasMany(Stok::class, 'product_id', 'id');

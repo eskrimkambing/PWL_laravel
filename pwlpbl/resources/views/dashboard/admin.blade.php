@@ -407,6 +407,12 @@
                     Kelola Produk
                 </a>
 
+                <a class="nav-link {{ request()->routeIs('toppings.*') ? 'active' : '' }}"
+                    href="{{ route('toppings.index') }}">
+                    <span>🧀</span>
+                    Kelola Topping
+                </a>
+
                 <a class="nav-link {{ request()->routeIs('kategoris.*') ? 'active' : '' }}"
                     href="{{ route('kategoris.index') }}">
                     <span>📂</span>

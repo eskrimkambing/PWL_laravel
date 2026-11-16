@@ -48,9 +48,8 @@
                             <th class="text-center" style="width: 100px">Foto</th>
                             <th>Nama Menu</th>
                             <th>Kategori</th>
-                            <th>Ukuran / Porsi</th>
-                            <th>Harga</th>
-                            <th class="text-center" style="width: 18%">Aksi</th>
+                            <th>Ukuran &amp; Harga</th>
+                            <th class="text-center" style="width: 12%">Aksi</th>
                         </tr>
 
                     </thead>
@@ -145,15 +144,24 @@
                                 </td>
 
 
-                                {{-- Porsi --}}
+                                {{-- Ukuran & Harga --}}
                                 <td>
-                                    {{ $item->portion }}
-                                </td>
+                                    @forelse ($item->sizes as $ukuran)
+                                        <div class="d-flex justify-content-between gap-3" style="max-width: 220px;">
+                                            <span>{{ $ukuran->nama }}</span>
+                                            <span class="fw-bold text-success">
+                                                Rp {{ number_format($ukuran->harga, 0, ',', '.') }}
+                                            </span>
+                                        </div>
+                                    @empty
+                                        <span class="fw-bold text-success">
+                                            Rp {{ number_format($item->price, 0, ',', '.') }}
+                                        </span>
+                                    @endforelse
 
-
-                                {{-- Harga --}}
-                                <td class="fw-bold text-success">
-                                    Rp {{ number_format($item->price, 0, ',', '.') }}
+                                    @if ($item->portion)
+                                        <small class="text-muted d-block mt-1">{{ $item->portion }}</small>
+                                    @endif
                                 </td>
 
 
@@ -169,8 +177,15 @@
                                             <a
                                                 href="{{ route('products.edit', $item->id) }}"
                                                 class="btn btn-outline-warning btn-sm"
+                                                title="Edit"
+                                                aria-label="Edit {{ $item->nama }}"
                                             >
-                                                Edit
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" aria-hidden="true">
+                                                    <path d="M12 20h9" />
+                                                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                                                </svg>
                                             </a>
 
 
@@ -187,8 +202,14 @@
                                                 <button
                                                     type="submit"
                                                     class="btn btn-outline-danger btn-sm"
+                                                    title="Hapus"
+                                                    aria-label="Hapus {{ $item->nama }}"
                                                 >
-                                                    Hapus
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" aria-hidden="true">
+                                                        <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6" />
+                                                    </svg>
                                                 </button>
 
                                             </form>
@@ -216,7 +237,7 @@
                             <tr>
 
                                 <td
-                                    colspan="7"
+                                    colspan="6"
                                     class="text-center py-4 text-muted"
                                 >
                                     Belum ada menu produk dalam database.

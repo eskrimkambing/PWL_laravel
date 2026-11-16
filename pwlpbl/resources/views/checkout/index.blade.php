@@ -129,6 +129,13 @@
         border: 1px solid var(--bs-border-color);
     }
 
+    .topping-box {
+        background: #FAF6F1;
+        border-radius: 8px;
+        padding: 8px 10px;
+        max-width: 320px;
+    }
+
     .cart-row {
         display: flex;
         gap: 12px;
@@ -320,12 +327,6 @@
         return $fotoDefault;
     };
 
-    $tambahanUkuran = [
-        'Small' => -10000,
-        'Medium' => 0,
-        'Large' => 15000,
-    ];
-
     $rows = [];
 
     $cartRaw = json_decode(request('cart', '[]'), true);
@@ -347,20 +348,28 @@
             continue;
         }
 
-        $isPizza = strtolower(trim((string) $p->kategori)) === 'pizza';
+        $isPizza = $p->isPizza();
 
-        $size = null;
+        // Ukuran terpilih: cocokkan ID, lalu nama (keranjang lama), lalu ukuran pertama.
+        $sizeId = null;
 
-        if ($isPizza) {
-            $size = isset($tambahanUkuran[$row['size'] ?? ''])
-                ? $row['size']
-                : 'Medium';
+        if ($p->sizes->isNotEmpty()) {
+            $dipilih = $p->sizes->firstWhere('id', (int) ($row['size_id'] ?? 0))
+                ?? $p->sizes->firstWhere('nama', $row['size'] ?? null)
+                ?? $p->sizes->first();
+
+            $sizeId = $dipilih->id;
         }
+
+        $toppingIds = $isPizza
+            ? array_map('intval', is_array($row['toppings'] ?? null) ? $row['toppings'] : [])
+            : [];
 
         $rows[] = [
             'product' => $p,
             'isPizza' => $isPizza,
-            'size' => $size,
+            'sizeId' => $sizeId,
+            'toppingIds' => $toppingIds,
             'qty' => max(1, (int) ($row['qty'] ?? 1)),
             'notes' => \Illuminate\Support\Str::limit(
                 trim((string) ($row['notes'] ?? '')),
@@ -642,7 +651,8 @@
                              data-id="{{ $p->id }}"
                              data-nama="{{ $p->nama }}"
                              data-image="{{ $fotoProduk($p) }}"
-                             data-base="{{ (int) $p->price }}">
+                             data-base="{{ (int) $p->price }}"
+                             data-sizes="{{ $p->sizes->isNotEmpty() ? '1' : '0' }}">
 
                             <img src="{{ $fotoProduk($p) }}"
                                  alt="{{ $p->nama }}"
@@ -658,18 +668,51 @@
 
                                 <small class="text-secondary d-block mb-2 unit-text"></small>
 
-                                @if ($r['isPizza'])
-                                    <select name="items[{{ $i }}][size]"
+                                @if ($p->sizes->isNotEmpty())
+                                    <select name="items[{{ $i }}][size_id]"
                                             class="form-select form-select-sm size-select mb-2"
-                                            style="max-width:200px;">
+                                            style="max-width:260px;">
 
-                                        @foreach ($tambahanUkuran as $nama => $tambah)
-                                            <option value="{{ $nama }}"
-                                                {{ $r['size'] === $nama ? 'selected' : '' }}>
-                                                Ukuran {{ $nama }}
+                                        @foreach ($p->sizes as $ukuran)
+                                            <option value="{{ $ukuran->id }}"
+                                                data-harga="{{ (int) $ukuran->harga }}"
+                                                data-nama="{{ $ukuran->nama }}"
+                                                {{ $r['sizeId'] === $ukuran->id ? 'selected' : '' }}>
+                                                {{ $ukuran->nama }} - Rp {{ number_format($ukuran->harga, 0, ',', '.') }}
                                             </option>
                                         @endforeach
                                     </select>
+                                @endif
+
+                                @if ($r['isPizza'] && $toppings->isNotEmpty())
+                                    <div class="topping-box mb-2">
+                                        <small class="fw-semibold d-block mb-1">Tambah topping</small>
+
+                                        @foreach ($toppings as $t)
+                                            <div class="form-check">
+                                                <input class="form-check-input topping-check"
+                                                       type="checkbox"
+                                                       name="items[{{ $i }}][toppings][]"
+                                                       id="top-{{ $i }}-{{ $t->id }}"
+                                                       value="{{ $t->id }}"
+                                                       data-harga="{{ (int) $t->harga }}"
+                                                       {{ $t->sold_out ? 'disabled' : '' }}
+                                                       {{ !$t->sold_out && in_array($t->id, $r['toppingIds'], true) ? 'checked' : '' }}>
+
+                                                <label class="form-check-label small {{ $t->sold_out ? 'text-muted' : '' }}"
+                                                       for="top-{{ $i }}-{{ $t->id }}">
+                                                    {{ $t->nama }}
+                                                    @if ($t->sold_out)
+                                                        <span class="badge bg-danger ms-1">Sold Out</span>
+                                                    @else
+                                                        <span class="text-secondary">
+                                                            (+Rp {{ number_format($t->harga, 0, ',', '.') }})
+                                                        </span>
+                                                    @endif
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 @endif
 
                                 <input type="text"
@@ -805,7 +848,6 @@
 <script>
 (function () {
 
-    const UKURAN = @json($tambahanUkuran);
     const CART_KEY = 'moza_cart';
 
     const rowsBox = document.getElementById('cartRows');
@@ -819,8 +861,18 @@
     function unitOf(row) {
         const sel = row.querySelector('.size-select');
 
-        return parseInt(row.dataset.base) +
-            (sel ? (UKURAN[sel.value] || 0) : 0);
+        // Harga dasar: harga ukuran terpilih (kalau produk punya ukuran).
+        let unit = parseInt(row.dataset.base);
+
+        if (sel && sel.selectedOptions[0]) {
+            unit = parseInt(sel.selectedOptions[0].dataset.harga);
+        }
+
+        row.querySelectorAll('.topping-check:checked').forEach(c => {
+            unit += parseInt(c.dataset.harga);
+        });
+
+        return unit;
     }
 
     function syncStorage() {
@@ -830,7 +882,15 @@
         rowsBox.querySelectorAll('.cart-row').forEach(row => {
 
             const sel = row.querySelector('.size-select');
-            const size = sel ? sel.value : null;
+            const sizeId = sel ? sel.value : null;
+            const sizeNama = sel && sel.selectedOptions[0]
+                ? sel.selectedOptions[0].dataset.nama : null;
+            const sizeHarga = sel && sel.selectedOptions[0]
+                ? parseInt(sel.selectedOptions[0].dataset.harga) : null;
+
+            const toppings = Array.from(
+                row.querySelectorAll('.topping-check:checked')
+            ).map(c => parseInt(c.value));
 
             const qty = parseInt(
                 row.querySelector('.qty-input').value
@@ -840,7 +900,8 @@
 
             lines.push({
                 id: row.dataset.id,
-                size: size,
+                size_id: sizeId,
+                toppings: toppings,
                 qty: qty,
                 notes: notes
             });
@@ -849,8 +910,10 @@
                 id: row.dataset.id,
                 nama: row.dataset.nama,
                 image: row.dataset.image,
-                base: parseInt(row.dataset.base),
-                size: size,
+                base: sizeHarga !== null ? sizeHarga : parseInt(row.dataset.base),
+                sizeId: sizeId ? parseInt(sizeId) : null,
+                size: sizeNama,
+                toppings: toppings,
                 notes: notes,
                 qty: qty
             });
@@ -952,7 +1015,7 @@
         }
     });
 
-    // Perubahan ukuran.
+    // Perubahan ukuran / topping.
     rowsBox.addEventListener('change', recalc);
 
     // Catatan produk.

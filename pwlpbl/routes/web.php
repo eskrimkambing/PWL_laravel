@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\ToppingController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
@@ -24,9 +25,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-    $products = \App\Models\Product::withStok()->latest()->get();
+    $products = \App\Models\Product::withStok()->with('sizes')->latest()->get();
 
-    return view('beranda', compact('products'));
+    $toppings = \App\Models\Topping::orderBy('nama')->get();
+
+    return view('beranda', compact('products', 'toppings'));
 })->name('home');
 
 
@@ -80,6 +83,16 @@ Route::middleware('role:admin')->group(function () {
     // ======================================================
 
     Route::resource('products', ProductController::class);
+
+
+    // ======================================================
+    // TOPPING TAMBAHAN PIZZA
+    // ======================================================
+
+    Route::resource('toppings', ToppingController::class)->except(['show', 'create']);
+
+    Route::patch('/toppings/{topping}/sold-out', [ToppingController::class, 'toggleSoldOut'])
+        ->name('toppings.sold-out');
 
 
     // ======================================================

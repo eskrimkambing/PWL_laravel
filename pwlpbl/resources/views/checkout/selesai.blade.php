@@ -38,6 +38,10 @@
                             <small class="d-block">Ukuran: {{ $item['ukuran'] }}</small>
                         @endif
 
+                        @if (!empty($item['toppings']))
+                            <small class="d-block">Topping: {{ implode(', ', $item['toppings']) }}</small>
+                        @endif
+
                         @if ($item['catatan'])
                             <small class="d-block">Catatan: {{ $item['catatan'] }}</small>
                         @endif

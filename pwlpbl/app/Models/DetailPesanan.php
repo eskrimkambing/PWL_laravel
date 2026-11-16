@@ -15,7 +15,15 @@ class DetailPesanan extends Model
         'jumlah',
         'harga',
         'subtotal',
+        'ukuran',
+        'catatan',
+        'toppings',
     ];
+
+    protected function casts(): array
+    {
+        return ['toppings' => 'array'];
+    }
 
     public function pesanan(): BelongsTo
     {

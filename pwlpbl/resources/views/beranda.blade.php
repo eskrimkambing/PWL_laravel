@@ -615,9 +615,39 @@
 
         .size-options {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
             gap: 10px;
             margin-bottom: 22px;
+        }
+
+        .topping-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .topping-option .topping-name { flex: 1; }
+        .topping-option .topping-price { font-weight: 600; }
+
+        .topping-option.is-off {
+            background: #F3F0EC;
+            color: #9C928A;
+            cursor: not-allowed;
+        }
+
+        .topping-option .topping-soldout {
+            background: #C62828;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 999px;
         }
 
         .size-option {
@@ -1310,6 +1340,7 @@
                                     data-nama="{{ $product->nama }}" data-kategori="{{ $product->kategori }}"
                                     data-deskripsi="{{ $product->deskripsi ?? 'Produk Pizza Moza' }}"
                                     data-price="{{ (int) $product->price }}" data-image="{{ $srcFoto }}"
+                                    data-sizes="{{ json_encode($product->sizes->map(fn($z) => ['id' => $z->id, 'nama' => $z->nama, 'harga' => (int) $z->harga])->values()) }}"
                                     @if ($habis) aria-disabled="true"
                                     @else
                                     role="button" tabindex="0"
@@ -1341,7 +1372,10 @@
                                         @endif
 
                                         <div class="price {{ $habis ? 'sold-dim' : '' }}">
-                                            Rp{{ number_format($product->price, 0, ',', '.') }}
+                                            @if ($product->sizes->count() > 1)
+                                                <small style="font-size:12px;font-weight:600;">Mulai dari</small>
+                                            @endif
+                                            Rp{{ number_format($product->sizes->min('harga') ?? $product->price, 0, ',', '.') }}
                                         </div>
 
                                         @if ($habis)
@@ -1471,6 +1505,11 @@
                     <div class="size-options" id="sizeOptions"></div>
                 </div>
 
+                <div id="toppingSection" style="display:none;">
+                    <p class="modal-label">Tambah topping <small>(opsional)</small></p>
+                    <div id="toppingOptions"></div>
+                </div>
+
                 <p class="modal-label">Catatan</p>
                 <textarea id="modalNotes" placeholder="Contoh: tanpa bawang, extra saus..."></textarea>
 
@@ -1550,24 +1589,32 @@
         // ID produk yang stoknya habis (Sold Out)
         const soldOutIds = @json($products->filter(fn($p) => $p->isSoldOut())->pluck('id')->map(fn($id) => (string) $id)->values());
 
-        // Tambahan harga per ukuran (harga di database dianggap harga Medium).
-        // Ubah angkanya sesuai kebutuhan.
-        const sizes = [{
-                key: 'Small',
-                label: 'Small',
-                add: -10000
-            },
-            {
-                key: 'Medium',
-                label: 'Medium',
-                add: 0
-            },
-            {
-                key: 'Large',
-                label: 'Large',
-                add: 15000
-            },
-        ];
+        @php
+            $toppingJs = $toppings->map(fn ($t) => [
+                'id' => $t->id,
+                'nama' => $t->nama,
+                'harga' => (int) $t->harga,
+                'soldOut' => (bool) $t->sold_out,
+            ])->values();
+
+            $produkJs = $products->mapWithKeys(fn ($p) => [
+                (string) $p->id => [
+                    'isPizza' => $p->isPizza(),
+                    'price' => (int) $p->price,
+                    'sizes' => $p->sizes->map(fn ($z) => [
+                        'id' => $z->id,
+                        'nama' => $z->nama,
+                        'harga' => (int) $z->harga,
+                    ])->values(),
+                ],
+            ]);
+        @endphp
+
+        // Daftar topping dari admin (yang Sold Out tampil tapi tidak bisa dipilih).
+        const toppings = @json($toppingJs);
+
+        // Data ukuran & jenis tiap produk, dipakai untuk membersihkan keranjang lama.
+        const productInfo = @json($produkJs);
 
         let order = null;
 
@@ -1579,6 +1626,7 @@
             if (soldOutIds.includes(String(btn.dataset.id))) return;
 
             const isPizza = btn.dataset.kategori.toLowerCase() === 'pizza';
+            const sizes = JSON.parse(btn.dataset.sizes || '[]');
 
             order = {
                 id: btn.dataset.id,
@@ -1586,9 +1634,14 @@
                 image: btn.dataset.image,
                 base: parseInt(btn.dataset.price),
                 isPizza: isPizza,
+                sizes: sizes,
                 size: null,
+                toppings: [],
                 qty: 1,
             };
+
+            // Produk dengan satu ukuran langsung terpilih
+            if (sizes.length === 1) order.size = sizes[0];
 
             document.getElementById('modalImage').src = btn.dataset.image;
             document.getElementById('modalName').textContent = btn.dataset.nama;
@@ -1600,21 +1653,61 @@
             const sizeBox = document.getElementById('sizeOptions');
             sizeBox.innerHTML = '';
 
-            if (isPizza) {
+            if (sizes.length > 1) {
                 sizeSection.style.display = '';
 
                 sizes.forEach(s => {
                     const el = document.createElement('button');
                     el.type = 'button';
                     el.className = 'size-option';
-                    el.dataset.key = s.key;
-                    el.innerHTML = '<strong>' + s.label + '</strong><small>' +
-                        rupiah(order.base + s.add) + '</small>';
-                    el.onclick = () => selectSize(s.key);
+                    el.dataset.id = s.id;
+
+                    const nm = document.createElement('strong');
+                    nm.textContent = s.nama;
+                    const hg = document.createElement('small');
+                    hg.textContent = rupiah(s.harga);
+
+                    el.appendChild(nm);
+                    el.appendChild(hg);
+                    el.onclick = () => selectSize(s.id);
                     sizeBox.appendChild(el);
                 });
             } else {
                 sizeSection.style.display = 'none';
+            }
+
+            // Pilihan topping tambahan (khusus pizza)
+            const topSection = document.getElementById('toppingSection');
+            const topBox = document.getElementById('toppingOptions');
+            topBox.innerHTML = '';
+
+            if (isPizza && toppings.length > 0) {
+                topSection.style.display = '';
+
+                toppings.forEach(t => {
+                    const label = document.createElement('label');
+                    label.className = 'topping-option' + (t.soldOut ? ' is-off' : '');
+
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.disabled = t.soldOut;
+                    cb.onchange = () => toggleTopping(t.id, cb.checked);
+
+                    const nm = document.createElement('span');
+                    nm.className = 'topping-name';
+                    nm.textContent = t.nama;
+
+                    const info = document.createElement('span');
+                    info.className = t.soldOut ? 'topping-soldout' : 'topping-price';
+                    info.textContent = t.soldOut ? 'Sold Out' : '+' + rupiah(t.harga);
+
+                    label.appendChild(cb);
+                    label.appendChild(nm);
+                    label.appendChild(info);
+                    topBox.appendChild(label);
+                });
+            } else {
+                topSection.style.display = 'none';
             }
 
             updateModal();
@@ -1628,20 +1721,34 @@
             document.body.style.overflow = '';
         }
 
-        function selectSize(key) {
-            order.size = key;
+        function selectSize(id) {
+            order.size = order.sizes.find(x => x.id === id) || null;
 
             document.querySelectorAll('.size-option').forEach(el => {
-                el.classList.toggle('selected', el.dataset.key === key);
+                el.classList.toggle('selected', parseInt(el.dataset.id) === id);
             });
 
             updateModal();
         }
 
+        function toggleTopping(id, on) {
+            order.toppings = on
+                ? [...order.toppings, id]
+                : order.toppings.filter(x => x !== id);
+
+            updateModal();
+        }
+
+        function toppingSum(ids) {
+            return ids.reduce((sum, id) => {
+                const t = toppings.find(x => x.id === id);
+                return sum + (t ? t.harga : 0);
+            }, 0);
+        }
+
         function unitPrice() {
-            if (!order.isPizza) return order.base;
-            const s = sizes.find(x => x.key === order.size) || sizes.find(x => x.add === 0);
-            return order.base + s.add;
+            const dasar = order.size ? order.size.harga : order.base;
+            return dasar + toppingSum(order.toppings);
         }
 
         function changeQty(delta) {
@@ -1654,8 +1761,8 @@
             document.getElementById('modalPrice').textContent = rupiah(unitPrice());
             document.getElementById('modalTotal').textContent = rupiah(unitPrice() * order.qty);
 
-            // Pizza wajib pilih ukuran dulu
-            document.getElementById('modalSubmit').disabled = order.isPizza && !order.size;
+            // Produk dengan pilihan ukuran wajib memilih ukuran dulu
+            document.getElementById('modalSubmit').disabled = order.sizes.length > 0 && !order.size;
         }
 
         /* ===== KERANJANG ===== */
@@ -1679,26 +1786,54 @@
 
         let cart = loadCart();
 
-        // Buang dari keranjang produk yang sekarang stoknya habis
-        (function bersihkanKeranjangHabis() {
-            const habis = cart.filter(i => soldOutIds.includes(String(i.id)));
-            if (habis.length === 0) return;
+        // Rapikan keranjang tersimpan: buang produk yang sudah tidak ada / Sold Out,
+        // samakan ukuran & harga dengan data terbaru, dan buang topping yang habis.
+        (function bersihkanKeranjang() {
+            const dibuang = [];
 
-            cart = cart.filter(i => !soldOutIds.includes(String(i.id)));
+            cart = cart.filter(i => {
+                const info = productInfo[String(i.id)];
+
+                if (!info || soldOutIds.includes(String(i.id))) {
+                    dibuang.push(i.nama);
+                    return false;
+                }
+
+                if (info.sizes.length > 0) {
+                    const z = info.sizes.find(x => x.id === i.sizeId)
+                        || info.sizes.find(x => x.nama === i.size);
+
+                    if (!z) {
+                        dibuang.push(i.nama);
+                        return false;
+                    }
+
+                    i.sizeId = z.id;
+                    i.size = z.nama;
+                    i.base = z.harga;
+                } else {
+                    i.sizeId = null;
+                    i.size = null;
+                    i.base = info.price;
+                }
+
+                i.toppings = (info.isPizza && Array.isArray(i.toppings) ? i.toppings : [])
+                    .filter(id => toppings.some(t => t.id === id && !t.soldOut));
+
+                return true;
+            });
+
             saveCart();
 
-            setTimeout(() => showToast(
-                habis.map(i => i.nama).join(', ') + ' sudah Sold Out dan dihapus dari keranjang'
-            ), 400);
+            if (dibuang.length > 0) {
+                setTimeout(() => showToast(
+                    dibuang.join(', ') + ' tidak tersedia lagi dan dihapus dari keranjang'
+                ), 400);
+            }
         })();
 
-        function sizeAdd(size) {
-            const s = sizes.find(x => x.key === size);
-            return s ? s.add : 0;
-        }
-
         function lineUnit(item) {
-            return item.base + sizeAdd(item.size);
+            return item.base + toppingSum(item.toppings || []);
         }
 
         function cartTotal() {
@@ -1715,10 +1850,12 @@
 
         function addToCart() {
             const notes = document.getElementById('modalNotes').value.trim();
-            const size = order.isPizza ? order.size : null;
+            const sizeId = order.size ? order.size.id : null;
+            const topKey = [...order.toppings].sort((a, b) => a - b).join(',');
 
             const existing = cart.find(i =>
-                i.id === order.id && i.size === size && i.notes === notes
+                i.id === order.id && i.sizeId === sizeId && i.notes === notes &&
+                [...(i.toppings || [])].sort((a, b) => a - b).join(',') === topKey
             );
 
             if (existing) {
@@ -1728,8 +1865,10 @@
                     id: order.id,
                     nama: order.nama,
                     image: order.image,
-                    base: order.base,
-                    size: size,
+                    base: order.size ? order.size.harga : order.base,
+                    sizeId: sizeId,
+                    size: order.size ? order.size.nama : null,
+                    toppings: [...order.toppings],
                     notes: notes,
                     qty: order.qty,
                 });
@@ -1794,6 +1933,14 @@
                     const sz = document.createElement('small');
                     sz.textContent = 'Ukuran: ' + item.size;
                     info.appendChild(sz);
+                }
+
+                if (item.toppings && item.toppings.length > 0) {
+                    const tp = document.createElement('small');
+                    tp.textContent = 'Topping: ' + item.toppings
+                        .map(id => (toppings.find(t => t.id === id) || {}).nama)
+                        .filter(Boolean).join(', ');
+                    info.appendChild(tp);
                 }
 
                 if (item.notes) {
@@ -1868,7 +2015,8 @@
 
             const payload = cart.map(i => ({
                 id: i.id,
-                size: i.size,
+                size_id: i.sizeId,
+                toppings: i.toppings || [],
                 qty: i.qty,
                 notes: i.notes,
             }));

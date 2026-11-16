@@ -78,7 +78,7 @@
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">
-                                    Porsi / Ukuran
+                                    Keterangan Porsi
                                 </label>
 
                                 <input
@@ -86,8 +86,7 @@
                                     name="portion"
                                     class="form-control @error('portion') is-invalid @enderror"
                                     value="{{ old('portion') }}"
-                                    placeholder="Contoh: Large (4 Orang)"
-                                    required
+                                    placeholder="Opsional, mis. 4 Orang"
                                 >
 
                                 @error('portion')
@@ -99,27 +98,8 @@
 
                         </div>
 
-                        {{-- Harga --}}
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">
-                                Harga (Rp)
-                            </label>
-
-                            <input
-                                type="number"
-                                name="price"
-                                class="form-control @error('price') is-invalid @enderror"
-                                value="{{ old('price') }}"
-                                placeholder="Contoh: 35000"
-                                required
-                            >
-
-                            @error('price')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
+                        {{-- Ukuran & Harga --}}
+                        @include('products._sizes')
 
                         {{-- Deskripsi --}}
                         <div class="mb-3">

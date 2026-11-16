@@ -272,7 +272,17 @@
                                          class="order-thumb"
                                          onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
 
-                                    <span>{{ $namaProduk ?? 'Produk tidak ditemukan' }}</span>
+                                    <div>
+                                        <span>{{ $namaProduk ?? 'Produk tidak ditemukan' }}</span>
+                                        @if ($detail->ukuran || !empty($detail->toppings))
+                                            <small class="d-block text-secondary">
+                                                @if ($detail->ukuran)Ukuran: {{ $detail->ukuran }}@endif
+                                                @if (!empty($detail->toppings))
+                                                    <span class="d-block">Topping: {{ collect($detail->toppings)->pluck('nama')->implode(', ') }}</span>
+                                                @endif
+                                            </small>
+                                        @endif
+                                    </div>
                                 </div>
                             </td>
                             <td class="text-center">{{ $detail->jumlah }}</td>
