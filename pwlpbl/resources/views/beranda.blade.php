@@ -9,32 +9,20 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
 
+    <link rel="stylesheet" href="{{ asset('css/typography.css') }}">
     <style>
         :root {
             --cream: #FDF8EE;
-            --beige: #FBF0D5;
-            --orange: #E8751A;
-            --yellow: #FBE7A1;
-            --brown: #8B1A10;
-            --ink: #2B1B14;
-            --border: #EBDDBA;
-            --white: #FFFFFF;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
+            --font-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
         }
 
         body {
-            font-family: 'Raleway', system-ui, sans-serif;
+            font-family: var(--font-body);
             background: var(--cream);
             color: var(--ink);
         }
@@ -60,12 +48,12 @@
             gap: 10px;
             text-decoration: none;
             color: var(--brown);
-            font-size: 23px;
+            font-size: var(--fs-2xl);
             font-weight: bold;
         }
 
         .logo span {
-            font-size: 35px;
+            font-size: var(--fs-3xl);
         }
 
         .nav-menu {
@@ -77,7 +65,7 @@
         .nav-menu a {
             text-decoration: none;
             color: var(--brown);
-            font-size: 14px;
+            font-size: var(--fs-sm);
             font-weight: bold;
         }
 
@@ -95,7 +83,7 @@
             color: var(--brown);
             text-decoration: none;
             font-weight: bold;
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
         .order-btn {
@@ -166,13 +154,13 @@
             color: var(--brown);
             padding: 9px 16px;
             border-radius: 30px;
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: bold;
             margin-bottom: 18px;
         }
 
         .slide h1 {
-            font-size: clamp(34px, 5vw, 58px);
+            font-size: clamp(2.25rem, 5vw, 3.5rem);
             font-weight: 900;
             line-height: 1.05;
             margin-bottom: 12px;
@@ -180,7 +168,7 @@
 
         .slide p {
             line-height: 1.7;
-            font-size: 16px;
+            font-size: var(--fs-base);
             margin-bottom: 24px;
             color: #FDF8EE;
         }
@@ -216,7 +204,7 @@
             border: none;
             background: rgba(255, 255, 255, .9);
             color: var(--brown);
-            font-size: 22px;
+            font-size: var(--fs-xl);
             font-weight: bold;
             cursor: pointer;
             z-index: 5;
@@ -309,7 +297,7 @@
             padding: 10px 22px;
             border-radius: 30px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             cursor: pointer;
             transition: .2s;
         }
@@ -335,7 +323,7 @@
             padding: 11px 16px;
             border: 1px solid var(--border);
             border-radius: 30px;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             outline: none;
             background: white;
         }
@@ -354,7 +342,7 @@
         }
 
         .menu-category h2 {
-            font-size: 26px;
+            font-size: var(--fs-2xl);
             color: var(--brown);
             margin-bottom: 18px;
         }
@@ -401,14 +389,14 @@
         }
 
         .product-name {
-            font-size: 18px;
+            font-size: var(--fs-lg);
             margin-bottom: 6px;
             color: var(--brown);
         }
 
         .product-description {
             color: #966b53;
-            font-size: 13px;
+            font-size: var(--fs-sm);
             line-height: 1.5;
             margin-bottom: 8px;
             display: -webkit-box;
@@ -419,13 +407,13 @@
         }
 
         .portion {
-            font-size: 12px;
+            font-size: var(--fs-xs);
             color: #966b53;
             margin-bottom: 8px;
         }
 
         .price {
-            font-size: 18px;
+            font-size: var(--fs-lg);
             font-weight: bold;
             color: var(--brown);
             margin-top: auto;
@@ -440,7 +428,7 @@
             border-radius: 9px;
             color: var(--orange);
             font-weight: bold;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             background: white;
             transition: .2s;
         }
@@ -463,7 +451,7 @@
             z-index: 3;
             background: #C62828;
             color: #fff;
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: 700;
             letter-spacing: .3px;
             line-height: 1;
@@ -506,7 +494,7 @@
             background: #BDBDBD;
             color: #fff;
             font-weight: 700;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             cursor: not-allowed;
         }
 
@@ -561,7 +549,7 @@
             right: 18px;
             border: none;
             background: none;
-            font-size: 30px;
+            font-size: var(--fs-3xl);
             line-height: 1;
             cursor: pointer;
             color: var(--brown);
@@ -577,20 +565,20 @@
         }
 
         .modal-left h3 {
-            font-size: 24px;
+            font-size: var(--fs-2xl);
             color: var(--brown);
             margin-bottom: 8px;
         }
 
         .modal-left .modal-price {
-            font-size: 20px;
+            font-size: var(--fs-xl);
             font-weight: bold;
             color: var(--orange);
             margin-bottom: 12px;
         }
 
         .modal-left p {
-            font-size: 13px;
+            font-size: var(--fs-sm);
             line-height: 1.7;
             color: #966b53;
         }
@@ -601,7 +589,7 @@
         }
 
         .modal-right h4 {
-            font-size: 22px;
+            font-size: var(--fs-xl);
             color: var(--brown);
             margin-bottom: 20px;
             padding-right: 30px;
@@ -609,7 +597,7 @@
 
         .modal-label {
             font-weight: bold;
-            font-size: 15px;
+            font-size: var(--fs-base);
             margin-bottom: 10px;
         }
 
@@ -629,11 +617,16 @@
             border-radius: 9px;
             margin-bottom: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
-        .topping-option .topping-name { flex: 1; }
-        .topping-option .topping-price { font-weight: 600; }
+        .topping-option .topping-name {
+            flex: 1;
+        }
+
+        .topping-option .topping-price {
+            font-weight: 600;
+        }
 
         .topping-option.is-off {
             background: #F3F0EC;
@@ -644,7 +637,7 @@
         .topping-option .topping-soldout {
             background: #C62828;
             color: #fff;
-            font-size: 11px;
+            font-size: var(--fs-xs);
             font-weight: 700;
             padding: 3px 8px;
             border-radius: 999px;
@@ -663,13 +656,13 @@
 
         .size-option strong {
             display: block;
-            font-size: 15px;
+            font-size: var(--fs-base);
             margin-bottom: 4px;
         }
 
         .size-option small {
             display: block;
-            font-size: 12px;
+            font-size: var(--fs-xs);
             color: #966b53;
         }
 
@@ -690,7 +683,7 @@
             border-radius: 9px;
             padding: 12px;
             font-family: inherit;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             outline: none;
             margin-bottom: 20px;
         }
@@ -711,7 +704,7 @@
         }
 
         .modal-total {
-            font-size: 22px;
+            font-size: var(--fs-xl);
             font-weight: bold;
             color: var(--brown);
         }
@@ -729,7 +722,7 @@
             border: 2px solid var(--orange);
             background: white;
             color: var(--orange);
-            font-size: 20px;
+            font-size: var(--fs-xl);
             font-weight: bold;
             cursor: pointer;
             line-height: 1;
@@ -749,7 +742,7 @@
             background: var(--orange);
             color: white;
             font-weight: bold;
-            font-size: 15px;
+            font-size: var(--fs-base);
             cursor: pointer;
         }
 
@@ -775,7 +768,7 @@
             padding: 15px 22px;
             border-radius: 40px;
             font-weight: bold;
-            font-size: 15px;
+            font-size: var(--fs-base);
             cursor: pointer;
             box-shadow: 0 8px 22px rgba(80, 40, 10, .35);
         }
@@ -816,13 +809,13 @@
 
         .cart-head h3 {
             color: var(--brown);
-            font-size: 21px;
+            font-size: var(--fs-xl);
         }
 
         .cart-head button {
             border: none;
             background: none;
-            font-size: 30px;
+            font-size: var(--fs-3xl);
             line-height: 1;
             cursor: pointer;
             color: var(--brown);
@@ -838,7 +831,7 @@
             text-align: center;
             color: #966b53;
             padding: 60px 10px;
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
         .cart-item {
@@ -865,14 +858,14 @@
         .cart-item-info strong {
             display: block;
             color: var(--brown);
-            font-size: 15px;
+            font-size: var(--fs-base);
             margin-bottom: 3px;
         }
 
         .cart-item-info small {
             display: block;
             color: #966b53;
-            font-size: 12px;
+            font-size: var(--fs-xs);
             margin-bottom: 2px;
             word-break: break-word;
         }
@@ -880,7 +873,7 @@
         .cart-item-price {
             color: var(--orange);
             font-weight: bold;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             margin: 4px 0 8px;
         }
 
@@ -894,7 +887,7 @@
             border: none;
             background: none;
             color: #B3261E;
-            font-size: 12px;
+            font-size: var(--fs-xs);
             cursor: pointer;
         }
 
@@ -908,11 +901,11 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 14px;
-            font-size: 16px;
+            font-size: var(--fs-base);
         }
 
         .cart-total-row strong {
-            font-size: 22px;
+            font-size: var(--fs-xl);
         }
 
         .cart-add-more {
@@ -924,7 +917,7 @@
             color: var(--orange);
             border-radius: 10px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             cursor: pointer;
         }
 
@@ -937,7 +930,7 @@
             color: white;
             padding: 12px 22px;
             border-radius: 30px;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             font-weight: bold;
             opacity: 0;
             pointer-events: none;
@@ -982,17 +975,17 @@
 
         .footer-brand h3 {
             color: var(--yellow);
-            font-size: 22px;
+            font-size: var(--fs-xl);
             margin-bottom: 7px;
         }
 
         .footer-brand p {
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
         .footer-contact h3 {
             color: var(--yellow);
-            font-size: 17px;
+            font-size: var(--fs-base);
             margin-bottom: 12px;
         }
 
@@ -1009,7 +1002,7 @@
             gap: 8px;
             color: white;
             text-decoration: none;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             transition: .2s;
         }
 
@@ -1030,7 +1023,7 @@
             padding-top: 13px;
             border-top: 1px solid rgba(255, 255, 255, .2);
             text-align: center;
-            font-size: 13px;
+            font-size: var(--fs-sm);
         }
 
         /* RESPONSIVE */
@@ -1068,7 +1061,7 @@
             }
 
             .nav-menu a {
-                font-size: 11px;
+                font-size: var(--fs-xs);
             }
 
             .nav-actions {
@@ -1076,12 +1069,12 @@
             }
 
             .login-link {
-                font-size: 12px;
+                font-size: var(--fs-xs);
             }
 
             .order-btn {
                 padding: 10px 13px;
-                font-size: 12px;
+                font-size: var(--fs-xs);
             }
 
             .slide {
@@ -1090,7 +1083,7 @@
             }
 
             .slide p {
-                font-size: 14px;
+                font-size: var(--fs-sm);
             }
 
             .slider-arrow {
@@ -1121,7 +1114,7 @@
             }
 
             .menu-category h2 {
-                font-size: 22px;
+                font-size: var(--fs-xl);
             }
 
             .product-container {
@@ -1138,7 +1131,7 @@
             }
 
             .product-name {
-                font-size: 15px;
+                font-size: var(--fs-base);
             }
 
             .footer-container {
@@ -1154,6 +1147,31 @@
 
             footer {
                 padding: 25px 15px 15px;
+            }
+
+            /* ===== TIPOGRAFI ===== */
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            .logo,
+            .hero-label,
+            .price,
+            .cart-item-price,
+            .order-btn,
+            .primary-btn,
+            .add-btn,
+            .sold-btn,
+            .footer-brand h3,
+            .footer-contact h3 {
+                font-family: var(--font-heading);
+            }
+
+            .price,
+            .cart-item-price {
+                font-variant-numeric: lining-nums tabular-nums;
             }
         }
     </style>
@@ -1336,8 +1354,9 @@
 
                             <div class="product-item" data-name="{{ strtolower($product->nama) }}">
 
-                                <div class="product-card {{ $habis ? 'is-sold-out' : '' }}" data-id="{{ $product->id }}"
-                                    data-nama="{{ $product->nama }}" data-kategori="{{ $product->kategori }}"
+                                <div class="product-card {{ $habis ? 'is-sold-out' : '' }}"
+                                    data-id="{{ $product->id }}" data-nama="{{ $product->nama }}"
+                                    data-kategori="{{ $product->kategori }}"
                                     data-deskripsi="{{ $product->deskripsi ?? 'Produk Pizza Moza' }}"
                                     data-price="{{ (int) $product->price }}" data-image="{{ $srcFoto }}"
                                     data-sizes="{{ json_encode($product->sizes->map(fn($z) => ['id' => $z->id, 'nama' => $z->nama, 'harga' => (int) $z->harga])->values()) }}"
@@ -1351,7 +1370,8 @@
                                         @if ($habis)
                                             <span class="sold-out-badge">Sold Out</span>
                                         @endif
-                                        <img src="{{ $srcFoto }}" alt="{{ $product->nama }}" class="product-image"
+                                        <img src="{{ $srcFoto }}" alt="{{ $product->nama }}"
+                                            class="product-image"
                                             onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
                                     </div>
 
@@ -1373,7 +1393,8 @@
 
                                         <div class="price {{ $habis ? 'sold-dim' : '' }}">
                                             @if ($product->sizes->count() > 1)
-                                                <small style="font-size:12px;font-weight:600;">Mulai dari</small>
+                                                <small style="font-size: var(--fs-xs);font-weight:600;">Mulai
+                                                    dari</small>
                                             @endif
                                             Rp{{ number_format($product->sizes->min('harga') ?? $product->price, 0, ',', '.') }}
                                         </div>
@@ -1590,24 +1611,34 @@
         const soldOutIds = @json($products->filter(fn($p) => $p->isSoldOut())->pluck('id')->map(fn($id) => (string) $id)->values());
 
         @php
-            $toppingJs = $toppings->map(fn ($t) => [
-                'id' => $t->id,
-                'nama' => $t->nama,
-                'harga' => (int) $t->harga,
-                'soldOut' => (bool) $t->sold_out,
-            ])->values();
+            $toppingJs = $toppings
+                ->map(
+                    fn($t) => [
+                        'id' => $t->id,
+                        'nama' => $t->nama,
+                        'harga' => (int) $t->harga,
+                        'soldOut' => (bool) $t->sold_out,
+                    ],
+                )
+                ->values();
 
-            $produkJs = $products->mapWithKeys(fn ($p) => [
-                (string) $p->id => [
-                    'isPizza' => $p->isPizza(),
-                    'price' => (int) $p->price,
-                    'sizes' => $p->sizes->map(fn ($z) => [
-                        'id' => $z->id,
-                        'nama' => $z->nama,
-                        'harga' => (int) $z->harga,
-                    ])->values(),
+            $produkJs = $products->mapWithKeys(
+                fn($p) => [
+                    (string) $p->id => [
+                        'isPizza' => $p->isPizza(),
+                        'price' => (int) $p->price,
+                        'sizes' => $p->sizes
+                            ->map(
+                                fn($z) => [
+                                    'id' => $z->id,
+                                    'nama' => $z->nama,
+                                    'harga' => (int) $z->harga,
+                                ],
+                            )
+                            ->values(),
+                    ],
                 ],
-            ]);
+            );
         @endphp
 
         // Daftar topping dari admin (yang Sold Out tampil tapi tidak bisa dipilih).
@@ -1732,9 +1763,8 @@
         }
 
         function toggleTopping(id, on) {
-            order.toppings = on
-                ? [...order.toppings, id]
-                : order.toppings.filter(x => x !== id);
+            order.toppings = on ? [...order.toppings, id] :
+                order.toppings.filter(x => x !== id);
 
             updateModal();
         }
@@ -1800,8 +1830,8 @@
                 }
 
                 if (info.sizes.length > 0) {
-                    const z = info.sizes.find(x => x.id === i.sizeId)
-                        || info.sizes.find(x => x.nama === i.size);
+                    const z = info.sizes.find(x => x.id === i.sizeId) ||
+                        info.sizes.find(x => x.nama === i.size);
 
                     if (!z) {
                         dibuang.push(i.nama);
@@ -1854,8 +1884,8 @@
             const topKey = [...order.toppings].sort((a, b) => a - b).join(',');
 
             const existing = cart.find(i =>
-                i.id === order.id && i.sizeId === sizeId && i.notes === notes &&
-                [...(i.toppings || [])].sort((a, b) => a - b).join(',') === topKey
+                i.id === order.id && i.sizeId === sizeId && i.notes === notes && [...(i.toppings || [])].sort((a, b) =>
+                    a - b).join(',') === topKey
             );
 
             if (existing) {

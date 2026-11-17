@@ -11,10 +11,14 @@
     <title>@yield('title', 'Dashboard Pembeli') - Pizza Moza</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/typography.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <style>
         /* ===== PALET: dominan krem, aksen oranye & maroon =====
@@ -46,8 +50,8 @@
             --moza-maroon: #8B1A10;
 
             --moza-ink: #2B1B14;
-            --bs-body-font-family: 'Raleway', system-ui, sans-serif;
-            --moza-accent: var(--moza-orange);
+            --bs-body-font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            --font-heading: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
             --moza-accent-text: #fff;
 
@@ -863,6 +867,31 @@
 
             background: rgba(247, 217, 145, 0.35) !important;
 
+        }
+
+        /* ===== TIPOGRAFI ===== */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .h1,
+        .h2,
+        .h3,
+        .h4,
+        .h5,
+        .h6,
+        .navbar-brand,
+        .btn,
+        .card-title,
+        .table thead th {
+            font-family: var(--font-heading);
+        }
+
+        .table td,
+        .badge {
+            font-variant-numeric: lining-nums tabular-nums;
         }
     </style>
 

@@ -7,7 +7,7 @@
     <div class="mx-auto" style="max-width: 720px;">
 
         <div class="text-center mb-4">
-            <div style="font-size: 56px;"></div>
+            <div style="font-size: var(--fs-icon);"></div>
             <h2 class="fw-bold mb-1">Pesanan Berhasil Dibuat!</h2>
             <p class="text-secondary mb-0">
                 Terima kasih, {{ $pesanan->nama_penerima }}. Pesananmu sedang kami proses.
@@ -92,7 +92,9 @@
 
     <script>
         // Pesanan sudah masuk, kosongkan keranjang di browser
-        try { localStorage.removeItem('moza_cart'); } catch (e) {}
+        try {
+            localStorage.removeItem('moza_cart');
+        } catch (e) {}
     </script>
 
 @endsection

@@ -13,7 +13,7 @@
         }
 
         .product-description {
-            font-size: 14px;
+            font-size: var(--fs-sm);
             line-height: 1.5;
             min-height: 42px;
         }

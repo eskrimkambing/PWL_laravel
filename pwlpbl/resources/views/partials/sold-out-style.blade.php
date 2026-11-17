@@ -13,7 +13,7 @@
         z-index: 3;
         background: #C62828;
         color: #fff;
-        font-size: 12px;
+        font-size: var(--fs-xs);
         font-weight: 700;
         letter-spacing: .3px;
         line-height: 1;
@@ -63,7 +63,7 @@
         background: #BDBDBD !important;
         color: #fff !important;
         font-weight: 700;
-        font-size: 14px;
+        font-size: var(--fs-sm);
         cursor: not-allowed;
         pointer-events: none;
         opacity: 1;
@@ -72,7 +72,7 @@
     .btn-soldout.btn-sm {
         width: auto;
         padding: 5px 12px;
-        font-size: 13px;
+        font-size: var(--fs-sm);
     }
 
     /* Pemberitahuan di dashboard pembeli */
@@ -83,6 +83,6 @@
         color: #8B1A10;
         border-radius: 10px;
         padding: 12px 16px;
-        font-size: 14px;
+        font-size: var(--fs-sm);
     }
 </style>

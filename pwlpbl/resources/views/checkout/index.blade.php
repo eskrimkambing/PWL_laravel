@@ -1,1109 +1,1005 @@
-
 @extends('layouts.pembeli')
 
 @section('title', 'Checkout')
 
 @push('styles')
-<style>
-    .checkout-box {
-        background: var(--bs-card-bg);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 14px;
-        padding: 20px !important;
-        margin-bottom: 18px;
-    }
-
-    .section-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-bottom: 12px;
-    }
-
-    .price {
-        color: var(--moza-accent);
-    }
-
-    .checkout-back {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--bs-body-color);
-        text-decoration: none;
-        border-radius: 50%;
-        transition: .2s;
-        flex-shrink: 0;
-    }
-
-    .checkout-back:hover {
-        background: rgba(240, 179, 107, .2);
-        color: #8B1A10;
-    }
-
-    .form-control,
-    .form-select {
-        background: var(--bs-body-bg);
-        border: 1px solid var(--bs-border-color);
-        color: var(--bs-body-color);
-        border-radius: 10px;
-    }
-
-    .form-control:focus,
-    .form-select:focus {
-        background: var(--bs-body-bg);
-        color: var(--bs-body-color);
-        border-color: #f0b36b;
-        box-shadow: 0 0 0 3px rgba(240, 179, 107, .2);
-    }
-
-    .form-control::placeholder {
-        color: #8f7e73;
-    }
-
-    .form-select option {
-        background: #261c17;
-        color: #f3e9e1;
-    }
-
-    textarea.form-control {
-        resize: vertical;
-    }
-
-    .choice-option {
-        position: relative;
-        background: var(--bs-body-bg);
-        border: 1.5px solid var(--bs-border-color);
-        border-radius: 12px;
-        padding: 11px 14px;
-        margin-bottom: 8px;
-        cursor: pointer;
-        transition: all .2s ease;
-    }
-
-    .choice-option:hover {
-        border-color: #c9a27e;
-    }
-
-    .choice-option .form-check-input {
-        width: 1.2em;
-        height: 1.2em;
-        margin-top: 5px;
-        cursor: pointer;
-    }
-
-    .choice-option:has(input[type="radio"]:checked) {
-        background: rgba(240, 179, 107, .15);
-        border-color: #f0b36b;
-        box-shadow: 0 0 0 3px rgba(240, 179, 107, .2);
-    }
-
-    html body main .choice-option .form-check,
-    html body main .choice-option .form-check:has(input:checked),
-    html body main .choice-option label:has(input:checked) {
-        background: transparent !important;
-        border: 0 !important;
-        box-shadow: none !important;
-    }
-
-    html body main .choice-option:has(input[type="radio"]:checked) strong {
-        color: var(--moza-maroon) !important;
-    }
-
-    html body main .choice-option:has(input[type="radio"]:checked) .text-secondary,
-    html body main .choice-option:has(input[type="radio"]:checked) small {
-        color: rgba(139, 26, 16, .8) !important;
-    }
-
-    .choice-option .form-check-input:checked {
-        background-color: #f0b36b;
-        border-color: #f0b36b;
-    }
-
-    .product-thumb {
-        width: 75px;
-        height: 75px;
-        object-fit: cover;
-        border-radius: 10px;
-        flex-shrink: 0;
-        border: 1px solid var(--bs-border-color);
-    }
-
-    .topping-box {
-        background: #FAF6F1;
-        border-radius: 8px;
-        padding: 8px 10px;
-        max-width: 320px;
-    }
-
-    .cart-row {
-        display: flex;
-        gap: 12px;
-        padding: 14px 0;
-        border-bottom: 1px solid var(--bs-border-color);
-    }
-
-    .cart-row:last-child {
-        border-bottom: none;
-    }
-
-    .qty-box {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .qty-box button {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        border: 2px solid #f0b36b;
-        background: transparent;
-        color: #f0b36b;
-        font-size: 18px;
-        font-weight: bold;
-        line-height: 1;
-        cursor: pointer;
-    }
-
-    .qty-box button:hover {
-        background: rgba(240, 179, 107, .2);
-    }
-
-    .qty-num {
-        min-width: 20px;
-        text-align: center;
-        font-weight: 700;
-    }
-
-    .remove-btn {
-        border: none;
-        background: none;
-        color: #e57373;
-        font-size: 13px;
-        cursor: pointer;
-        padding: 0;
-    }
-
-    .field-label {
-        display: block;
-        font-size: .85rem;
-        font-weight: 600;
-        color: #8f7e73;
-        margin-bottom: 5px;
-    }
-
-    .field-label .req {
-        color: #8B1A10;
-    }
-
-    .field-input {
-        padding: 10px 12px;
-    }
-
-    .phone-group {
-        display: flex;
-        align-items: center;
-        border: 1px solid var(--bs-border-color);
-        border-radius: 10px;
-        background: var(--bs-body-bg);
-        overflow: hidden;
-    }
-
-    .phone-group:focus-within {
-        border-color: #f0b36b;
-        box-shadow: 0 0 0 3px rgba(240, 179, 107, .2);
-    }
-
-    .phone-prefix {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 0 12px;
-        height: 44px;
-        border-right: 1px solid var(--bs-border-color);
-        font-weight: 600;
-        flex-shrink: 0;
-    }
-
-    .phone-group input {
-        flex: 1;
-        min-width: 0;
-        height: 44px;
-        border: none;
-        outline: none;
-        background: transparent;
-        color: var(--bs-body-color);
-        padding: 0 12px;
-        font: inherit;
-    }
-
-    .phone-group input::placeholder {
-        color: #8f7e73;
-    }
-
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 7px;
-        font-size: .95rem;
-    }
-
-    .summary-total {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 12px;
-        margin-top: 8px;
-        border-top: 1px solid var(--bs-border-color);
-        font-size: 1.1rem;
-        font-weight: 700;
-    }
-
-    #alamatBox {
-        display: none;
-    }
-
-    @media (min-width: 992px) {
-        .sticky-side {
-            position: sticky;
-            top: 90px;
-        }
-    }
-
-    @media (max-width: 576px) {
+    <style>
         .checkout-box {
-            padding: 15px !important;
+            background: var(--bs-card-bg);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 14px;
+            padding: 20px !important;
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-size: var(--fs-lg);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .price {
+            color: var(--moza-accent);
+        }
+
+        .checkout-back {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bs-body-color);
+            text-decoration: none;
+            border-radius: 50%;
+            transition: .2s;
+            flex-shrink: 0;
+        }
+
+        .checkout-back:hover {
+            background: rgba(240, 179, 107, .2);
+            color: #8B1A10;
+        }
+
+        .form-control,
+        .form-select {
+            background: var(--bs-body-bg);
+            border: 1px solid var(--bs-border-color);
+            color: var(--bs-body-color);
+            border-radius: 10px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: var(--bs-body-bg);
+            color: var(--bs-body-color);
+            border-color: #f0b36b;
+            box-shadow: 0 0 0 3px rgba(240, 179, 107, .2);
+        }
+
+        .form-control::placeholder {
+            color: #8f7e73;
+        }
+
+        .form-select option {
+            background: #261c17;
+            color: #f3e9e1;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+        }
+
+        .choice-option {
+            position: relative;
+            background: var(--bs-body-bg);
+            border: 1.5px solid var(--bs-border-color);
+            border-radius: 12px;
+            padding: 11px 14px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all .2s ease;
+        }
+
+        .choice-option:hover {
+            border-color: #c9a27e;
+        }
+
+        .choice-option .form-check-input {
+            width: 1.2em;
+            height: 1.2em;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        .choice-option:has(input[type="radio"]:checked) {
+            background: rgba(240, 179, 107, .15);
+            border-color: #f0b36b;
+            box-shadow: 0 0 0 3px rgba(240, 179, 107, .2);
+        }
+
+        html body main .choice-option .form-check,
+        html body main .choice-option .form-check:has(input:checked),
+        html body main .choice-option label:has(input:checked) {
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+        }
+
+        html body main .choice-option:has(input[type="radio"]:checked) strong {
+            color: var(--moza-maroon) !important;
+        }
+
+        html body main .choice-option:has(input[type="radio"]:checked) .text-secondary,
+        html body main .choice-option:has(input[type="radio"]:checked) small {
+            color: rgba(139, 26, 16, .8) !important;
+        }
+
+        .choice-option .form-check-input:checked {
+            background-color: #f0b36b;
+            border-color: #f0b36b;
         }
 
         .product-thumb {
-            width: 65px;
-            height: 65px;
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+            border: 1px solid var(--bs-border-color);
         }
-    }
-</style>
+
+        .topping-box {
+            background: #FAF6F1;
+            border-radius: 8px;
+            padding: 8px 10px;
+            max-width: 320px;
+        }
+
+        .cart-row {
+            display: flex;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--bs-border-color);
+        }
+
+        .cart-row:last-child {
+            border-bottom: none;
+        }
+
+        .qty-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-box button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #f0b36b;
+            background: transparent;
+            color: #f0b36b;
+            font-size: var(--fs-lg);
+            font-weight: bold;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .qty-box button:hover {
+            background: rgba(240, 179, 107, .2);
+        }
+
+        .qty-num {
+            min-width: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .remove-btn {
+            border: none;
+            background: none;
+            color: #e57373;
+            font-size: var(--fs-sm);
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .field-label {
+            display: block;
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            color: #8f7e73;
+            margin-bottom: 5px;
+        }
+
+        .field-label .req {
+            color: #8B1A10;
+        }
+
+        .field-input {
+            padding: 10px 12px;
+        }
+
+        .phone-group {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--bs-border-color);
+            border-radius: 10px;
+            background: var(--bs-body-bg);
+            overflow: hidden;
+        }
+
+        .phone-group:focus-within {
+            border-color: #f0b36b;
+            box-shadow: 0 0 0 3px rgba(240, 179, 107, .2);
+        }
+
+        .phone-prefix {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 12px;
+            height: 44px;
+            border-right: 1px solid var(--bs-border-color);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .phone-group input {
+            flex: 1;
+            min-width: 0;
+            height: 44px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--bs-body-color);
+            padding: 0 12px;
+            font: inherit;
+        }
+
+        .phone-group input::placeholder {
+            color: #8f7e73;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 7px;
+            font-size: var(--fs-base);
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            margin-top: 8px;
+            border-top: 1px solid var(--bs-border-color);
+            font-size: var(--fs-lg);
+            font-weight: 700;
+        }
+
+        #alamatBox {
+            display: none;
+        }
+
+        @media (min-width: 992px) {
+            .sticky-side {
+                position: sticky;
+                top: 90px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .checkout-box {
+                padding: 15px !important;
+            }
+
+            .product-thumb {
+                width: 65px;
+                height: 65px;
+            }
+        }
+    </style>
 @endpush
 
 @section('content')
 
-@php
-    $fotoPizza = [
-        'Extra Chicken' => 'extra-chicken.jpeg',
-        'Cheese Volcano' => 'cheese-volcano.jpeg',
-        'Ekstra Beef' => 'ekstra-beef.jpeg',
-        'Original Mozza' => 'original-mozza.jpeg',
-        'Original Cheese Volcano' => 'original-cheese-volcano.jpeg',
-        'Long Pizza' => 'long-pizza.jpeg',
-    ];
+    @php
+        $fotoPizza = [
+            'Extra Chicken' => 'extra-chicken.jpeg',
+            'Cheese Volcano' => 'cheese-volcano.jpeg',
+            'Ekstra Beef' => 'ekstra-beef.jpeg',
+            'Original Mozza' => 'original-mozza.jpeg',
+            'Original Cheese Volcano' => 'original-cheese-volcano.jpeg',
+            'Long Pizza' => 'long-pizza.jpeg',
+        ];
 
-    $fotoCemilan = [
-        'Tape Bakar Original' => 'tape-bakar-original.jpeg',
-        'Singkong Keju' => 'singkong-keju.jpeg',
-        'Tape Bakar Topping Keju' => 'tape-bakar-topping-keju.jpeg',
-    ];
+        $fotoCemilan = [
+            'Tape Bakar Original' => 'tape-bakar-original.jpeg',
+            'Singkong Keju' => 'singkong-keju.jpeg',
+            'Tape Bakar Topping Keju' => 'tape-bakar-topping-keju.jpeg',
+        ];
 
-    $fotoDefault = asset('images/pizza.jpg');
+        $fotoDefault = asset('images/pizza.jpg');
 
-    $fotoProduk = function ($product) use ($fotoPizza, $fotoCemilan, $fotoDefault) {
-        if (!empty($product->image)) {
-            if (\Illuminate\Support\Str::startsWith(
-                $product->image,
-                ['http://', 'https://']
-            )) {
-                return $product->image;
+        $fotoProduk = function ($product) use ($fotoPizza, $fotoCemilan, $fotoDefault) {
+            if (!empty($product->image)) {
+                if (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://'])) {
+                    return $product->image;
+                }
+
+                return asset(ltrim($product->image, '/'));
             }
 
-            return asset(ltrim($product->image, '/'));
+            if (isset($fotoPizza[$product->nama])) {
+                return asset('images/pizza/' . $fotoPizza[$product->nama]);
+            }
+
+            if (isset($fotoCemilan[$product->nama])) {
+                return asset('images/cemilan/' . $fotoCemilan[$product->nama]);
+            }
+
+            return $fotoDefault;
+        };
+
+        $rows = [];
+
+        $cartRaw = json_decode(request('cart', '[]'), true);
+
+        if (!is_array($cartRaw) || count($cartRaw) === 0) {
+            $cartRaw = request('product') ? [['id' => request('product'), 'qty' => 1]] : [];
         }
 
-        if (isset($fotoPizza[$product->nama])) {
-            return asset('images/pizza/' . $fotoPizza[$product->nama]);
+        foreach ($cartRaw as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $p = $products->firstWhere('id', $row['id'] ?? null);
+
+            if (!$p) {
+                continue;
+            }
+
+            $isPizza = $p->isPizza();
+
+            // Ukuran terpilih: cocokkan ID, lalu nama (keranjang lama), lalu ukuran pertama.
+            $sizeId = null;
+
+            if ($p->sizes->isNotEmpty()) {
+                $dipilih =
+                    $p->sizes->firstWhere('id', (int) ($row['size_id'] ?? 0)) ??
+                    ($p->sizes->firstWhere('nama', $row['size'] ?? null) ?? $p->sizes->first());
+
+                $sizeId = $dipilih->id;
+            }
+
+            $toppingIds = $isPizza
+                ? array_map('intval', is_array($row['toppings'] ?? null) ? $row['toppings'] : [])
+                : [];
+
+            $rows[] = [
+                'product' => $p,
+                'isPizza' => $isPizza,
+                'sizeId' => $sizeId,
+                'toppingIds' => $toppingIds,
+                'qty' => max(1, (int) ($row['qty'] ?? 1)),
+                'notes' => \Illuminate\Support\Str::limit(trim((string) ($row['notes'] ?? '')), 200, ''),
+            ];
         }
 
-        if (isset($fotoCemilan[$product->nama])) {
-            return asset('images/cemilan/' . $fotoCemilan[$product->nama]);
-        }
+        $jenisLama = old('jenis_pesanan', 'Makan di tempat');
 
-        return $fotoDefault;
-    };
+        $namaLengkap = old('nama_penerima', optional($pembeli ?? null)->nama);
 
-    $rows = [];
+        $namaParts = preg_split('/\s+/', trim((string) $namaLengkap), 2);
 
-    $cartRaw = json_decode(request('cart', '[]'), true);
+        $namaDepan = old('nama_depan', $namaParts[0] ?? '');
+        $namaBelakang = old('nama_belakang', $namaParts[1] ?? '');
 
-    if (!is_array($cartRaw) || count($cartRaw) === 0) {
-        $cartRaw = request('product')
-            ? [['id' => request('product'), 'qty' => 1]]
-            : [];
-    }
+        $telpRaw = old('no_telp', optional($pembeli ?? null)->no_telp);
 
-    foreach ($cartRaw as $row) {
-        if (!is_array($row)) {
-            continue;
-        }
+        $telpTampil = preg_replace('/^(62|0)/', '', preg_replace('/\D/', '', (string) $telpRaw));
 
-        $p = $products->firstWhere('id', $row['id'] ?? null);
+        $emailAwal = old('email', optional(auth()->user())->email ?? optional($pembeli ?? null)->email);
+    @endphp
+    <div class="mb-4">
+        <div class="d-flex align-items-center gap-3 mb-2">
+            <a href="{{ url('/') }}#menu" class="checkout-back" aria-label="Kembali">
+                <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5" />
+                    <path d="M12 19l-7-7 7-7" />
+                </svg>
+            </a>
 
-        if (!$p) {
-            continue;
-        }
+            <h2 class="fw-bold mb-0">Checkout</h2>
+        </div>
 
-        $isPizza = $p->isPizza();
+        <p class="text-secondary mb-0">
+            Periksa pesananmu, lalu lengkapi data dan pembayaran.
+        </p>
 
-        // Ukuran terpilih: cocokkan ID, lalu nama (keranjang lama), lalu ukuran pertama.
-        $sizeId = null;
-
-        if ($p->sizes->isNotEmpty()) {
-            $dipilih = $p->sizes->firstWhere('id', (int) ($row['size_id'] ?? 0))
-                ?? $p->sizes->firstWhere('nama', $row['size'] ?? null)
-                ?? $p->sizes->first();
-
-            $sizeId = $dipilih->id;
-        }
-
-        $toppingIds = $isPizza
-            ? array_map('intval', is_array($row['toppings'] ?? null) ? $row['toppings'] : [])
-            : [];
-
-        $rows[] = [
-            'product' => $p,
-            'isPizza' => $isPizza,
-            'sizeId' => $sizeId,
-            'toppingIds' => $toppingIds,
-            'qty' => max(1, (int) ($row['qty'] ?? 1)),
-            'notes' => \Illuminate\Support\Str::limit(
-                trim((string) ($row['notes'] ?? '')),
-                200,
-                ''
-            ),
-        ];
-    }
-
-    $jenisLama = old('jenis_pesanan', 'Makan di tempat');
-
-    $namaLengkap = old(
-        'nama_penerima',
-        optional($pembeli ?? null)->nama
-    );
-
-    $namaParts = preg_split('/\s+/', trim((string) $namaLengkap), 2);
-
-    $namaDepan = old('nama_depan', $namaParts[0] ?? '');
-    $namaBelakang = old('nama_belakang', $namaParts[1] ?? '');
-
-    $telpRaw = old(
-        'no_telp',
-        optional($pembeli ?? null)->no_telp
-    );
-
-    $telpTampil = preg_replace(
-        '/^(62|0)/',
-        '',
-        preg_replace('/\D/', '', (string) $telpRaw)
-    );
-
-    $emailAwal = old(
-        'email',
-        optional(auth()->user())->email
-            ?? optional($pembeli ?? null)->email
-    );
-@endphp
-
-<div class="mb-4">
-    <div class="d-flex align-items-center gap-3 mb-2">
-        <a href="{{ url('/') }}#menu"
-           class="checkout-back"
-           aria-label="Kembali">
-            <svg width="25" height="25"
-                 viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="2"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
-                <path d="M19 12H5"/>
-                <path d="M12 19l-7-7 7-7"/>
-            </svg>
-        </a>
-
-        <h2 class="fw-bold mb-0">Checkout</h2>
+        @if (empty($pembeli))
+            <p class="small mb-0 mt-1">
+                Tidak perlu daftar untuk memesan. Sudah punya akun?
+                <a href="{{ route('login') }}" class="fw-semibold">Login</a>
+            </p>
+        @endif
     </div>
 
-    <p class="text-secondary mb-0">
-        Periksa pesananmu, lalu lengkapi data dan pembayaran.
-    </p>
-
-    @if (empty($pembeli))
-        <p class="small mb-0 mt-1">
-            Tidak perlu daftar untuk memesan. Sudah punya akun?
-            <a href="{{ route('login') }}" class="fw-semibold">Login</a>
-        </p>
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
     @endif
-</div>
 
-@if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
-
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Terjadi kesalahan:</strong>
-        <ul class="mb-0 mt-2">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-@if (count($rows) === 0)
-
-    <div class="checkout-box text-center">
-        <p class="mb-3">
-            Pesananmu masih kosong. Pilih menu favoritmu dulu ya.
-        </p>
-
-        <a href="{{ url('/') }}#menu" class="btn btn-moza px-4">
-            Lihat Menu
-        </a>
-    </div>
-
-@else
-
-<form action="{{ route('checkout.store') }}"
-      method="POST"
-      id="checkoutForm">
-
-    @csrf
-
-    <div class="row g-3">
-
-        <div class="col-lg-7">
-
-            {{-- INFORMASI PESANAN --}}
-            <div class="checkout-box">
-                <div class="section-title">Informasi Pesanan</div>
-
-                <label class="form-label text-secondary small">
-                    Jenis Pesanan
-                </label>
-
-                @foreach ([
-                    'Makan di tempat' => 'Dinikmati langsung di Pizza Moza.',
-                    'Dibungkus' => 'Ambil sendiri di outlet.',
-                    'Delivery' => 'Pesanan diantar ke alamat kamu.'
-                ] as $value => $description)
-
-                    <div class="choice-option">
-                        <div class="form-check">
-                            <input class="form-check-input"
-                                   type="radio"
-                                   name="jenis_pesanan"
-                                   id="jenis_{{ $loop->index }}"
-                                   value="{{ $value }}"
-                                   {{ $jenisLama == $value ? 'checked' : '' }}
-                                   required>
-
-                            <label class="form-check-label w-100"
-                                   for="jenis_{{ $loop->index }}">
-                                <strong>{{ $value }}</strong>
-                                <div class="text-secondary small">
-                                    {{ $description }}
-                                </div>
-                            </label>
-                        </div>
-                    </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Terjadi kesalahan:</strong>
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
                 @endforeach
+            </ul>
+        </div>
+    @endif
 
-                <div id="alamatBox" class="mt-3">
-                    <label for="alamat" class="field-label">
-                        Alamat Pengiriman <span class="req">*</span>
-                    </label>
+    @if (count($rows) === 0)
 
-                    <textarea name="alamat"
-                              id="alamat"
-                              class="form-control field-input"
-                              rows="3"
-                              maxlength="500"
-                              placeholder="Masukkan alamat lengkap">{{ old('alamat') }}</textarea>
-                </div>
-            </div>
+        <div class="checkout-box text-center">
+            <p class="mb-3">
+                Pesananmu masih kosong. Pilih menu favoritmu dulu ya.
+            </p>
 
-            {{-- INFORMASI KONTAK --}}
-            <div class="checkout-box">
-                <div class="section-title">Informasi Kontak</div>
+            <a href="{{ url('/') }}#menu" class="btn btn-moza px-4">
+                Lihat Menu
+            </a>
+        </div>
+    @else
+        <form action="{{ route('checkout.store') }}" method="POST" id="checkoutForm">
 
-                <p class="text-secondary small mb-3">
-                    Isi data di bawah ini supaya pesananmu bisa kami proses.
-                </p>
+            @csrf
 
-                <div class="row g-3">
+            <div class="row g-3">
 
-                    <div class="col-md-6">
-                        <label for="nama_depan" class="field-label">
-                            Nama Depan <span class="req">*</span>
+                <div class="col-lg-7">
+
+                    {{-- INFORMASI PESANAN --}}
+                    <div class="checkout-box">
+                        <div class="section-title">Informasi Pesanan</div>
+
+                        <label class="form-label text-secondary small">
+                            Jenis Pesanan
                         </label>
 
-                        <input type="text"
-                               id="nama_depan"
-                               name="nama_depan"
-                               class="form-control field-input"
-                               value="{{ $namaDepan }}"
-                               placeholder="Nama depan kamu"
-                               required>
-                    </div>
+                        @foreach ([
+            'Makan di tempat' => 'Dinikmati langsung di Pizza Moza.',
+            'Dibungkus' => 'Ambil sendiri di outlet.',
+            'Delivery' => 'Pesanan diantar ke alamat kamu.',
+        ] as $value => $description)
+                            <div class="choice-option">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="jenis_pesanan"
+                                        id="jenis_{{ $loop->index }}" value="{{ $value }}"
+                                        {{ $jenisLama == $value ? 'checked' : '' }} required>
 
-                    <div class="col-md-6">
-                        <label for="nama_belakang" class="field-label">
-                            Nama Belakang
-                        </label>
-
-                        <input type="text"
-                               id="nama_belakang"
-                               name="nama_belakang"
-                               class="form-control field-input"
-                               value="{{ $namaBelakang }}"
-                               placeholder="Nama belakang kamu">
-                    </div>
-
-                    <div class="col-12">
-                        <label for="telp_input" class="field-label">
-                            Nomor HP <span class="req">*</span>
-                        </label>
-
-                        <div class="phone-group">
-                            <span class="phone-prefix">
-                                🇮🇩 +62
-                            </span>
-
-                            <input type="tel"
-                                   id="telp_input"
-                                   inputmode="numeric"
-                                   value="{{ $telpTampil }}"
-                                   placeholder="81212345678"
-                                   required>
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="email" class="field-label">
-                            Email <span class="req">*</span>
-                        </label>
-
-                        <input type="email"
-                               id="email"
-                               name="email"
-                               class="form-control field-input"
-                               value="{{ $emailAwal }}"
-                               placeholder="contoh: pizzamoza@mail.com"
-                               required>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="catatan" class="field-label">
-                            Catatan Pesanan
-                        </label>
-
-                        <textarea name="catatan"
-                                  id="catatan"
-                                  class="form-control field-input"
-                                  rows="2"
-                                  maxlength="500"
-                                  placeholder="Catatan tambahan (opsional)">{{ old('catatan') }}</textarea>
-                    </div>
-
-                    <input type="hidden"
-                           name="nama_penerima"
-                           id="nama_penerima"
-                           value="{{ $namaLengkap }}">
-
-                    <input type="hidden"
-                           name="no_telp"
-                           id="no_telp"
-                           value="{{ $telpRaw }}">
-                </div>
-            </div>
-
-            {{-- RINGKASAN PESANAN --}}
-            <div class="checkout-box">
-
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div class="section-title mb-0">
-                        Ringkasan Pesanan
-                    </div>
-
-                    <a href="{{ url('/') }}#menu"
-                       class="btn btn-sm btn-outline-secondary">
-                        + Tambah menu
-                    </a>
-                </div>
-
-                <div id="cartRows">
-
-                    @foreach ($rows as $i => $r)
-                        @php
-                            $p = $r['product'];
-                        @endphp
-
-                        <div class="cart-row"
-                             data-id="{{ $p->id }}"
-                             data-nama="{{ $p->nama }}"
-                             data-image="{{ $fotoProduk($p) }}"
-                             data-base="{{ (int) $p->price }}"
-                             data-sizes="{{ $p->sizes->isNotEmpty() ? '1' : '0' }}">
-
-                            <img src="{{ $fotoProduk($p) }}"
-                                 alt="{{ $p->nama }}"
-                                 class="product-thumb"
-                                 onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
-
-                            <div class="flex-grow-1" style="min-width:0;">
-
-                                <div class="d-flex justify-content-between gap-2">
-                                    <strong>{{ $p->nama }}</strong>
-                                    <span class="price fw-semibold line-total"></span>
-                                </div>
-
-                                <small class="text-secondary d-block mb-2 unit-text"></small>
-
-                                @if ($p->sizes->isNotEmpty())
-                                    <select name="items[{{ $i }}][size_id]"
-                                            class="form-select form-select-sm size-select mb-2"
-                                            style="max-width:260px;">
-
-                                        @foreach ($p->sizes as $ukuran)
-                                            <option value="{{ $ukuran->id }}"
-                                                data-harga="{{ (int) $ukuran->harga }}"
-                                                data-nama="{{ $ukuran->nama }}"
-                                                {{ $r['sizeId'] === $ukuran->id ? 'selected' : '' }}>
-                                                {{ $ukuran->nama }} - Rp {{ number_format($ukuran->harga, 0, ',', '.') }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                @endif
-
-                                @if ($r['isPizza'] && $toppings->isNotEmpty())
-                                    <div class="topping-box mb-2">
-                                        <small class="fw-semibold d-block mb-1">Tambah topping</small>
-
-                                        @foreach ($toppings as $t)
-                                            <div class="form-check">
-                                                <input class="form-check-input topping-check"
-                                                       type="checkbox"
-                                                       name="items[{{ $i }}][toppings][]"
-                                                       id="top-{{ $i }}-{{ $t->id }}"
-                                                       value="{{ $t->id }}"
-                                                       data-harga="{{ (int) $t->harga }}"
-                                                       {{ $t->sold_out ? 'disabled' : '' }}
-                                                       {{ !$t->sold_out && in_array($t->id, $r['toppingIds'], true) ? 'checked' : '' }}>
-
-                                                <label class="form-check-label small {{ $t->sold_out ? 'text-muted' : '' }}"
-                                                       for="top-{{ $i }}-{{ $t->id }}">
-                                                    {{ $t->nama }}
-                                                    @if ($t->sold_out)
-                                                        <span class="badge bg-danger ms-1">Sold Out</span>
-                                                    @else
-                                                        <span class="text-secondary">
-                                                            (+Rp {{ number_format($t->harga, 0, ',', '.') }})
-                                                        </span>
-                                                    @endif
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endif
-
-                                <input type="text"
-                                       name="items[{{ $i }}][notes]"
-                                       class="form-control form-control-sm notes-input mb-2"
-                                       maxlength="200"
-                                       placeholder="Catatan untuk menu ini (opsional)"
-                                       value="{{ $r['notes'] }}">
-
-                                <input type="hidden"
-                                       name="items[{{ $i }}][product_id]"
-                                       value="{{ $p->id }}">
-
-                                <input type="hidden"
-                                       name="items[{{ $i }}][qty]"
-                                       class="qty-input"
-                                       value="{{ $r['qty'] }}">
-
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <button type="button" class="remove-btn">
-                                        Hapus
-                                    </button>
-
-                                    <div class="qty-box">
-                                        <button type="button"
-                                                class="btn-minus"
-                                                aria-label="Kurangi">−</button>
-
-                                        <span class="qty-num">{{ $r['qty'] }}</span>
-
-                                        <button type="button"
-                                                class="btn-plus"
-                                                aria-label="Tambah">+</button>
-                                    </div>
+                                    <label class="form-check-label w-100" for="jenis_{{ $loop->index }}">
+                                        <strong>{{ $value }}</strong>
+                                        <div class="text-secondary small">
+                                            {{ $description }}
+                                        </div>
+                                    </label>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
 
-                </div>
-            </div>
-
-        </div>
-
-        {{-- KOLOM KANAN --}}
-        <div class="col-lg-5">
-            <div class="sticky-side">
-
-                {{-- METODE PEMBAYARAN --}}
-                <div class="checkout-box">
-                    <div class="section-title">Metode Pembayaran</div>
-
-                    <div class="choice-option">
-                        <div class="form-check">
-                            <input class="form-check-input"
-                                   type="radio"
-                                   name="metode_pembayaran"
-                                   id="cash"
-                                   value="Cash"
-                                   {{ old('metode_pembayaran', 'Cash') == 'Cash' ? 'checked' : '' }}
-                                   required>
-
-                            <label class="form-check-label w-100"
-                                   for="cash">
-                                <strong>Cash</strong>
-                                <div class="text-secondary small">
-                                    Bayar langsung kepada kasir.
-                                </div>
+                        <div id="alamatBox" class="mt-3">
+                            <label for="alamat" class="field-label">
+                                Alamat Pengiriman <span class="req">*</span>
                             </label>
+
+                            <textarea name="alamat" id="alamat" class="form-control field-input" rows="3" maxlength="500"
+                                placeholder="Masukkan alamat lengkap">{{ old('alamat') }}</textarea>
                         </div>
                     </div>
 
-                    <div class="choice-option mb-0">
-                        <div class="form-check">
-                            <input class="form-check-input"
-                                   type="radio"
-                                   name="metode_pembayaran"
-                                   id="midtrans"
-                                   value="Midtrans"
-                                   {{ old('metode_pembayaran') == 'Midtrans' ? 'checked' : '' }}
-                                   required>
+                    {{-- INFORMASI KONTAK --}}
+                    <div class="checkout-box">
+                        <div class="section-title">Informasi Kontak</div>
 
-                            <label class="form-check-label w-100"
-                                   for="midtrans">
-                                <strong>Midtrans</strong>
-                                <div class="text-secondary small">
-                                    Bayar online melalui halaman pembayaran Midtrans.
+                        <p class="text-secondary small mb-3">
+                            Isi data di bawah ini supaya pesananmu bisa kami proses.
+                        </p>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label for="nama_depan" class="field-label">
+                                    Nama Depan <span class="req">*</span>
+                                </label>
+
+                                <input type="text" id="nama_depan" name="nama_depan" class="form-control field-input"
+                                    value="{{ $namaDepan }}" placeholder="Nama depan kamu" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="nama_belakang" class="field-label">
+                                    Nama Belakang
+                                </label>
+
+                                <input type="text" id="nama_belakang" name="nama_belakang"
+                                    class="form-control field-input" value="{{ $namaBelakang }}"
+                                    placeholder="Nama belakang kamu">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="telp_input" class="field-label">
+                                    Nomor HP <span class="req">*</span>
+                                </label>
+
+                                <div class="phone-group">
+                                    <span class="phone-prefix">
+                                        🇮🇩 +62
+                                    </span>
+
+                                    <input type="tel" id="telp_input" inputmode="numeric" value="{{ $telpTampil }}"
+                                        placeholder="81212345678" required>
                                 </div>
-                            </label>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="email" class="field-label">
+                                    Email <span class="req">*</span>
+                                </label>
+
+                                <input type="email" id="email" name="email" class="form-control field-input"
+                                    value="{{ $emailAwal }}" placeholder="contoh: pizzamoza@mail.com" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="catatan" class="field-label">
+                                    Catatan Pesanan
+                                </label>
+
+                                <textarea name="catatan" id="catatan" class="form-control field-input" rows="2" maxlength="500"
+                                    placeholder="Catatan tambahan (opsional)">{{ old('catatan') }}</textarea>
+                            </div>
+
+                            <input type="hidden" name="nama_penerima" id="nama_penerima" value="{{ $namaLengkap }}">
+
+                            <input type="hidden" name="no_telp" id="no_telp" value="{{ $telpRaw }}">
                         </div>
                     </div>
 
-                    <small class="text-secondary d-block mt-2">
-                        Pembayaran online akan diproses setelah integrasi Midtrans diaktifkan.
-                    </small>
+                    {{-- RINGKASAN PESANAN --}}
+                    <div class="checkout-box">
+
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="section-title mb-0">
+                                Ringkasan Pesanan
+                            </div>
+
+                            <a href="{{ url('/') }}#menu" class="btn btn-sm btn-outline-secondary">
+                                + Tambah menu
+                            </a>
+                        </div>
+
+                        <div id="cartRows">
+
+                            @foreach ($rows as $i => $r)
+                                @php
+                                    $p = $r['product'];
+                                @endphp
+
+                                <div class="cart-row" data-id="{{ $p->id }}" data-nama="{{ $p->nama }}"
+                                    data-image="{{ $fotoProduk($p) }}" data-base="{{ (int) $p->price }}"
+                                    data-sizes="{{ $p->sizes->isNotEmpty() ? '1' : '0' }}">
+
+                                    <img src="{{ $fotoProduk($p) }}" alt="{{ $p->nama }}" class="product-thumb"
+                                        onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
+
+                                    <div class="flex-grow-1" style="min-width:0;">
+
+                                        <div class="d-flex justify-content-between gap-2">
+                                            <strong>{{ $p->nama }}</strong>
+                                            <span class="price fw-semibold line-total"></span>
+                                        </div>
+
+                                        <small class="text-secondary d-block mb-2 unit-text"></small>
+
+                                        @if ($p->sizes->isNotEmpty())
+                                            <select name="items[{{ $i }}][size_id]"
+                                                class="form-select form-select-sm size-select mb-2"
+                                                style="max-width:260px;">
+
+                                                @foreach ($p->sizes as $ukuran)
+                                                    <option value="{{ $ukuran->id }}"
+                                                        data-harga="{{ (int) $ukuran->harga }}"
+                                                        data-nama="{{ $ukuran->nama }}"
+                                                        {{ $r['sizeId'] === $ukuran->id ? 'selected' : '' }}>
+                                                        {{ $ukuran->nama }} - Rp
+                                                        {{ number_format($ukuran->harga, 0, ',', '.') }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+
+                                        @if ($r['isPizza'] && $toppings->isNotEmpty())
+                                            <div class="topping-box mb-2">
+                                                <small class="fw-semibold d-block mb-1">Tambah topping</small>
+
+                                                @foreach ($toppings as $t)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input topping-check" type="checkbox"
+                                                            name="items[{{ $i }}][toppings][]"
+                                                            id="top-{{ $i }}-{{ $t->id }}"
+                                                            value="{{ $t->id }}"
+                                                            data-harga="{{ (int) $t->harga }}"
+                                                            {{ $t->sold_out ? 'disabled' : '' }}
+                                                            {{ !$t->sold_out && in_array($t->id, $r['toppingIds'], true) ? 'checked' : '' }}>
+
+                                                        <label
+                                                            class="form-check-label small {{ $t->sold_out ? 'text-muted' : '' }}"
+                                                            for="top-{{ $i }}-{{ $t->id }}">
+                                                            {{ $t->nama }}
+                                                            @if ($t->sold_out)
+                                                                <span class="badge bg-danger ms-1">Sold Out</span>
+                                                            @else
+                                                                <span class="text-secondary">
+                                                                    (+Rp {{ number_format($t->harga, 0, ',', '.') }})
+                                                                </span>
+                                                            @endif
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+
+                                        <input type="text" name="items[{{ $i }}][notes]"
+                                            class="form-control form-control-sm notes-input mb-2" maxlength="200"
+                                            placeholder="Catatan untuk menu ini (opsional)" value="{{ $r['notes'] }}">
+
+                                        <input type="hidden" name="items[{{ $i }}][product_id]"
+                                            value="{{ $p->id }}">
+
+                                        <input type="hidden" name="items[{{ $i }}][qty]" class="qty-input"
+                                            value="{{ $r['qty'] }}">
+
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <button type="button" class="remove-btn">
+                                                Hapus
+                                            </button>
+
+                                            <div class="qty-box">
+                                                <button type="button" class="btn-minus" aria-label="Kurangi">−</button>
+
+                                                <span class="qty-num">{{ $r['qty'] }}</span>
+
+                                                <button type="button" class="btn-plus" aria-label="Tambah">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                        </div>
+                    </div>
+
                 </div>
+                {{-- KOLOM KANAN --}}
+                <div class="col-lg-5">
+                    <div class="sticky-side">
 
-                {{-- RINGKASAN PEMBAYARAN --}}
-                <div class="checkout-box">
-                    <div class="section-title">Ringkasan Pembayaran</div>
+                        {{-- METODE PEMBAYARAN --}}
+                        <div class="checkout-box">
+                            <div class="section-title">Metode Pembayaran</div>
 
-                    <div class="summary-row">
-                        <span class="text-secondary">
-                            Subtotal (<span id="sumCount">0</span> item)
-                        </span>
+                            <div class="choice-option">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="metode_pembayaran"
+                                        id="cash" value="Cash"
+                                        {{ old('metode_pembayaran', 'Cash') == 'Cash' ? 'checked' : '' }} required>
 
-                        <span id="sumSubtotal">Rp 0</span>
+                                    <label class="form-check-label w-100" for="cash">
+                                        <strong>Cash</strong>
+                                        <div class="text-secondary small">
+                                            Bayar langsung kepada kasir.
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="choice-option mb-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="metode_pembayaran"
+                                        id="midtrans" value="Midtrans"
+                                        {{ old('metode_pembayaran') == 'Midtrans' ? 'checked' : '' }} required>
+
+                                    <label class="form-check-label w-100" for="midtrans">
+                                        <strong>Midtrans</strong>
+                                        <div class="text-secondary small">
+                                            Bayar online melalui halaman pembayaran Midtrans.
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <small class="text-secondary d-block mt-2">
+                                Pembayaran online akan diproses setelah integrasi Midtrans diaktifkan.
+                            </small>
+                        </div>
+
+                        {{-- RINGKASAN PEMBAYARAN --}}
+                        <div class="checkout-box">
+                            <div class="section-title">Ringkasan Pembayaran</div>
+
+                            <div class="summary-row">
+                                <span class="text-secondary">
+                                    Subtotal (<span id="sumCount">0</span> item)
+                                </span>
+
+                                <span id="sumSubtotal">Rp 0</span>
+                            </div>
+
+                            <div class="summary-total">
+                                <span>Total Pembayaran</span>
+                                <span class="price" id="sumTotal">Rp 0</span>
+                            </div>
+
+                            <button type="submit" class="btn btn-moza w-100 mt-3 py-2" id="btnSubmit">
+                                Check Out
+                            </button>
+
+                            <a href="{{ url('/') }}#menu" class="btn btn-outline-secondary w-100 mt-2">
+                                Kembali
+                            </a>
+                        </div>
+
                     </div>
-
-                    <div class="summary-total">
-                        <span>Total Pembayaran</span>
-                        <span class="price" id="sumTotal">Rp 0</span>
-                    </div>
-
-                    <button type="submit"
-                            class="btn btn-moza w-100 mt-3 py-2"
-                            id="btnSubmit">
-                        Check Out
-                    </button>
-
-                    <a href="{{ url('/') }}#menu"
-                       class="btn btn-outline-secondary w-100 mt-2">
-                        Kembali
-                    </a>
                 </div>
 
             </div>
-        </div>
-
-    </div>
-</form>
+        </form>
+        <script>
+            (function() {
 
-<script>
-(function () {
+                const CART_KEY = 'moza_cart';
+
+                const rowsBox = document.getElementById('cartRows');
+                const btnSubmit = document.getElementById('btnSubmit');
+                const form = document.getElementById('checkoutForm');
 
-    const CART_KEY = 'moza_cart';
+                function rupiah(n) {
+                    return 'Rp ' + n.toLocaleString('id-ID');
+                }
 
-    const rowsBox = document.getElementById('cartRows');
-    const btnSubmit = document.getElementById('btnSubmit');
-    const form = document.getElementById('checkoutForm');
+                function unitOf(row) {
+                    const sel = row.querySelector('.size-select');
 
-    function rupiah(n) {
-        return 'Rp ' + n.toLocaleString('id-ID');
-    }
+                    // Harga dasar: harga ukuran terpilih (kalau produk punya ukuran).
+                    let unit = parseInt(row.dataset.base);
 
-    function unitOf(row) {
-        const sel = row.querySelector('.size-select');
+                    if (sel && sel.selectedOptions[0]) {
+                        unit = parseInt(sel.selectedOptions[0].dataset.harga);
+                    }
 
-        // Harga dasar: harga ukuran terpilih (kalau produk punya ukuran).
-        let unit = parseInt(row.dataset.base);
+                    row.querySelectorAll('.topping-check:checked').forEach(c => {
+                        unit += parseInt(c.dataset.harga);
+                    });
 
-        if (sel && sel.selectedOptions[0]) {
-            unit = parseInt(sel.selectedOptions[0].dataset.harga);
-        }
+                    return unit;
+                }
 
-        row.querySelectorAll('.topping-check:checked').forEach(c => {
-            unit += parseInt(c.dataset.harga);
-        });
+                function syncStorage() {
+                    const lines = [];
+                    const full = [];
 
-        return unit;
-    }
+                    rowsBox.querySelectorAll('.cart-row').forEach(row => {
 
-    function syncStorage() {
-        const lines = [];
-        const full = [];
+                        const sel = row.querySelector('.size-select');
+                        const sizeId = sel ? sel.value : null;
+                        const sizeNama = sel && sel.selectedOptions[0] ?
+                            sel.selectedOptions[0].dataset.nama : null;
+                        const sizeHarga = sel && sel.selectedOptions[0] ?
+                            parseInt(sel.selectedOptions[0].dataset.harga) : null;
 
-        rowsBox.querySelectorAll('.cart-row').forEach(row => {
+                        const toppings = Array.from(
+                            row.querySelectorAll('.topping-check:checked')
+                        ).map(c => parseInt(c.value));
 
-            const sel = row.querySelector('.size-select');
-            const sizeId = sel ? sel.value : null;
-            const sizeNama = sel && sel.selectedOptions[0]
-                ? sel.selectedOptions[0].dataset.nama : null;
-            const sizeHarga = sel && sel.selectedOptions[0]
-                ? parseInt(sel.selectedOptions[0].dataset.harga) : null;
+                        const qty = parseInt(
+                            row.querySelector('.qty-input').value
+                        );
 
-            const toppings = Array.from(
-                row.querySelectorAll('.topping-check:checked')
-            ).map(c => parseInt(c.value));
+                        const notes = row.querySelector('.notes-input').value.trim();
 
-            const qty = parseInt(
-                row.querySelector('.qty-input').value
-            );
+                        lines.push({
+                            id: row.dataset.id,
+                            size_id: sizeId,
+                            toppings: toppings,
+                            qty: qty,
+                            notes: notes
+                        });
 
-            const notes = row.querySelector('.notes-input').value.trim();
+                        full.push({
+                            id: row.dataset.id,
+                            nama: row.dataset.nama,
+                            image: row.dataset.image,
+                            base: sizeHarga !== null ? sizeHarga : parseInt(row.dataset.base),
+                            sizeId: sizeId ? parseInt(sizeId) : null,
+                            size: sizeNama,
+                            toppings: toppings,
+                            notes: notes,
+                            qty: qty
+                        });
+                    });
 
-            lines.push({
-                id: row.dataset.id,
-                size_id: sizeId,
-                toppings: toppings,
-                qty: qty,
-                notes: notes
-            });
+                    try {
+                        const url = new URL(window.location.href);
 
-            full.push({
-                id: row.dataset.id,
-                nama: row.dataset.nama,
-                image: row.dataset.image,
-                base: sizeHarga !== null ? sizeHarga : parseInt(row.dataset.base),
-                sizeId: sizeId ? parseInt(sizeId) : null,
-                size: sizeNama,
-                toppings: toppings,
-                notes: notes,
-                qty: qty
-            });
-        });
+                        url.searchParams.set('cart', JSON.stringify(lines));
+                        url.searchParams.delete('product');
 
-        try {
-            const url = new URL(window.location.href);
+                        history.replaceState(null, '', url);
+                    } catch (e) {}
 
-            url.searchParams.set('cart', JSON.stringify(lines));
-            url.searchParams.delete('product');
+                    try {
+                        localStorage.setItem(CART_KEY, JSON.stringify(full));
+                    } catch (e) {}
+                }
 
-            history.replaceState(null, '', url);
-        } catch (e) {}
+                function recalc() {
+                    let total = 0;
+                    let count = 0;
 
-        try {
-            localStorage.setItem(CART_KEY, JSON.stringify(full));
-        } catch (e) {}
-    }
+                    rowsBox.querySelectorAll('.cart-row').forEach(row => {
 
-    function recalc() {
-        let total = 0;
-        let count = 0;
+                        const qty = parseInt(
+                            row.querySelector('.qty-input').value
+                        );
 
-        rowsBox.querySelectorAll('.cart-row').forEach(row => {
+                        const unit = unitOf(row);
 
-            const qty = parseInt(
-                row.querySelector('.qty-input').value
-            );
+                        row.querySelector('.qty-num').textContent = qty;
 
-            const unit = unitOf(row);
+                        row.querySelector('.line-total').textContent =
+                            rupiah(unit * qty);
 
-            row.querySelector('.qty-num').textContent = qty;
+                        row.querySelector('.unit-text').textContent =
+                            qty + ' x ' + rupiah(unit);
 
-            row.querySelector('.line-total').textContent =
-                rupiah(unit * qty);
+                        total += unit * qty;
+                        count += qty;
+                    });
 
-            row.querySelector('.unit-text').textContent =
-                qty + ' x ' + rupiah(unit);
+                    document.getElementById('sumCount').textContent = count;
 
-            total += unit * qty;
-            count += qty;
-        });
+                    document.getElementById('sumSubtotal').textContent =
+                        rupiah(total);
 
-        document.getElementById('sumCount').textContent = count;
+                    document.getElementById('sumTotal').textContent =
+                        rupiah(total);
 
-        document.getElementById('sumSubtotal').textContent =
-            rupiah(total);
+                    btnSubmit.disabled = count === 0;
 
-        document.getElementById('sumTotal').textContent =
-            rupiah(total);
+                    syncStorage();
+                }
 
-        btnSubmit.disabled = count === 0;
+                // Tombol jumlah dan hapus produk.
+                rowsBox.addEventListener('click', function(e) {
 
-        syncStorage();
-    }
+                    const row = e.target.closest('.cart-row');
 
-    // Tombol jumlah dan hapus produk.
-    rowsBox.addEventListener('click', function (e) {
+                    if (!row) return;
 
-        const row = e.target.closest('.cart-row');
+                    const qtyInput = row.querySelector('.qty-input');
 
-        if (!row) return;
+                    if (e.target.closest('.btn-plus')) {
 
-        const qtyInput = row.querySelector('.qty-input');
+                        const qty = parseInt(qtyInput.value);
 
-        if (e.target.closest('.btn-plus')) {
+                        if (qty < 99) {
+                            qtyInput.value = qty + 1;
+                        }
 
-            const qty = parseInt(qtyInput.value);
+                        recalc();
 
-            if (qty < 99) {
-                qtyInput.value = qty + 1;
-            }
+                    } else if (e.target.closest('.btn-minus')) {
 
-            recalc();
+                        qtyInput.value = Math.max(
+                            1,
+                            parseInt(qtyInput.value) - 1
+                        );
 
-        } else if (e.target.closest('.btn-minus')) {
+                        recalc();
 
-            qtyInput.value = Math.max(
-                1,
-                parseInt(qtyInput.value) - 1
-            );
+                    } else if (e.target.closest('.remove-btn')) {
 
-            recalc();
+                        row.remove();
 
-        } else if (e.target.closest('.remove-btn')) {
+                        if (rowsBox.querySelectorAll('.cart-row').length === 0) {
+                            try {
+                                localStorage.removeItem(CART_KEY);
+                            } catch (err) {}
 
-            row.remove();
+                            window.location.href = "{{ url('/') }}#menu";
+                            return;
+                        }
 
-            if (rowsBox.querySelectorAll('.cart-row').length === 0) {
-                try {
-                    localStorage.removeItem(CART_KEY);
-                } catch (err) {}
+                        recalc();
+                    }
+                });
 
-                window.location.href = "{{ url('/') }}#menu";
-                return;
-            }
+                // Perubahan ukuran / topping.
+                rowsBox.addEventListener('change', recalc);
 
-            recalc();
-        }
-    });
+                // Catatan produk.
+                rowsBox.addEventListener('input', function(e) {
+                    if (e.target.classList.contains('notes-input')) {
+                        syncStorage();
+                    }
+                });
 
-    // Perubahan ukuran / topping.
-    rowsBox.addEventListener('change', recalc);
+                // Sinkronisasi nama dan nomor telepon.
+                const namaDepan = document.getElementById('nama_depan');
+                const namaBelakang = document.getElementById('nama_belakang');
+                const namaHidden = document.getElementById('nama_penerima');
 
-    // Catatan produk.
-    rowsBox.addEventListener('input', function (e) {
-        if (e.target.classList.contains('notes-input')) {
-            syncStorage();
-        }
-    });
+                const telpInput = document.getElementById('telp_input');
+                const telpHidden = document.getElementById('no_telp');
 
-    // Sinkronisasi nama dan nomor telepon.
-    const namaDepan = document.getElementById('nama_depan');
-    const namaBelakang = document.getElementById('nama_belakang');
-    const namaHidden = document.getElementById('nama_penerima');
+                function syncKontak() {
 
-    const telpInput = document.getElementById('telp_input');
-    const telpHidden = document.getElementById('no_telp');
+                    namaHidden.value = (
+                        namaDepan.value.trim() + ' ' +
+                        namaBelakang.value.trim()
+                    ).trim();
 
-    function syncKontak() {
+                    const digits = telpInput.value
+                        .replace(/\D/g, '')
+                        .replace(/^(62|0)/, '');
 
-        namaHidden.value = (
-            namaDepan.value.trim() + ' ' +
-            namaBelakang.value.trim()
-        ).trim();
+                    telpHidden.value = digits ? '0' + digits : '';
+                }
 
-        const digits = telpInput.value
-            .replace(/\D/g, '')
-            .replace(/^(62|0)/, '');
+                [namaDepan, namaBelakang, telpInput].forEach(el => {
+                    el.addEventListener('input', syncKontak);
+                });
 
-        telpHidden.value = digits ? '0' + digits : '';
-    }
+                // Tampilkan alamat jika memilih Delivery.
+                const jenisRadios = document.querySelectorAll(
+                    'input[name="jenis_pesanan"]'
+                );
 
-    [namaDepan, namaBelakang, telpInput].forEach(el => {
-        el.addEventListener('input', syncKontak);
-    });
+                const alamatBox = document.getElementById('alamatBox');
+                const alamatInput = document.getElementById('alamat');
 
-    // Tampilkan alamat jika memilih Delivery.
-    const jenisRadios = document.querySelectorAll(
-        'input[name="jenis_pesanan"]'
-    );
+                function toggleAlamat() {
 
-    const alamatBox = document.getElementById('alamatBox');
-    const alamatInput = document.getElementById('alamat');
+                    const selected = document.querySelector(
+                        'input[name="jenis_pesanan"]:checked'
+                    );
 
-    function toggleAlamat() {
+                    const delivery = selected && selected.value === 'Delivery';
 
-        const selected = document.querySelector(
-            'input[name="jenis_pesanan"]:checked'
-        );
+                    alamatBox.style.display = delivery ? 'block' : 'none';
+                    alamatInput.required = !!delivery;
+                }
 
-        const delivery = selected && selected.value === 'Delivery';
+                jenisRadios.forEach(radio => {
+                    radio.addEventListener('change', toggleAlamat);
+                });
 
-        alamatBox.style.display = delivery ? 'block' : 'none';
-        alamatInput.required = !!delivery;
-    }
+                // Saat formulir dikirim.
+                form.addEventListener('submit', function(e) {
 
-    jenisRadios.forEach(radio => {
-        radio.addEventListener('change', toggleAlamat);
-    });
+                    syncKontak();
 
-    // Saat formulir dikirim.
-    form.addEventListener('submit', function (e) {
+                    if (!namaHidden.value.trim() || !telpHidden.value.trim()) {
+                        e.preventDefault();
+                        alert('Lengkapi nama dan nomor HP terlebih dahulu.');
+                        return;
+                    }
 
-        syncKontak();
+                    if (rowsBox.querySelectorAll('.cart-row').length === 0) {
+                        e.preventDefault();
+                        alert('Keranjang pesanan masih kosong.');
+                        return;
+                    }
 
-        if (!namaHidden.value.trim() || !telpHidden.value.trim()) {
-            e.preventDefault();
-            alert('Lengkapi nama dan nomor HP terlebih dahulu.');
-            return;
-        }
+                    // Jangan hapus localStorage sebelum server berhasil menerima
+                    // pesanan agar keranjang tidak hilang jika validasi gagal.
+                });
 
-        if (rowsBox.querySelectorAll('.cart-row').length === 0) {
-            e.preventDefault();
-            alert('Keranjang pesanan masih kosong.');
-            return;
-        }
+                syncKontak();
+                toggleAlamat();
+                recalc();
 
-        // Jangan hapus localStorage sebelum server berhasil menerima
-        // pesanan agar keranjang tidak hilang jika validasi gagal.
-    });
+            })();
+        </script>
 
-    syncKontak();
-    toggleAlamat();
-    recalc();
-
-})();
-</script>
-
-@endif
+    @endif
 
 @endsection
-

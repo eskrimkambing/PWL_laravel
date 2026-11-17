@@ -3,34 +3,34 @@
 @section('title', 'Pesanan Saya')
 
 @push('styles')
-<style>
-    .order-card {
-        background: var(--bs-card-bg);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 14px;
-    }
+    <style>
+        .order-card {
+            background: var(--bs-card-bg);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 14px;
+        }
 
-    .order-card:hover {
-        background: #2d211b;
-    }
+        .order-card:hover {
+            background: #2d211b;
+        }
 
-    .price {
-        color: var(--moza-accent);
-    }
+        .price {
+            color: var(--moza-accent);
+        }
 
-    .back-arrow {
-        font-size: 32px;
-        color: #7f1d1d;
-        text-decoration: none;
-        font-weight: bold;
-        transition: 0.2s;
-    }
+        .back-arrow {
+            font-size: var(--fs-3xl);
+            color: #7f1d1d;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+        }
 
-    .back-arrow:hover {
-        color: #b91c1c;
-        transform: translateX(-3px);
-    }
-</style>
+        .back-arrow:hover {
+            color: #b91c1c;
+            transform: translateX(-3px);
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -40,9 +40,7 @@
         <div class="d-flex align-items-center gap-3 mb-1">
 
             {{-- PANAH KEMBALI KE BERANDA --}}
-            <a href="{{ route('home') }}"
-                class="back-arrow"
-                title="Kembali ke Halaman Utama">
+            <a href="{{ route('home') }}" class="back-arrow" title="Kembali ke Halaman Utama">
                 ←
             </a>
 
@@ -69,7 +67,6 @@
     @endif
 
     @forelse ($pesanans as $pesanan)
-
         <div class="order-card p-4 mb-3">
 
             <div class="d-flex justify-content-between align-items-start mb-3">
@@ -140,8 +137,7 @@
                     </span>
                 </div>
 
-                <a href="{{ route('pesanans.show', $pesanan->id_pesanan) }}"
-                    class="btn btn-outline-light">
+                <a href="{{ route('pesanans.show', $pesanan->id_pesanan) }}" class="btn btn-outline-light">
                     Lihat Detail
                 </a>
             </div>
@@ -159,7 +155,6 @@
                 Kamu belum membuat pesanan.
             </p>
         </div>
-
     @endforelse
 
 @endsection

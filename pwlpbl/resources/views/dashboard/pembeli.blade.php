@@ -11,7 +11,7 @@
             color: var(--bs-secondary-color);
             padding: 9px 20px;
             border-radius: 12px;
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
         .category-btn:hover {
@@ -32,12 +32,12 @@
         }
 
         .product-description {
-            font-size: 13px;
+            font-size: var(--fs-sm);
             min-height: 38px;
         }
 
         .price {
-            font-size: 18px;
+            font-size: var(--fs-lg);
             font-weight: bold;
             color: var(--moza-accent);
         }

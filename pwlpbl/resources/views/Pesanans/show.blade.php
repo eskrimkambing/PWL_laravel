@@ -3,63 +3,63 @@
 @section('title', 'Detail Pesanan')
 
 @push('styles')
-<style>
-    .content-card {
-        background: var(--bs-card-bg);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 14px;
-    }
+    <style>
+        .content-card {
+            background: var(--bs-card-bg);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 14px;
+        }
 
-    .info-box {
-        background: var(--bs-body-bg);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 10px;
-        padding: 14px;
-        height: 100%;
-    }
+        .info-box {
+            background: var(--bs-body-bg);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 10px;
+            padding: 14px;
+            height: 100%;
+        }
 
-    .info-label {
-        color: var(--bs-secondary-color);
-        font-size: 13px;
-        margin-bottom: 4px;
-    }
+        .info-label {
+            color: var(--bs-secondary-color);
+            font-size: var(--fs-sm);
+            margin-bottom: 4px;
+        }
 
-    .total-box {
-        border-top: 1px solid var(--bs-border-color);
-    }
+        .total-box {
+            border-top: 1px solid var(--bs-border-color);
+        }
 
-    .price {
-        color: var(--moza-accent);
-    }
+        .price {
+            color: var(--moza-accent);
+        }
 
-    .table {
-        --bs-table-bg: transparent;
-        --bs-table-color: #f3e9e1;
-        --bs-table-border-color: var(--bs-border-color);
-    }
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: #f3e9e1;
+            --bs-table-border-color: var(--bs-border-color);
+        }
 
-    .order-thumb {
-        width: 56px;
-        height: 56px;
-        object-fit: cover;
-        border-radius: 10px;
-        flex-shrink: 0;
-        border: 1px solid var(--bs-border-color);
-    }
+        .order-thumb {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+            border: 1px solid var(--bs-border-color);
+        }
 
-    .back-arrow {
-        font-size: 32px;
-        color: #7f1d1d;
-        text-decoration: none;
-        font-weight: bold;
-        transition: 0.2s;
-    }
+        .back-arrow {
+            font-size: var(--fs-3xl);
+            color: #7f1d1d;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+        }
 
-    .back-arrow:hover {
-        color: #b91c1c;
-        transform: translateX(-3px);
-    }
-</style>
+        .back-arrow:hover {
+            color: #b91c1c;
+            transform: translateX(-3px);
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -88,9 +88,7 @@
     <div class="mb-4">
         <div class="d-flex align-items-center gap-3 mb-1">
 
-            <a href="{{ route('pesanans.index') }}"
-                class="back-arrow"
-                title="Kembali ke Pesanan">
+            <a href="{{ route('pesanans.index') }}" class="back-arrow" title="Kembali ke Pesanan">
                 ←
             </a>
 
@@ -263,18 +261,19 @@
                                 <div class="d-flex align-items-center gap-3">
 
                                     {{-- GAMBAR PRODUK --}}
-                                    <img src="{{ $srcFoto }}"
-                                        alt="{{ $namaProduk ?? 'Produk' }}"
-                                        class="order-thumb"
+                                    <img src="{{ $srcFoto }}" alt="{{ $namaProduk ?? 'Produk' }}" class="order-thumb"
                                         onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
 
                                     <div>
                                         <span>{{ $namaProduk ?? 'Produk tidak ditemukan' }}</span>
                                         @if ($detail->ukuran || !empty($detail->toppings))
                                             <small class="d-block text-secondary">
-                                                @if ($detail->ukuran)Ukuran: {{ $detail->ukuran }}@endif
+                                                @if ($detail->ukuran)
+                                                    Ukuran: {{ $detail->ukuran }}
+                                                @endif
                                                 @if (!empty($detail->toppings))
-                                                    <span class="d-block">Topping: {{ collect($detail->toppings)->pluck('nama')->implode(', ') }}</span>
+                                                    <span class="d-block">Topping:
+                                                        {{ collect($detail->toppings)->pluck('nama')->implode(', ') }}</span>
                                                 @endif
                                             </small>
                                         @endif
@@ -317,7 +316,6 @@
 
     {{-- ================= PEMBAYARAN ================= --}}
     @if ($pesanan->metode_pembayaran === 'Midtrans' && $pesanan->status_pembayaran !== 'Dibayar')
-
         <div class="content-card p-4 mb-4">
             <h5 class="mb-1">Pembayaran</h5>
             <p class="text-secondary small mb-3">
@@ -331,55 +329,46 @@
                 </button>
             </form>
         </div>
-
     @endif
 
     {{-- ================= INFORMASI CASH ================= --}}
     @if ($pesanan->metode_pembayaran === 'Cash')
-
         <div class="content-card p-4 mb-4">
             <h5 class="mb-1">Pembayaran Cash</h5>
             <p class="text-secondary mb-0">
                 Silakan lakukan pembayaran langsung kepada kasir.
             </p>
         </div>
-
     @endif
 
 @endsection
 
 {{-- MIDTRANS SNAP --}}
-@if (
-    session('snap_token')
-    && $pesanan->metode_pembayaran === 'Midtrans'
-    && $pesanan->status_pembayaran !== 'Dibayar'
-)
+@if (session('snap_token') && $pesanan->metode_pembayaran === 'Midtrans' && $pesanan->status_pembayaran !== 'Dibayar')
     @push('scripts')
-        <script
-            src="https://app.sandbox.midtrans.com/snap/snap.js"
-            data-client-key="{{ config('services.midtrans.client_key') }}">
-        </script>
+        <script src="https://app.sandbox.midtrans.com/snap/snap.js"
+            data-client-key="{{ config('services.midtrans.client_key') }}"></script>
 
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
 
                 const snapToken = @json(session('snap_token'));
 
                 if (snapToken) {
                     window.snap.pay(snapToken, {
-                        onSuccess: function () {
+                        onSuccess: function() {
                             window.location.reload();
                         },
 
-                        onPending: function () {
+                        onPending: function() {
                             window.location.reload();
                         },
 
-                        onError: function () {
+                        onError: function() {
                             alert('Pembayaran gagal.');
                         },
 
-                        onClose: function () {
+                        onClose: function() {
                             console.log('Halaman pembayaran ditutup.');
                         }
                     });

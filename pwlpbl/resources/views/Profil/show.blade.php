@@ -3,50 +3,50 @@
 @section('title', 'Profil')
 
 @push('styles')
-<style>
-    .profile-avatar {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        background: var(--moza-accent);
-        color: var(--moza-accent-text);
-        font-size: 34px;
-        font-weight: bold;
-        flex-shrink: 0;
-    }
+    <style>
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: var(--moza-accent);
+            color: var(--moza-accent-text);
+            font-size: var(--fs-3xl);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
 
-    .profile-avatar-img {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        object-fit: cover;
-        flex-shrink: 0;
-        border: 2px solid var(--moza-accent);
-    }
+        .profile-avatar-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--moza-accent);
+        }
 
-    .info-box {
-        background: var(--bs-tertiary-bg);
-        border-radius: 12px;
-        padding: 16px 18px;
-    }
+        .info-box {
+            background: var(--bs-tertiary-bg);
+            border-radius: 12px;
+            padding: 16px 18px;
+        }
 
-    .btn-outline-moza {
-        border: 1px solid var(--moza-accent);
-        color: var(--moza-accent);
-        font-weight: 600;
-    }
+        .btn-outline-moza {
+            border: 1px solid var(--moza-accent);
+            color: var(--moza-accent);
+            font-weight: 600;
+        }
 
-    .btn-outline-moza:hover {
-        background: var(--moza-accent);
-        color: var(--moza-accent-text);
-    }
+        .btn-outline-moza:hover {
+            background: var(--moza-accent);
+            color: var(--moza-accent-text);
+        }
 
-    .danger-zone {
-        border: 1px solid rgba(220, 53, 69, 0.4);
-        background: rgba(220, 53, 69, 0.06);
-        border-radius: 14px;
-    }
-</style>
+        .danger-zone {
+            border: 1px solid rgba(220, 53, 69, 0.4);
+            background: rgba(220, 53, 69, 0.06);
+            border-radius: 14px;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -74,7 +74,7 @@
                     <img src="{{ $pembeli->foto }}" alt="Foto profil" class="profile-avatar-img">
                 @else
                     <div class="profile-avatar d-flex align-items-center justify-content-center">
-                        {{ strtoupper(substr($pembeli->nama ?? $pembeli->email ?? 'P', 0, 1)) }}
+                        {{ strtoupper(substr($pembeli->nama ?? ($pembeli->email ?? 'P'), 0, 1)) }}
                     </div>
                 @endif
 
@@ -141,8 +141,7 @@
                 </p>
             </div>
 
-            <button type="button" class="btn btn-outline-danger"
-                    data-bs-toggle="modal" data-bs-target="#modalHapusAkun">
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalHapusAkun">
                 🗑️ Hapus Akun Saya
             </button>
         </div>
@@ -171,8 +170,8 @@
                         <label class="form-label small" for="konfirmasiHapus">
                             Ketik <strong>HAPUS</strong> untuk melanjutkan
                         </label>
-                        <input type="text" id="konfirmasiHapus" class="form-control"
-                               autocomplete="off" placeholder="HAPUS">
+                        <input type="text" id="konfirmasiHapus" class="form-control" autocomplete="off"
+                            placeholder="HAPUS">
                     </div>
 
                     <div class="modal-footer">
@@ -191,10 +190,10 @@
 @endsection
 
 @push('scripts')
-<script>
-    // Tombol hapus baru aktif setelah pengguna mengetik "HAPUS"
-    document.getElementById('konfirmasiHapus').addEventListener('input', function () {
-        document.getElementById('tombolHapus').disabled = this.value.trim() !== 'HAPUS';
-    });
-</script>
+    <script>
+        // Tombol hapus baru aktif setelah pengguna mengetik "HAPUS"
+        document.getElementById('konfirmasiHapus').addEventListener('input', function() {
+            document.getElementById('tombolHapus').disabled = this.value.trim() !== 'HAPUS';
+        });
+    </script>
 @endpush

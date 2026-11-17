@@ -9,8 +9,11 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
 
+    <link rel="stylesheet" href="{{ asset('css/typography.css') }}">
     <style>
         :root {
             --cream: #FDF8EE;
@@ -34,7 +37,7 @@
         }
 
         body {
-            font-family: 'Raleway', system-ui, sans-serif;
+            font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
             background: var(--cream);
             color: var(--ink);
             min-height: 100vh;
@@ -63,12 +66,12 @@
             gap: 10px;
             text-decoration: none;
             color: var(--brown);
-            font-size: 23px;
+            font-size: var(--fs-2xl);
             font-weight: bold;
         }
 
         .logo span {
-            font-size: 35px;
+            font-size: var(--fs-3xl);
         }
 
         .nav-menu {
@@ -80,7 +83,7 @@
         .nav-menu a {
             text-decoration: none;
             color: var(--brown);
-            font-size: 14px;
+            font-size: var(--fs-sm);
             font-weight: bold;
         }
 
@@ -98,7 +101,7 @@
             color: var(--brown);
             text-decoration: none;
             font-weight: bold;
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
         .login-link:hover {
@@ -144,7 +147,7 @@
             color: var(--brown);
             padding: 9px 16px;
             border-radius: 30px;
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: bold;
             margin-bottom: 18px;
         }
@@ -162,7 +165,7 @@
         .auth-card h2 {
             text-align: center;
             color: var(--brown);
-            font-size: 28px;
+            font-size: var(--fs-2xl);
             font-weight: 800;
             margin-bottom: 8px;
         }
@@ -170,7 +173,7 @@
         .auth-desc {
             text-align: center;
             color: #7A6A5F;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             line-height: 1.7;
             margin-bottom: 26px;
         }
@@ -178,7 +181,7 @@
         .auth-card label {
             display: block;
             margin-bottom: 8px;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             font-weight: bold;
             color: var(--brown);
         }
@@ -189,7 +192,7 @@
             border: 1px solid var(--border);
             border-radius: 9px;
             font-family: inherit;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             margin-bottom: 18px;
             outline: none;
             background: white;
@@ -223,7 +226,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: var(--fs-lg);
         }
 
         .toggle-password:hover {
@@ -244,7 +247,7 @@
             border: none;
             border-radius: 9px;
             font-family: inherit;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             font-weight: bold;
             cursor: pointer;
             transition: .2s;
@@ -257,7 +260,7 @@
         .auth-bottom {
             text-align: center;
             margin-top: 22px;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             color: #7A6A5F;
         }
 
@@ -277,7 +280,7 @@
             padding: 12px 14px;
             border-radius: 9px;
             margin-bottom: 18px;
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
         .error ul {
@@ -304,17 +307,17 @@
 
         .footer-brand h3 {
             color: var(--yellow);
-            font-size: 22px;
+            font-size: var(--fs-xl);
             margin-bottom: 7px;
         }
 
         .footer-brand p {
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
         .footer-contact h3 {
             color: var(--yellow);
-            font-size: 17px;
+            font-size: var(--fs-base);
             margin-bottom: 12px;
         }
 
@@ -331,7 +334,7 @@
             gap: 8px;
             color: white;
             text-decoration: none;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             transition: .2s;
         }
 
@@ -352,7 +355,7 @@
             padding-top: 13px;
             border-top: 1px solid rgba(255, 255, 255, .2);
             text-align: center;
-            font-size: 13px;
+            font-size: var(--fs-sm);
         }
 
         /* RESPONSIVE */
@@ -380,7 +383,7 @@
             }
 
             .nav-menu a {
-                font-size: 11px;
+                font-size: var(--fs-xs);
             }
 
             .nav-actions {
@@ -388,12 +391,12 @@
             }
 
             .login-link {
-                font-size: 12px;
+                font-size: var(--fs-xs);
             }
 
             .order-btn {
                 padding: 10px 13px;
-                font-size: 12px;
+                font-size: var(--fs-xs);
             }
 
             .auth-main {
@@ -408,6 +411,21 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 18px;
+            }
+
+            /* ===== TIPOGRAFI ===== */
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            .logo,
+            .hero-label,
+            .order-btn,
+            .submit-btn,
+            .footer-brand h3 {
+                font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
             }
         }
     </style>

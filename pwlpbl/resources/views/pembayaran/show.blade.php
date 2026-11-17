@@ -3,63 +3,63 @@
 @section('title', 'Detail Pembayaran')
 
 @push('styles')
-<style>
-    .info-box {
-        background: var(--bs-card-bg);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 12px;
-    }
+    <style>
+        .info-box {
+            background: var(--bs-card-bg);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 12px;
+        }
 
-    .info-item {
-        padding: 16px;
-        border-bottom: 1px solid var(--bs-border-color);
-    }
+        .info-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--bs-border-color);
+        }
 
-    .info-item:last-child {
-        border-bottom: none;
-    }
+        .info-item:last-child {
+            border-bottom: none;
+        }
 
-    .info-label {
-        color: var(--bs-secondary-color);
-        font-size: 14px;
-        margin-bottom: 4px;
-    }
+        .info-label {
+            color: var(--bs-secondary-color);
+            font-size: var(--fs-sm);
+            margin-bottom: 4px;
+        }
 
-    .info-value {
-        font-size: 16px;
-        font-weight: 500;
-    }
+        .info-value {
+            font-size: var(--fs-base);
+            font-weight: 500;
+        }
 
-    .section-title {
-        font-size: 20px;
-        font-weight: 600;
-    }
+        .section-title {
+            font-size: var(--fs-xl);
+            font-weight: 600;
+        }
 
-    .table {
-        --bs-table-bg: transparent;
-        --bs-table-color: #f3e9e1;
-    }
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: #f3e9e1;
+        }
 
-    .table th,
-    .table td {
-        border-color: var(--bs-border-color);
-        padding: 12px 10px;
-    }
+        .table th,
+        .table td {
+            border-color: var(--bs-border-color);
+            padding: 12px 10px;
+        }
 
-    .table thead th {
-        font-weight: 600;
-    }
+        .table thead th {
+            font-weight: 600;
+        }
 
-    .token-box {
-        background: var(--bs-body-bg);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 8px;
-        padding: 10px 12px;
-        word-break: break-all;
-        font-size: 13px;
-        color: var(--bs-secondary-color);
-    }
-</style>
+        .token-box {
+            background: var(--bs-body-bg);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 8px;
+            padding: 10px 12px;
+            word-break: break-all;
+            font-size: var(--fs-sm);
+            color: var(--bs-secondary-color);
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -96,9 +96,7 @@
             <div class="col-md-6 info-item">
                 <div class="info-label">Pembeli</div>
                 <div class="info-value">
-                    {{ $pembayaran->pembeli->nama
-                        ?? $pembayaran->pembeli->email
-                        ?? '-' }}
+                    {{ $pembayaran->pembeli->nama ?? ($pembayaran->pembeli->email ?? '-') }}
                 </div>
             </div>
 
@@ -185,9 +183,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    {{ $detail->product->name
-                                        ?? $detail->product->nama_produk
-                                        ?? '-' }}
+                                    {{ $detail->product->name ?? ($detail->product->nama_produk ?? '-') }}
                                 </td>
                                 <td>Rp {{ number_format($detail->harga, 0, ',', '.') }}</td>
                                 <td>{{ $detail->jumlah }}</td>
@@ -221,14 +217,12 @@
 
     {{-- ================= SNAP TOKEN ================= --}}
     @if ($pembayaran->snap_token)
-
         <div class="info-box mt-4">
             <div class="p-3">
                 <div class="info-label">Snap Token Midtrans</div>
                 <div class="token-box mt-2">{{ $pembayaran->snap_token }}</div>
             </div>
         </div>
-
     @endif
 
 @endsection

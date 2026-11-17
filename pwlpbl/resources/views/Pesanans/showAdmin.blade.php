@@ -3,50 +3,50 @@
 @section('title', 'Detail Pesanan')
 
 @push('styles')
-<style>
-    .content-card {
-        background: var(--bs-card-bg);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 14px;
-    }
+    <style>
+        .content-card {
+            background: var(--bs-card-bg);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 14px;
+        }
 
-    .info-box {
-        background: var(--bs-body-bg);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 10px;
-        padding: 14px;
-        height: 100%;
-    }
+        .info-box {
+            background: var(--bs-body-bg);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 10px;
+            padding: 14px;
+            height: 100%;
+        }
 
-    .info-label {
-        color: var(--bs-secondary-color);
-        font-size: 13px;
-        margin-bottom: 4px;
-    }
+        .info-label {
+            color: var(--bs-secondary-color);
+            font-size: var(--fs-sm);
+            margin-bottom: 4px;
+        }
 
-    .total-box {
-        border-top: 1px solid var(--bs-border-color);
-    }
+        .total-box {
+            border-top: 1px solid var(--bs-border-color);
+        }
 
-    .price {
-        color: var(--moza-accent);
-    }
+        .price {
+            color: var(--moza-accent);
+        }
 
-    .table {
-        --bs-table-bg: transparent;
-        --bs-table-color: #f3e9e1;
-        --bs-table-border-color: var(--bs-border-color);
-    }
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: #f3e9e1;
+            --bs-table-border-color: var(--bs-border-color);
+        }
 
-    .order-thumb {
-        width: 56px;
-        height: 56px;
-        object-fit: cover;
-        border-radius: 10px;
-        flex-shrink: 0;
-        border: 1px solid var(--bs-border-color);
-    }
-</style>
+        .order-thumb {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+            border: 1px solid var(--bs-border-color);
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -267,18 +267,19 @@
                                 <div class="d-flex align-items-center gap-3">
 
                                     {{-- GAMBAR PRODUK --}}
-                                    <img src="{{ $srcFoto }}"
-                                         alt="{{ $namaProduk ?? 'Produk' }}"
-                                         class="order-thumb"
-                                         onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
+                                    <img src="{{ $srcFoto }}" alt="{{ $namaProduk ?? 'Produk' }}" class="order-thumb"
+                                        onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
 
                                     <div>
                                         <span>{{ $namaProduk ?? 'Produk tidak ditemukan' }}</span>
                                         @if ($detail->ukuran || !empty($detail->toppings))
                                             <small class="d-block text-secondary">
-                                                @if ($detail->ukuran)Ukuran: {{ $detail->ukuran }}@endif
+                                                @if ($detail->ukuran)
+                                                    Ukuran: {{ $detail->ukuran }}
+                                                @endif
                                                 @if (!empty($detail->toppings))
-                                                    <span class="d-block">Topping: {{ collect($detail->toppings)->pluck('nama')->implode(', ') }}</span>
+                                                    <span class="d-block">Topping:
+                                                        {{ collect($detail->toppings)->pluck('nama')->implode(', ') }}</span>
                                                 @endif
                                             </small>
                                         @endif

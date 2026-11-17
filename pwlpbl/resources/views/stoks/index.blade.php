@@ -3,7 +3,6 @@
 @section('title', 'Kelola Stok')
 
 @push('styles')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>
         .stat-card .stat-icon {
             width: 38px;
@@ -18,85 +17,6 @@
             font-size: 1.5rem;
             font-weight: 700;
             line-height: 1.1;
-        }
-
-        .stok-table thead th {
-            background: #F9ECE8;
-            color: var(--moza-maroon);
-            font-weight: 700;
-            text-align: center;
-            vertical-align: middle;
-            padding: .85rem .75rem;
-            border-bottom: 0;
-        }
-
-        .stok-table tbody td {
-            vertical-align: middle;
-            padding: .75rem;
-            border-color: rgba(139, 26, 16, 0.08);
-        }
-
-        .stok-table tbody td+td {
-            border-left: 1px solid rgba(139, 26, 16, 0.08);
-        }
-
-        .stok-table .col-aksi {
-            width: 1%;
-            white-space: nowrap;
-            text-align: center;
-        }
-
-        .btn-aksi {
-            font-size: 14px;
-            font-weight: 600;
-            border: 0;
-            border-radius: 8px;
-            padding: .35rem .85rem;
-        }
-
-        /* Tombol Edit dan Hapus hanya berisi ikon */
-        .btn-aksi-icon {
-            padding: .4rem .65rem;
-            line-height: 1;
-        }
-
-        .btn-aksi-icon i {
-            margin: 0;
-            font-size: 15px;
-        }
-
-        .btn-aksi-stok {
-            background: var(--moza-orange);
-            color: #fff;
-        }
-
-        .btn-aksi-stok:hover {
-            background: var(--moza-maroon);
-            color: #fff;
-        }
-
-        .btn-aksi-edit {
-            background: #F9ECE8;
-            color: var(--moza-maroon);
-        }
-
-        .btn-aksi-edit:hover {
-            background: var(--moza-cream);
-            color: var(--moza-maroon);
-        }
-
-        .btn-aksi-edit i {
-            color: var(--moza-red);
-        }
-
-        .btn-aksi-hapus {
-            background: #E5575A;
-            color: #fff;
-        }
-
-        .btn-aksi-hapus:hover {
-            background: var(--moza-red);
-            color: #fff;
         }
 
         .tanggal-wrap {
@@ -148,7 +68,7 @@
         <div class="row g-3 mb-3">
 
             <div class="col-md-6">
-                <div class="card stat-card h-100">
+                <div class="card stat-card shadow-sm border-0 h-100">
                     <div class="card-body d-flex align-items-center gap-3 py-3">
                         <div class="stat-icon d-flex align-items-center justify-content-center">🍕</div>
                         <div>
@@ -160,7 +80,7 @@
             </div>
 
             <div class="col-md-6">
-                <div class="card stat-card h-100">
+                <div class="card stat-card shadow-sm border-0 h-100">
                     <div class="card-body d-flex align-items-center gap-3 py-3">
                         <div class="stat-icon d-flex align-items-center justify-content-center">📦</div>
                         <div>
@@ -175,11 +95,20 @@
 
 
         {{-- ===== DAFTAR PRODUK ===== --}}
-        <div class="card overflow-hidden">
+        <div class="card shadow-sm border-0">
 
+            {{-- Header kartu --}}
             <div class="card-header bg-transparent d-flex justify-content-between align-items-center flex-wrap gap-2 py-3">
 
-                <h5 class="fw-bold mb-0">Daftar Produk</h5>
+                <div>
+                    <h5 class="mb-1 fw-bold">
+                        Daftar Produk
+                    </h5>
+
+                    <small class="text-muted">
+                        Tambah stok harian untuk setiap produk Pizza Moza
+                    </small>
+                </div>
 
                 <div class="d-flex align-items-center gap-2">
                     <i class="bi bi-calendar-event"></i>
@@ -190,78 +119,98 @@
 
             </div>
 
-            <div class="table-responsive">
 
-                <table class="table stok-table mb-0">
+            {{-- Tabel Stok --}}
+            <div class="card-body p-0">
 
-                    <thead>
-                        <tr>
-                            <th style="width: 7%">No</th>
-                            <th>Nama Produk</th>
-                            <th>Kategori</th>
-                            <th style="width: 14%">Stok</th>
-                            <th colspan="3">Aksi</th>
-                        </tr>
-                    </thead>
+                <div class="table-responsive">
 
-                    <tbody>
+                    <table class="table table-hover align-middle mb-0">
 
-                        @forelse ($products as $product)
+                        <thead class="table-dark">
                             <tr>
-
-                                <td class="text-center">{{ $loop->iteration }}</td>
-
-                                <td class="fs-6">{{ $product->nama }}</td>
-
-                                <td>{{ $product->kategori }}</td>
-
-                                <td class="text-center fs-6">
-                                    {{ max(0, (int) $product->total_stok) }}
-                                </td>
-
-                                {{-- + Stok --}}
-                                <td class="col-aksi">
-                                    <button type="button" class="btn btn-aksi btn-aksi-stok btn-tambah-stok"
-                                        data-id="{{ $product->id }}" data-nama="{{ $product->nama }}">
-                                        <i class="bi bi-plus-lg me-1"></i> Stok
-                                    </button>
-                                </td>
-
-                                {{-- Edit (ikon saja) --}}
-                                <td class="col-aksi">
-                                    <a href="{{ route('products.edit', $product->id) }}"
-                                        class="btn btn-aksi btn-aksi-edit btn-aksi-icon" title="Edit"
-                                        aria-label="Edit {{ $product->nama }}">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </a>
-                                </td>
-
-                                {{-- Hapus (ikon saja) --}}
-                                <td class="col-aksi">
-                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST"
-                                        class="d-inline"
-                                        onsubmit="return confirm('Hapus produk {{ addslashes($product->nama) }}? Seluruh data stoknya juga akan terhapus.')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-aksi btn-aksi-hapus btn-aksi-icon"
-                                            title="Hapus" aria-label="Hapus {{ $product->nama }}">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-                                    </form>
-                                </td>
-
+                                <th class="text-center" style="width: 5%">No</th>
+                                <th>Nama Produk</th>
+                                <th>Kategori</th>
+                                <th class="text-center" style="width: 14%">Stok</th>
+                                <th class="text-center" style="width: 22%">Aksi</th>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5 text-secondary">
-                                    Belum ada produk.
-                                </td>
-                            </tr>
-                        @endforelse
+                        </thead>
 
-                    </tbody>
+                        <tbody>
 
-                </table>
+                            @forelse ($products as $product)
+                                <tr>
+
+                                    {{-- Nomor --}}
+                                    <td class="text-center fw-bold">
+                                        {{ $loop->iteration }}
+                                    </td>
+
+                                    {{-- Nama Produk --}}
+                                    <td>
+                                        <span class="fw-semibold">
+                                            {{ $product->nama }}
+                                        </span>
+                                    </td>
+
+                                    {{-- Kategori --}}
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            {{ $product->kategori }}
+                                        </span>
+                                    </td>
+
+                                    {{-- Stok --}}
+                                    <td class="text-center fw-bold">
+                                        {{ max(0, (int) $product->total_stok) }}
+                                    </td>
+
+                                    {{-- Aksi --}}
+                                    <td class="text-center">
+                                        <div class="aksi-group">
+
+                                            {{-- + Stok --}}
+                                            <button type="button" class="btn btn-aksi btn-aksi-stok btn-tambah-stok"
+                                                data-id="{{ $product->id }}" data-nama="{{ $product->nama }}">
+                                                <i class="bi bi-plus-lg me-1"></i> Stok
+                                            </button>
+
+                                            {{-- Edit --}}
+                                            <a href="{{ route('products.edit', $product->id) }}"
+                                                class="btn btn-aksi btn-aksi-edit btn-aksi-icon" title="Edit"
+                                                aria-label="Edit {{ $product->nama }}">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+
+                                            {{-- Hapus --}}
+                                            <form action="{{ route('products.destroy', $product->id) }}" method="POST"
+                                                onsubmit="return confirm('Hapus produk {{ addslashes($product->nama) }}? Seluruh data stoknya juga akan terhapus.')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-aksi btn-aksi-hapus btn-aksi-icon"
+                                                    title="Hapus" aria-label="Hapus {{ $product->nama }}">
+                                                    <i class="bi bi-trash3-fill"></i>
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        Belum ada produk.
+                                    </td>
+                                </tr>
+                            @endforelse
+
+                        </tbody>
+
+                    </table>
+
+                </div>
 
             </div>
 

@@ -8,10 +8,14 @@
     <title>@yield('title', 'Dashboard Admin') - Pizza Moza</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('css/typography.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <style>
         /* ===== PALET WARNA ===== */
@@ -28,7 +32,8 @@
 
             --moza-ink: #2B1B14;
 
-            --bs-body-font-family: 'Raleway', system-ui, sans-serif;
+            --bs-body-font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            --font-heading: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
             --moza-accent: var(--moza-orange);
             --moza-accent-text: #fff;
 
@@ -88,7 +93,7 @@
             margin-bottom: 3px;
             border-radius: 10px;
             color: #8B1A10 !important;
-            font-size: 13.5px;
+            font-size: var(--fs-sm);
             transition: all .2s ease;
         }
 
@@ -181,7 +186,7 @@
         .avatar {
             width: 34px;
             height: 34px;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             border-radius: 50%;
             background: var(--moza-orange);
             color: #fff;
@@ -322,7 +327,7 @@
                 z-index: 1030;
             }
 
-            .sidebar + .flex-grow-1 {
+            .sidebar+.flex-grow-1 {
                 margin-left: 220px;
                 min-width: 0;
             }
@@ -346,29 +351,62 @@
 
         /* ===== MODE KOMPAK (tampilan lebih kecil & rapi) ===== */
 
-        html {
-            font-size: 14px;
+        body {
+            font-size: var(--fs-sm);
         }
 
-        h1, .h1 { font-size: 1.6rem; }
-        h2, .h2 { font-size: 1.35rem; }
-        h3, .h3 { font-size: 1.15rem; }
-        h4, .h4 { font-size: 1.05rem; }
-        h5, .h5 { font-size: 1rem; }
+        h1,
+        .h1 {
+            font-size: var(--fs-2xl);
+        }
 
-        .sidebar .fw-bold { font-size: 14px; }
-        .sidebar small { font-size: 10px !important; }
+        h2,
+        .h2 {
+            font-size: var(--fs-xl);
+        }
 
-        .card { border-radius: 12px; }
-        .card-body { padding: 1rem; }
-        .card-header, .card-footer { padding: .6rem 1rem; }
+        h3,
+        .h3 {
+            font-size: var(--fs-lg);
+        }
 
-        .table > :not(caption) > * > * {
+        h4,
+        .h4 {
+            font-size: var(--fs-base);
+        }
+
+        h5,
+        .h5 {
+            font-size: var(--fs-base);
+        }
+
+        .sidebar .fw-bold {
+            font-size: var(--fs-sm);
+        }
+
+        .sidebar small {
+            font-size: var(--fs-xs) !important;
+        }
+
+        .card {
+            border-radius: 12px;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .card-header,
+        .card-footer {
+            padding: .6rem 1rem;
+        }
+
+        .table> :not(caption)>*>* {
             padding: .5rem .65rem;
         }
 
         .table thead th {
-            font-size: .8rem;
+            font-size: var(--fs-sm);
             text-transform: uppercase;
             letter-spacing: .3px;
         }
@@ -376,41 +414,169 @@
         .btn {
             --bs-btn-padding-y: .3rem;
             --bs-btn-padding-x: .75rem;
-            --bs-btn-font-size: .85rem;
+            --bs-btn-font-size: var(--fs-sm);
             --bs-btn-border-radius: 8px;
         }
 
         .btn-sm {
             --bs-btn-padding-y: .2rem;
             --bs-btn-padding-x: .55rem;
-            --bs-btn-font-size: .78rem;
+            --bs-btn-font-size: var(--fs-xs);
         }
 
         .form-control,
         .form-select {
             padding: .4rem .7rem;
-            font-size: .875rem;
+            font-size: var(--fs-sm);
             border-radius: 8px;
         }
 
         .form-label {
             margin-bottom: .25rem;
-            font-size: .85rem;
+            font-size: var(--fs-sm);
         }
 
-        .badge { font-size: .72rem; }
-        .alert { padding: .6rem .9rem; font-size: .875rem; }
-        .pagination { --bs-pagination-padding-x: .6rem; --bs-pagination-padding-y: .25rem; --bs-pagination-font-size: .82rem; }
+        .badge {
+            font-size: var(--fs-xs);
+        }
+
+        .alert {
+            padding: .6rem .9rem;
+            font-size: var(--fs-sm);
+        }
+
+        .pagination {
+            --bs-pagination-padding-x: .6rem;
+            --bs-pagination-padding-y: .25rem;
+            --bs-pagination-font-size: var(--fs-sm);
+        }
 
         /* Rapatkan jarak antar elemen */
-        main .mb-5 { margin-bottom: 1.75rem !important; }
-        main .mb-4 { margin-bottom: 1.1rem !important; }
-        main .py-5 { padding-top: 2rem !important; padding-bottom: 2rem !important; }
-        main .p-5 { padding: 2rem !important; }
-        main .p-4 { padding: 1.1rem !important; }
-        main .fs-1 { font-size: 1.8rem !important; }
-        main .fs-2 { font-size: 1.5rem !important; }
+        main .mb-5 {
+            margin-bottom: 1.75rem !important;
+        }
 
+        main .mb-4 {
+            margin-bottom: 1.1rem !important;
+        }
+
+        main .py-5 {
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+        }
+
+        main .p-5 {
+            padding: 2rem !important;
+        }
+
+        main .p-4 {
+            padding: 1.1rem !important;
+        }
+
+        main .fs-1 {
+            font-size: var(--fs-3xl) !important;
+        }
+
+        main .fs-2 {
+            font-size: var(--fs-2xl) !important;
+        }
+
+        /* ===== TIPOGRAFI ===== */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .h1,
+        .h2,
+        .h3,
+        .h4,
+        .h5,
+        .h6,
+        .navbar-brand,
+        .sidebar-logout,
+        .btn,
+        .card-title,
+        .table thead th {
+            font-family: var(--font-heading);
+        }
+
+        .table td,
+        .badge {
+            font-variant-numeric: lining-nums tabular-nums;
+        }
+
+        /* ===== TOMBOL AKSI (SERAGAM DI SEMUA HALAMAN KELOLA) ===== */
+
+        .aksi-group {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+        }
+
+        .aksi-group form {
+            margin: 0;
+        }
+
+        .btn-aksi {
+            font-size: 14px;
+            font-weight: 600;
+            border: 0;
+            border-radius: 8px;
+            padding: .35rem .85rem;
+            white-space: nowrap;
+        }
+
+        .btn-aksi-icon {
+            padding: .4rem .65rem;
+            line-height: 1;
+        }
+
+        .btn-aksi-icon i {
+            margin: 0;
+            font-size: 15px;
+        }
+
+        /* Utama (oranye): Stok, Detail */
+        .btn-aksi-stok,
+        .btn-aksi-detail {
+            background: var(--moza-orange);
+            color: #fff;
+        }
+
+        .btn-aksi-stok:hover,
+        .btn-aksi-detail:hover {
+            background: var(--moza-maroon);
+            color: #fff;
+        }
+
+        /* Edit (krem, ikon merah) */
+        .btn-aksi-edit {
+            background: #F9ECE8;
+            color: var(--moza-maroon);
+        }
+
+        .btn-aksi-edit:hover {
+            background: var(--moza-cream);
+            color: var(--moza-maroon);
+        }
+
+        .btn-aksi-edit i {
+            color: var(--moza-red);
+        }
+
+        /* Hapus (merah) */
+        .btn-aksi-hapus {
+            background: #E5575A;
+            color: #fff;
+        }
+
+        .btn-aksi-hapus:hover {
+            background: var(--moza-red);
+            color: #fff;
+        }
     </style>
 
     @stack('styles')
@@ -449,7 +615,7 @@
                             PIZZA MOZA
                         </div>
 
-                        <small style="letter-spacing:2px; font-size:11px; opacity:.7;">
+                        <small style="letter-spacing:2px; font-size: var(--fs-xs); opacity:.7;">
                             ADMIN PANEL
                         </small>
 
@@ -576,15 +742,11 @@
                         </div>
 
                         @if ($fotoAdmin)
-
                             <img src="{{ $fotoAdmin }}" alt="Foto {{ $namaAdmin }}" class="avatar-img">
-
                         @else
-
                             <div class="avatar d-flex align-items-center justify-content-center">
                                 {{ strtoupper(substr($namaAdmin ?: 'A', 0, 1)) }}
                             </div>
-
                         @endif
 
                     </a>

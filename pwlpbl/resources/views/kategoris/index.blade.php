@@ -97,7 +97,7 @@
                                 </th>
 
                                 @if (session('role') === 'admin')
-                                    <th style="width: 180px;">
+                                    <th class="text-center" style="width: 180px;">
                                         Aksi
                                     </th>
                                 @endif
@@ -121,14 +121,15 @@
 
 
                                     @if (session('role') === 'admin')
-                                        <td>
+                                        <td class="text-center">
 
-                                            <div class="d-flex gap-2">
+                                            <div class="aksi-group">
 
                                                 {{-- Edit --}}
                                                 <a href="{{ route('kategoris.edit', $kategori->id_kategori) }}"
-                                                    class="btn btn-sm btn-outline-primary">
-                                                    Edit
+                                                    class="btn btn-aksi btn-aksi-edit btn-aksi-icon" title="Edit"
+                                                    aria-label="Edit {{ $kategori->nama_kategori }}">
+                                                    <i class="bi bi-pencil-fill"></i>
                                                 </a>
 
 
@@ -140,8 +141,9 @@
                                                     @csrf
                                                     @method('DELETE')
 
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                        Hapus
+                                                    <button type="submit" class="btn btn-aksi btn-aksi-hapus btn-aksi-icon"
+                                                        title="Hapus" aria-label="Hapus {{ $kategori->nama_kategori }}">
+                                                        <i class="bi bi-trash3-fill"></i>
                                                     </button>
 
                                                 </form>

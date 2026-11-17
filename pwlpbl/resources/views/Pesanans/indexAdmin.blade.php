@@ -15,12 +15,12 @@
 
         .summary-label {
             color: #9B5140;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             margin-bottom: 5px;
         }
 
         .summary-value {
-            font-size: 18px;
+            font-size: var(--fs-lg);
             font-weight: 700;
             color: #8B1A10;
         }
@@ -62,7 +62,7 @@
         .status-dropdown {
             min-width: 145px;
             border-radius: 7px;
-            font-size: 13px;
+            font-size: var(--fs-sm);
             font-weight: 600;
             padding: 7px 25px 7px 10px;
             cursor: pointer;
@@ -94,18 +94,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: var(--fs-xl);
             color: #E8751A;
         }
 
         .revenue-label {
-            font-size: 14px;
+            font-size: var(--fs-sm);
             font-weight: 700;
             margin-bottom: 2px;
         }
 
         .revenue-value {
-            font-size: 21px;
+            font-size: var(--fs-xl);
             font-weight: 800;
             color: #8B1A10;
         }
@@ -162,7 +162,7 @@
 
         .pagination-info {
             color: rgba(139, 26, 16, 0.7);
-            font-size: 13px;
+            font-size: var(--fs-sm);
         }
 
         .filter-date {
@@ -173,11 +173,11 @@
 
         @media (max-width: 768px) {
             .revenue-value {
-                font-size: 22px;
+                font-size: var(--fs-xl);
             }
 
             .summary-value {
-                font-size: 20px;
+                font-size: var(--fs-xl);
             }
         }
     </style>
@@ -366,8 +366,9 @@
                             {{-- AKSI: HANYA DETAIL --}}
                             <td class="text-end text-nowrap">
                                 <a href="{{ route('admin.pesanans.show', $pesanan->id_pesanan) }}"
-                                    class="btn btn-sm btn-outline-info">
-                                    Detail
+                                    class="btn btn-aksi btn-aksi-detail btn-aksi-icon" title="Detail"
+                                    aria-label="Detail pesanan #{{ $pesanan->id_pesanan }}">
+                                    <i class="bi bi-eye-fill"></i>
                                 </a>
                             </td>
                         </tr>

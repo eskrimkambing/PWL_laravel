@@ -192,8 +192,8 @@
                     Cari Transaksi Berdasarkan Tanggal
                 </label>
 
-               <input type="date" name="tanggal" id="tanggal" class="form-control date-box"
-                value="{{ request('tanggal', now()->format('Y-m-d')) }}">
+                <input type="date" name="tanggal" id="tanggal" class="form-control date-box"
+                    value="{{ request('tanggal', now()->format('Y-m-d')) }}">
             </div>
 
             <button type="submit" class="btn btn-moza">
@@ -237,7 +237,7 @@
                             <th>Metode</th>
                             <th>Status</th>
                             <th>Dibayar Pada</th>
-                            <th>Aksi</th>
+                            <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
 
@@ -294,28 +294,36 @@
                                 </td>
 
                                 {{-- TOMBOL AKSI --}}
-                                <td>
-                                    <div class="d-flex gap-1">
+                                <td class="text-center">
+                                    <div class="aksi-group">
+
+                                        {{-- Detail --}}
                                         <a href="{{ route('pembayaran.show', $pembayaran->id_pesanan) }}"
-                                            class="btn btn-sm btn-info text-white">
-                                            Detail
+                                            class="btn btn-aksi btn-aksi-detail btn-aksi-icon" title="Detail"
+                                            aria-label="Detail transaksi #{{ $pembayaran->id_pesanan }}">
+                                            <i class="bi bi-eye-fill"></i>
                                         </a>
 
+                                        {{-- Edit --}}
                                         <a href="{{ route('pembayaran.edit', $pembayaran->id_pesanan) }}"
-                                            class="btn btn-sm btn-warning">
-                                            Edit
+                                            class="btn btn-aksi btn-aksi-edit btn-aksi-icon" title="Edit"
+                                            aria-label="Edit transaksi #{{ $pembayaran->id_pesanan }}">
+                                            <i class="bi bi-pencil-fill"></i>
                                         </a>
 
+                                        {{-- Hapus --}}
                                         <form action="{{ route('pembayaran.destroy', $pembayaran->id_pesanan) }}"
                                             method="POST"
                                             onsubmit="return confirm('Yakin ingin menghapus data pembayaran ini?')">
                                             @csrf
                                             @method('DELETE')
 
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                Hapus
+                                            <button type="submit" class="btn btn-aksi btn-aksi-hapus btn-aksi-icon"
+                                                title="Hapus" aria-label="Hapus transaksi #{{ $pembayaran->id_pesanan }}">
+                                                <i class="bi bi-trash3-fill"></i>
                                             </button>
                                         </form>
+
                                     </div>
                                 </td>
                             </tr>
