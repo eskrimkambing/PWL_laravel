@@ -6,16 +6,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>
         .stat-card .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
             background: var(--moza-cream);
-            font-size: 22px;
+            font-size: 17px;
             flex-shrink: 0;
         }
 
         .stat-card .stat-value {
-            font-size: 1.9rem;
+            font-size: 1.5rem;
             font-weight: 700;
             line-height: 1.1;
         }

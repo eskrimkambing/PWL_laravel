@@ -20,7 +20,7 @@
         }
 
         .summary-value {
-            font-size: 23px;
+            font-size: 18px;
             font-weight: 700;
             color: #8B1A10;
         }
@@ -82,30 +82,30 @@
             background: #F9ECE8;
             border: 1px solid rgba(139, 26, 16, 0.10);
             border-radius: 14px;
-            padding: 20px 24px;
+            padding: 14px 18px;
             color: #8B1A10;
         }
 
         .revenue-icon {
-            width: 58px;
-            height: 58px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             border: 2px solid #E8751A;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 27px;
+            font-size: 20px;
             color: #E8751A;
         }
 
         .revenue-label {
-            font-size: 17px;
+            font-size: 14px;
             font-weight: 700;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .revenue-value {
-            font-size: 27px;
+            font-size: 21px;
             font-weight: 800;
             color: #8B1A10;
         }

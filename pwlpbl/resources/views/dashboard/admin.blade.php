@@ -62,11 +62,11 @@
         /* ===== SIDEBAR ===== */
 
         .sidebar {
-            --bs-offcanvas-width: 250px;
+            --bs-offcanvas-width: 220px;
             --bs-offcanvas-bg: var(--moza-maroon);
             --bs-offcanvas-color: #fff;
 
-            width: 250px;
+            width: 220px;
             flex-shrink: 0;
             background: var(--moza-maroon);
             color: #8B1A10;
@@ -83,12 +83,12 @@
         .sidebar .nav-link {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            margin-bottom: 6px;
-            border-radius: 12px;
+            gap: 10px;
+            padding: 8px 12px;
+            margin-bottom: 3px;
+            border-radius: 10px;
             color: #8B1A10 !important;
-            font-size: 16px;
+            font-size: 13.5px;
             transition: all .2s ease;
         }
 
@@ -179,8 +179,9 @@
         }
 
         .avatar {
-            width: 42px;
-            height: 42px;
+            width: 34px;
+            height: 34px;
+            font-size: 14px;
             border-radius: 50%;
             background: var(--moza-orange);
             color: #fff;
@@ -189,8 +190,8 @@
         }
 
         .avatar-img {
-            width: 42px;
-            height: 42px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             object-fit: cover;
             flex-shrink: 0;
@@ -312,7 +313,7 @@
                 left: 0;
                 bottom: 0;
 
-                width: 250px !important;
+                width: 220px !important;
                 height: 100vh;
 
                 overflow-y: auto;
@@ -322,7 +323,7 @@
             }
 
             .sidebar + .flex-grow-1 {
-                margin-left: 250px;
+                margin-left: 220px;
                 min-width: 0;
             }
         }
@@ -341,6 +342,74 @@
         .sidebar::-webkit-scrollbar-track {
             background: #6E1209;
         }
+
+
+        /* ===== MODE KOMPAK (tampilan lebih kecil & rapi) ===== */
+
+        html {
+            font-size: 14px;
+        }
+
+        h1, .h1 { font-size: 1.6rem; }
+        h2, .h2 { font-size: 1.35rem; }
+        h3, .h3 { font-size: 1.15rem; }
+        h4, .h4 { font-size: 1.05rem; }
+        h5, .h5 { font-size: 1rem; }
+
+        .sidebar .fw-bold { font-size: 14px; }
+        .sidebar small { font-size: 10px !important; }
+
+        .card { border-radius: 12px; }
+        .card-body { padding: 1rem; }
+        .card-header, .card-footer { padding: .6rem 1rem; }
+
+        .table > :not(caption) > * > * {
+            padding: .5rem .65rem;
+        }
+
+        .table thead th {
+            font-size: .8rem;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+        }
+
+        .btn {
+            --bs-btn-padding-y: .3rem;
+            --bs-btn-padding-x: .75rem;
+            --bs-btn-font-size: .85rem;
+            --bs-btn-border-radius: 8px;
+        }
+
+        .btn-sm {
+            --bs-btn-padding-y: .2rem;
+            --bs-btn-padding-x: .55rem;
+            --bs-btn-font-size: .78rem;
+        }
+
+        .form-control,
+        .form-select {
+            padding: .4rem .7rem;
+            font-size: .875rem;
+            border-radius: 8px;
+        }
+
+        .form-label {
+            margin-bottom: .25rem;
+            font-size: .85rem;
+        }
+
+        .badge { font-size: .72rem; }
+        .alert { padding: .6rem .9rem; font-size: .875rem; }
+        .pagination { --bs-pagination-padding-x: .6rem; --bs-pagination-padding-y: .25rem; --bs-pagination-font-size: .82rem; }
+
+        /* Rapatkan jarak antar elemen */
+        main .mb-5 { margin-bottom: 1.75rem !important; }
+        main .mb-4 { margin-bottom: 1.1rem !important; }
+        main .py-5 { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+        main .p-5 { padding: 2rem !important; }
+        main .p-4 { padding: 1.1rem !important; }
+        main .fs-1 { font-size: 1.8rem !important; }
+        main .fs-2 { font-size: 1.5rem !important; }
 
     </style>
 
@@ -366,13 +435,13 @@
 
         {{-- SIDEBAR --}}
 
-        <aside class="sidebar offcanvas-lg offcanvas-start p-3 d-flex flex-column" tabindex="-1" id="sidebarMenu">
+        <aside class="sidebar offcanvas-lg offcanvas-start p-2 d-flex flex-column" tabindex="-1" id="sidebarMenu">
 
-            <div class="d-flex align-items-center justify-content-between px-2 pb-4">
+            <div class="d-flex align-items-center justify-content-between px-2 pb-3">
 
                 <div class="d-flex align-items-center gap-2">
 
-                    <span class="fs-2">🍕</span>
+                    <span class="fs-4">🍕</span>
 
                     <div>
 
@@ -465,7 +534,7 @@
 
                 @csrf
 
-                <button type="submit" class="btn btn-outline-danger w-100 py-2">
+                <button type="submit" class="btn btn-outline-danger btn-sm w-100">
                     ⏻ Logout
                 </button>
 
@@ -479,7 +548,7 @@
 
             {{-- TOPBAR --}}
 
-            <header class="topbar d-flex align-items-center gap-3 px-3 px-lg-4 py-3">
+            <header class="topbar d-flex align-items-center gap-3 px-3 px-lg-4 py-2">
 
                 <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#sidebarMenu">
@@ -526,7 +595,7 @@
 
             {{-- ISI HALAMAN --}}
 
-            <main class="p-3 p-lg-4">
+            <main class="p-3">
 
                 @yield('content')
 
