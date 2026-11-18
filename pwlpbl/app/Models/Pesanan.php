@@ -17,6 +17,7 @@ class Pesanan extends Model
         'nama_penerima',
         'alamat',
         'no_telp',
+        'email',
         'catatan',
         'total_harga',
         'jenis_pesanan',
@@ -52,3 +53,4 @@ class Pesanan extends Model
         );
     }
 }
+

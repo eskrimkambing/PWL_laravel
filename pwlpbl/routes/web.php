@@ -1,4 +1,3 @@
-
 <?php
 
 use App\Http\Controllers\ProductController;
@@ -16,6 +15,7 @@ use App\Http\Controllers\PembeliController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\AnalisisKeputusanController;
 use App\Http\Controllers\LaporanPenjualanController;
+use App\Http\Controllers\MidtransNotificationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -25,11 +25,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-    $products = \App\Models\Product::withStok()->with('sizes')->latest()->get();
+    $products = \App\Models\Product::withStok()
+        ->with('sizes')
+        ->latest()
+        ->get();
 
     $toppings = \App\Models\Topping::orderBy('nama')->get();
 
     return view('beranda', compact('products', 'toppings'));
+
 })->name('home');
 
 
@@ -54,6 +58,29 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 
 // ==========================================================
+// CHECKOUT DAN PEMBAYARAN MIDTRANS
+// ==========================================================
+
+// Halaman checkout
+Route::get('/checkout', [CheckoutController::class, 'index'])
+    ->name('checkout.index');
+
+// Proses checkout
+Route::post('/checkout', [CheckoutController::class, 'store'])
+    ->name('checkout.store');
+
+// Halaman selesai pesanan tamu
+Route::get('/checkout/selesai/{id}', [CheckoutController::class, 'selesai'])
+    ->name('checkout.selesai');
+
+// Notifikasi pembayaran otomatis dari Midtrans
+Route::post('/midtrans/notification', [
+    MidtransNotificationController::class,
+    'handle'
+])->name('midtrans.notification');
+
+
+// ==========================================================
 // ROUTE ADMIN
 // ==========================================================
 
@@ -64,9 +91,7 @@ Route::middleware('role:admin')->group(function () {
         ->name('dashboard.admin');
 
 
-    // ======================================================
     // PROFIL ADMIN
-    // ======================================================
 
     Route::get('/admin/profil', [ProfilAdminController::class, 'show'])
         ->name('admin.profil.show');
@@ -78,96 +103,84 @@ Route::middleware('role:admin')->group(function () {
         ->name('admin.profil.update');
 
 
-    // ======================================================
     // PRODUK
-    // ======================================================
 
     Route::resource('products', ProductController::class);
 
 
-    // ======================================================
-    // TOPPING TAMBAHAN PIZZA
-    // ======================================================
+    // TOPPING
 
-    Route::resource('toppings', ToppingController::class)->except(['show', 'create']);
+    Route::resource('toppings', ToppingController::class)
+        ->except(['show', 'create']);
 
-    Route::patch('/toppings/{topping}/sold-out', [ToppingController::class, 'toggleSoldOut'])
-        ->name('toppings.sold-out');
+    Route::patch('/toppings/{topping}/sold-out', [
+        ToppingController::class,
+        'toggleSoldOut'
+    ])->name('toppings.sold-out');
 
 
-    // ======================================================
     // KATEGORI
-    // ======================================================
 
     Route::resource('kategoris', KategoriController::class);
 
 
-    // ======================================================
     // PEMBELI
-    // ======================================================
 
     Route::resource('pembelis', PembeliController::class);
 
 
-    // ======================================================
-    // PEMBAYARAN
-    // ======================================================
+    // PEMBAYARAN ADMIN
 
     Route::resource('pembayaran', PembayaranController::class);
 
 
-    // ======================================================
     // KELOLA PESANAN ADMIN
-    // ======================================================
 
-    // Menampilkan semua pesanan
     Route::get('/admin/pesanans', [PesananController::class, 'index'])
         ->name('admin.pesanans.indexAdmin');
 
-    // Detail pesanan (admin)
     Route::get('/admin/pesanans/{id}', [PesananController::class, 'show'])
         ->name('admin.pesanans.show');
 
-    // Halaman edit pesanan
     Route::get('/admin/pesanans/{id}/edit', [PesananController::class, 'edit'])
         ->name('admin.pesanans.edit');
 
-    // Simpan perubahan pesanan
     Route::put('/admin/pesanans/{id}', [PesananController::class, 'update'])
         ->name('admin.pesanans.update');
 
-    // Update status pembayaran
-    Route::patch('/admin/pesanans/{id}/status-pembayaran', [PesananController::class, 'updateStatusPembayaran'])
-        ->name('admin.pesanans.updateStatusPembayaran');
+    Route::patch('/admin/pesanans/{id}/status-pembayaran', [
+        PesananController::class,
+        'updateStatusPembayaran'
+    ])->name('admin.pesanans.updateStatusPembayaran');
 
 
-    // ======================================================
-    // ANALISIS KEPUTUSAN (AHP DAN SAW)
-    // ======================================================
+    // ANALISIS KEPUTUSAN
 
-    // Halaman utama analisis keputusan
-    Route::get('/admin/analisis-keputusan', [AnalisisKeputusanController::class, 'index'])
-        ->name('admin.analisis.index');
+    Route::get('/admin/analisis-keputusan', [
+        AnalisisKeputusanController::class,
+        'index'
+    ])->name('admin.analisis.index');
 
-    // Detail perhitungan AHP dan SAW
-    Route::get('/admin/analisis-keputusan/detail', [AnalisisKeputusanController::class, 'detail'])
-        ->name('admin.analisis.detail');
+    Route::get('/admin/analisis-keputusan/detail', [
+        AnalisisKeputusanController::class,
+        'detail'
+    ])->name('admin.analisis.detail');
 
 
-    // ======================================================
     // LAPORAN PENJUALAN
-    // ======================================================
 
-    Route::get('/admin/laporan-penjualan', [LaporanPenjualanController::class, 'index'])
-        ->name('admin.laporan.index');
+    Route::get('/admin/laporan-penjualan', [
+        LaporanPenjualanController::class,
+        'index'
+    ])->name('admin.laporan.index');
 
-    Route::get('/admin/laporan-penjualan/export', [LaporanPenjualanController::class, 'export'])
-        ->name('admin.laporan.export');
+    Route::get('/admin/laporan-penjualan/export', [
+        LaporanPenjualanController::class,
+        'export'
+    ])->name('admin.laporan.export');
 
 
-    // ======================================================
     // PENGGUNA
-    // ======================================================
 
     Route::get('/pengguna', [PenggunaController::class, 'index'])
         ->name('pengguna.index');
@@ -178,19 +191,23 @@ Route::middleware('role:admin')->group(function () {
     Route::post('/pengguna', [PenggunaController::class, 'store'])
         ->name('pengguna.store');
 
-    Route::get('/pengguna/{role}/{id}/edit', [PenggunaController::class, 'edit'])
-        ->name('pengguna.edit');
+    Route::get('/pengguna/{role}/{id}/edit', [
+        PenggunaController::class,
+        'edit'
+    ])->name('pengguna.edit');
 
-    Route::put('/pengguna/{role}/{id}', [PenggunaController::class, 'update'])
-        ->name('pengguna.update');
+    Route::put('/pengguna/{role}/{id}', [
+        PenggunaController::class,
+        'update'
+    ])->name('pengguna.update');
 
-    Route::delete('/pengguna/{role}/{id}', [PenggunaController::class, 'destroy'])
-        ->name('pengguna.destroy');
+    Route::delete('/pengguna/{role}/{id}', [
+        PenggunaController::class,
+        'destroy'
+    ])->name('pengguna.destroy');
 
 
-    // ======================================================
     // STOK
-    // ======================================================
 
     Route::get('/stoks', [StokController::class, 'index'])
         ->name('stoks.index');
@@ -210,7 +227,6 @@ Route::middleware('role:admin')->group(function () {
     Route::delete('/stoks/{stok}', [StokController::class, 'destroy'])
         ->name('stoks.destroy');
 
-    // Atur stok produk ke angka tertentu (termasuk 0 = Sold Out)
     Route::put('/stoks/produk/{product}', [StokController::class, 'atur'])
         ->name('stoks.atur');
 });
@@ -223,31 +239,24 @@ Route::middleware('role:admin')->group(function () {
 Route::middleware('role:pembeli')->group(function () {
 
     // Dashboard Pembeli
-    // Tampilan pemesanan pembeli sama dengan beranda ('/'), jadi diarahkan ke sana.
     Route::get('/pembeli/dashboard', function () {
         return redirect()->route('home');
     })->name('dashboard.pembeli');
 
 
-    // ======================================================
     // PRODUK PEMBELI
-    // ======================================================
 
     Route::get('/pembeli/products', [ProductController::class, 'pembeli'])
         ->name('pembeli.products');
 
 
-    // ======================================================
     // KATEGORI PEMBELI
-    // ======================================================
 
     Route::get('/pembeli/kategoris', [KategoriController::class, 'index'])
         ->name('pembeli.kategoris');
 
 
-    // ======================================================
     // PESANAN PEMBELI
-    // ======================================================
 
     Route::get('/pesanans', [PesananController::class, 'index'])
         ->name('pesanans.index');
@@ -259,20 +268,7 @@ Route::middleware('role:pembeli')->group(function () {
         ->name('pesanans.bayar');
 
 
-    // ======================================================
-    // CHECKOUT
-    // ======================================================
-
-    Route::get('/checkout', [CheckoutController::class, 'index'])
-        ->name('checkout.index');
-
-    Route::post('/checkout', [CheckoutController::class, 'store'])
-        ->name('checkout.store');
-
-
-    // ======================================================
-    // PROFIL
-    // ======================================================
+    // PROFIL PEMBELI
 
     Route::get('/profil', [ProfilController::class, 'show'])
         ->name('profil.show');
@@ -286,3 +282,4 @@ Route::middleware('role:pembeli')->group(function () {
     Route::delete('/profil', [ProfilController::class, 'destroy'])
         ->name('profil.destroy');
 });
+
