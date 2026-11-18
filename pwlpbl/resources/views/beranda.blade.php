@@ -17,8 +17,26 @@
     <style>
         :root {
             --cream: #FDF8EE;
+            --beige: #FBF0D5;
+            --orange: #E8751A;
+            --yellow: #FBE7A1;
+            --brown: #8B1A10;
+            --ink: #2B1B14;
+            --border: #EBDDBA;
+            --white: #FFFFFF;
+
             --font-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
-            font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            --font-heading: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -323,6 +341,7 @@
             padding: 11px 16px;
             border: 1px solid var(--border);
             border-radius: 30px;
+            font-family: inherit;
             font-size: var(--fs-sm);
             outline: none;
             background: white;
@@ -1148,31 +1167,31 @@
             footer {
                 padding: 25px 15px 15px;
             }
+        }
 
-            /* ===== TIPOGRAFI ===== */
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6,
-            .logo,
-            .hero-label,
-            .price,
-            .cart-item-price,
-            .order-btn,
-            .primary-btn,
-            .add-btn,
-            .sold-btn,
-            .footer-brand h3,
-            .footer-contact h3 {
-                font-family: var(--font-heading);
-            }
+        /* ===== TIPOGRAFI ===== */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .logo,
+        .hero-label,
+        .price,
+        .cart-item-price,
+        .order-btn,
+        .primary-btn,
+        .add-btn,
+        .sold-btn,
+        .footer-brand h3,
+        .footer-contact h3 {
+            font-family: var(--font-heading);
+        }
 
-            .price,
-            .cart-item-price {
-                font-variant-numeric: lining-nums tabular-nums;
-            }
+        .price,
+        .cart-item-price {
+            font-variant-numeric: lining-nums tabular-nums;
         }
     </style>
 </head>

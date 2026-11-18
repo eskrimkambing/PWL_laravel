@@ -6,13 +6,20 @@ use App\Models\Product;
 use App\Models\Pesanan;
 use App\Models\Pembeli;
 use App\Models\Stok;
-use App\Models\Topping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
+    // Tambahan harga berdasarkan ukuran pizza.
+    // Harga Medium merupakan harga dasar dari database.
+    private const TAMBAHAN_UKURAN = [
+        'Small'  => -10000,
+        'Medium' => 0,
+        'Large'  => 15000,
+    ];
+
     /**
      * Mengambil data pembeli yang sedang login.
      * Jika pengunjung belum login, hasilnya null.
@@ -39,15 +46,12 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        $products = Product::with('sizes')->latest()->get();
-
-        $toppings = Topping::orderBy('nama')->get();
+        $products = Product::latest()->get();
 
         $pembeli = $this->pembeliLogin();
 
         return view('checkout.index', compact(
             'products',
-            'toppings',
             'pembeli'
         ));
     }
@@ -63,9 +67,7 @@ class CheckoutController extends Controller
 
             'items.*.product_id' => 'required|integer',
             'items.*.qty' => 'required|integer|min:1|max:99',
-            'items.*.size_id' => 'nullable|integer',
-            'items.*.toppings' => 'nullable|array',
-            'items.*.toppings.*' => 'integer',
+            'items.*.size' => 'nullable|in:Small,Medium,Large',
             'items.*.notes' => 'nullable|string|max:200',
 
             'nama_penerima' => 'required|string|max:100',
@@ -147,63 +149,22 @@ class CheckoutController extends Controller
             $totalHarga = 0;
             $daftarProduk = [];
 
-            $semuaTopping = Topping::all()->keyBy('id');
-
             foreach ($request->items as $item) {
 
-                $product = Product::with('sizes')->findOrFail($item['product_id']);
+                $product = Product::findOrFail($item['product_id']);
 
                 $jumlah = (int) $item['qty'];
 
-                // Harga dasar: dari ukuran yang dipilih bila produk punya ukuran,
-                // selain itu memakai harga produk.
                 $hargaSatuan = (float) $product->price;
 
                 $ukuran = null;
 
-                if ($product->sizes->isNotEmpty()) {
+                // Ukuran hanya berlaku untuk produk kategori Pizza.
+                if (strtolower(trim((string) $product->kategori)) === 'pizza') {
 
-                    $dipilih = $product->sizes->firstWhere('id', (int) ($item['size_id'] ?? 0));
+                    $ukuran = $item['size'] ?? 'Medium';
 
-                    if (!$dipilih) {
-                        throw ValidationException::withMessages([
-                            'ukuran_' . $product->id => 'Pilih ukuran untuk ' . $product->nama . '.',
-                        ]);
-                    }
-
-                    $ukuran = $dipilih->nama;
-                    $hargaSatuan = (float) $dipilih->harga;
-                }
-
-                // Topping tambahan hanya berlaku untuk pizza.
-                $toppingDipilih = [];
-
-                if ($product->isPizza()) {
-
-                    $idTopping = array_unique(array_map('intval', $item['toppings'] ?? []));
-
-                    foreach ($idTopping as $idT) {
-
-                        $topping = $semuaTopping->get($idT);
-
-                        if (!$topping) {
-                            continue;
-                        }
-
-                        if ($topping->sold_out) {
-                            throw ValidationException::withMessages([
-                                'topping_' . $idT => 'Topping ' . $topping->nama
-                                    . ' sedang Sold Out. Hapus topping tersebut dari pesanan.',
-                            ]);
-                        }
-
-                        $toppingDipilih[] = [
-                            'nama'  => $topping->nama,
-                            'harga' => (float) $topping->harga,
-                        ];
-
-                        $hargaSatuan += (float) $topping->harga;
-                    }
+                    $hargaSatuan += self::TAMBAHAN_UKURAN[$ukuran] ?? 0;
                 }
 
                 $subtotal = $hargaSatuan * $jumlah;
@@ -214,7 +175,6 @@ class CheckoutController extends Controller
                     'product' => $product,
                     'jumlah' => $jumlah,
                     'ukuran' => $ukuran,
-                    'toppings' => $toppingDipilih ?: null,
                     'catatan' => trim((string) ($item['notes'] ?? '')) ?: null,
                     'harga' => $hargaSatuan,
                     'subtotal' => $subtotal,
@@ -265,8 +225,6 @@ class CheckoutController extends Controller
                     'jumlah' => $item['jumlah'],
 
                     'ukuran' => $item['ukuran'],
-
-                    'toppings' => $item['toppings'],
 
                     'catatan' => $item['catatan'],
 
@@ -332,8 +290,6 @@ class CheckoutController extends Controller
                 'nama' => $product->nama ?? 'Produk',
 
                 'ukuran' => $detail->ukuran ?? null,
-
-                'toppings' => collect($detail->toppings ?? [])->pluck('nama')->all(),
 
                 'catatan' => $detail->catatan ?? null,
 
