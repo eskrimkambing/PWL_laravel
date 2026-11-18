@@ -114,7 +114,7 @@
         /* ===== LOGOUT ===== */
 
         .sidebar-logout {
-            margin-top: 1rem;
+            margin-top: auto;
             padding-top: 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
