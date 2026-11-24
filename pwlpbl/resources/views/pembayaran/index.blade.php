@@ -256,7 +256,7 @@
 
                                 {{-- EMAIL PELANGGAN --}}
                                 <td>
-                                    {{ $pembayaran->pembeli->email ?? '-' }}
+                                    {{ $pembayaran->email ?? ($pembayaran->pembeli->email ?? '-') }}
                                 </td>
 
                                 {{-- TOTAL HARGA --}}

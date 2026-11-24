@@ -96,14 +96,14 @@
             <div class="col-md-6 info-item">
                 <div class="info-label">Pembeli</div>
                 <div class="info-value">
-                    {{ $pembayaran->pembeli->nama ?? ($pembayaran->pembeli->email ?? '-') }}
+                    {{ $pembayaran->nama_penerima ?? ($pembayaran->pembeli->nama ?? ($pembayaran->pembeli->email ?? '-')) }}
                 </div>
             </div>
 
             {{-- EMAIL --}}
             <div class="col-md-6 info-item">
                 <div class="info-label">Email</div>
-                <div class="info-value">{{ $pembayaran->pembeli->email ?? '-' }}</div>
+                <div class="info-value">{{ $pembayaran->email ?? ($pembayaran->pembeli->email ?? '-') }}</div>
             </div>
 
             {{-- TOTAL --}}

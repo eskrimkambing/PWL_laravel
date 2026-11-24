@@ -14,6 +14,10 @@
             </p>
         </div>
 
+        @if (session('warning'))
+            <div class="alert alert-warning">{{ session('warning') }}</div>
+        @endif
+
         <div class="card p-4 mb-4">
 
             <div class="d-flex justify-content-between flex-wrap gap-2 mb-3">
@@ -85,7 +89,7 @@
 
         <div class="d-flex flex-wrap justify-content-center gap-2">
             <a href="{{ route('home') }}#menu" class="btn btn-moza px-4">Pesan Lagi</a>
-            <a href="{{ route('login') }}" class="btn btn-outline-secondary px-4">Login / Daftar</a>
+            <a href="{{ route('pesanans.index') }}" class="btn btn-outline-secondary px-4">Pesanan Saya</a>
         </div>
 
     </div>

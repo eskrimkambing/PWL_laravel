@@ -186,7 +186,7 @@
             <div class="col-md-6">
                 <div class="info-box">
                     <div class="info-label">Email</div>
-                    <div class="fw-semibold">{{ $pesanan->pembeli->email ?? '-' }}</div>
+                    <div class="fw-semibold">{{ $pesanan->email ?? ($pesanan->pembeli->email ?? '-') }}</div>
                 </div>
             </div>
 
