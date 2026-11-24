@@ -305,7 +305,7 @@
 
         $fotoProduk = function ($product) use ($fotoPizza, $fotoCemilan, $fotoDefault) {
             if (!empty($product->image)) {
-                if (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://'])) {
+                if (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://', 'data:'])) {
                     return $product->image;
                 }
 

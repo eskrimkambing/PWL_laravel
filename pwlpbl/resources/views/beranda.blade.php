@@ -1351,7 +1351,7 @@
                         @foreach ($items as $product)
                             @php
                                 if (!empty($product->image)) {
-                                    if (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://'])) {
+                                    if (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://', 'data:'])) {
                                         $srcFoto = $product->image;
                                     } else {
                                         $srcFoto = asset(ltrim($product->image, '/'));
@@ -1913,7 +1913,6 @@
                 cart.push({
                     id: order.id,
                     nama: order.nama,
-                    image: order.image,
                     base: order.size ? order.size.harga : order.base,
                     sizeId: sizeId,
                     size: order.size ? order.size.nama : null,
@@ -1968,7 +1967,8 @@
                 row.className = 'cart-item';
 
                 const img = document.createElement('img');
-                img.src = item.image;
+                const card = document.querySelector('.product-card[data-id="' + item.id + '"]');
+                img.src = card ? card.dataset.image : '{{ $fotoDefault }}';
                 img.alt = item.nama;
 
                 const info = document.createElement('div');
