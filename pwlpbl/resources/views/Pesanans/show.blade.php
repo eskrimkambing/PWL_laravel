@@ -34,8 +34,12 @@
 
         .table {
             --bs-table-bg: transparent;
-            --bs-table-color: #f3e9e1;
+            --bs-table-color: #3b1d12;
             --bs-table-border-color: var(--bs-border-color);
+        }
+
+        .table td.price {
+            color: #c2570c;
         }
 
         .order-thumb {
