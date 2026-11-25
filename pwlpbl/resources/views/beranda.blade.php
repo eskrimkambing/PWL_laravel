@@ -151,7 +151,7 @@
         .slide-2 {
             background-image:
                 linear-gradient(90deg, rgba(232, 117, 26, 0.92), rgba(232, 117, 26, 0.55), rgba(232, 117, 26, 0.08)),
-                url('{{ asset('images/pizza.jpg') }}');
+                url('{{ asset('images/tape-bakar-topping-keju.jpeg') }}');
             background-position: left center;
         }
 
