@@ -22,15 +22,56 @@ class PesananController extends Controller
         // TAMPILAN PEMBELI
         if (session('role') === 'pembeli') {
 
-            $pesanans = Pesanan::with([
+            $request->validate([
+                'q' => 'nullable|string|max:100',
+                'dari' => 'nullable|date_format:Y-m-d',
+                'sampai' => 'nullable|date_format:Y-m-d|after_or_equal:dari',
+            ], [
+                'sampai.after_or_equal' => 'Tanggal akhir tidak boleh lebih awal dari tanggal awal.',
+            ]);
+
+            $cari = trim((string) $request->input('q', ''));
+            $dari = $request->input('dari') ?: null;
+            $sampai = $request->input('sampai') ?: null;
+
+            $query = Pesanan::with([
                 'pembeli',
                 'detailPesanans.product'
             ])
-                ->where('pembeli_id', session('user_id'))
-                ->latest()
-                ->get();
+                ->where('pembeli_id', session('user_id'));
 
-            return view('pesanans.index', compact('pesanans'));
+            // Filter rentang tanggal pesanan dibuat.
+            if ($dari) {
+                $query->whereDate('created_at', '>=', $dari);
+            }
+
+            if ($sampai) {
+                $query->whereDate('created_at', '<=', $sampai);
+            }
+
+            // Pencarian: ID pesanan, nama produk, jenis, metode pembayaran, atau status.
+            if ($cari !== '') {
+                $kata = '%' . $cari . '%';
+                $idCari = ltrim($cari, '#');
+
+                $query->where(function ($q) use ($kata, $idCari) {
+                    if (ctype_digit($idCari)) {
+                        $q->orWhere('id_pesanan', (int) $idCari);
+                    }
+
+                    $q->orWhere('jenis_pesanan', 'like', $kata)
+                        ->orWhere('metode_pembayaran', 'like', $kata)
+                        ->orWhere('status', 'like', $kata)
+                        ->orWhere('status_pembayaran', 'like', $kata)
+                        ->orWhereHas('detailPesanans.product', function ($p) use ($kata) {
+                            $p->where('nama', 'like', $kata);
+                        });
+                });
+            }
+
+            $pesanans = $query->latest()->get();
+
+            return view('pesanans.index', compact('pesanans', 'cari', 'dari', 'sampai'));
         }
 
         // TAMPILAN ADMIN
@@ -38,10 +79,25 @@ class PesananController extends Controller
         // Validasi tanggal pencarian.
         $request->validate([
             'tanggal' => 'nullable|date_format:Y-m-d',
+            'q' => 'nullable|string|max:100',
+            'urut' => 'nullable|in:waktu,id,total',
+            'urutan' => 'nullable|in:asc,desc',
         ]);
 
         // Jika belum memilih tanggal, tampilkan pesanan hari ini.
         $tanggal = $request->input('tanggal') ?: now()->toDateString();
+
+        // Kata kunci pencarian, pengurutan, dan arah urutan.
+        $cari = trim((string) $request->input('q', ''));
+        $urut = $request->input('urut', 'waktu');
+        $urutan = $request->input('urutan', 'desc');
+
+        // Kolom yang boleh dipakai untuk pengurutan.
+        $kolomUrut = [
+            'waktu' => 'created_at',
+            'id' => 'id_pesanan',
+            'total' => 'total_harga',
+        ];
 
         // Total seluruh pesanan.
         $totalPesanan = Pesanan::count();
@@ -58,14 +114,39 @@ class PesananController extends Controller
             'detailPesanans.product'
         ])->whereDate('created_at', $tanggal);
 
+        // Pencarian: ID pesanan, nama penerima, no. HP, email, atau nama/email pembeli.
+        if ($cari !== '') {
+            $kataCari = '%' . $cari . '%';
+            $idCari = ltrim($cari, '#');
+
+            $query->where(function ($q) use ($kataCari, $idCari) {
+                if (ctype_digit($idCari)) {
+                    $q->orWhere('id_pesanan', (int) $idCari);
+                }
+
+                $q->orWhere('nama_penerima', 'like', $kataCari)
+                    ->orWhere('no_telp', 'like', $kataCari)
+                    ->orWhere('email', 'like', $kataCari)
+                    ->orWhereHas('pembeli', function ($p) use ($kataCari) {
+                        $p->where('nama', 'like', $kataCari)
+                            ->orWhere('email', 'like', $kataCari);
+                    });
+            });
+        }
+
         // Jumlah pesanan pada tanggal yang dipilih.
         $jumlahPesananTanggal = (clone $query)->count();
 
         // Total pendapatan pada tanggal yang dipilih.
         $totalPendapatan = (clone $query)->sum('total_harga');
 
+        // Pengurutan sesuai pilihan (default: waktu, terbaru di atas).
+        $kolom = $kolomUrut[$urut] ?? 'created_at';
+
         // Tampilkan pesanan dengan pagination 10 data per halaman.
-        $pesanans = $query->latest()
+        $pesanans = $query
+            ->orderBy($kolom, $urutan)
+            ->orderBy('id_pesanan', $urutan)
             ->paginate(10)
             ->withQueryString();
 
@@ -76,7 +157,10 @@ class PesananController extends Controller
             'totalPesanan',
             'totalPesananHariIni',
             'jumlahPesananTanggal',
-            'totalPendapatan'
+            'totalPendapatan',
+            'cari',
+            'urut',
+            'urutan'
         ));
     }
 
@@ -262,7 +346,7 @@ class PesananController extends Controller
         abort_unless(session('role') === 'admin', 403);
 
         $request->validate([
-            'status' => 'required|in:Menunggu,Diproses,Selesai,Dibatalkan',
+            'status' => 'required|in:Menunggu,Diproses,Pengantaran,Selesai,Dibatalkan',
         ]);
 
         $pesanan = Pesanan::findOrFail($id);

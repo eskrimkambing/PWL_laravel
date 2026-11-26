@@ -31,7 +31,7 @@
             margin: 0;
         }
 
-        .daftar-produk li + li {
+        .daftar-produk li+li {
             margin-top: 4px;
         }
 
@@ -45,8 +45,8 @@
 @section('content')
 
     @php
-        $adaFilter = $dari || $sampai;
-        $paramFilter = array_filter(['dari' => $dari, 'sampai' => $sampai]);
+        $adaFilter = $dari || $sampai || $cari !== '';
+        $paramFilter = array_filter(['dari' => $dari, 'sampai' => $sampai, 'cari' => $cari]);
     @endphp
 
     {{-- HEADER --}}
@@ -58,7 +58,7 @@
             </p>
         </div>
 
-       
+
     </div>
 
     {{-- ERROR VALIDASI FILTER --}}
@@ -76,6 +76,12 @@
 
             <input type="hidden" name="tabel" value="{{ $tabel }}">
 
+            <div class="col-12">
+                <label for="cari" class="form-label fw-semibold mb-1">Cari</label>
+                <input type="search" id="cari" name="cari" class="form-control" value="{{ $cari }}"
+                    placeholder="{{ $tabel === 'produk' ? 'Cari nama produk...' : 'Cari ID pesanan, nama pembeli, no. HP, email, atau nama produk...' }}">
+            </div>
+
             <div class="col-md-3 col-sm-6">
                 <label for="dari" class="form-label fw-semibold mb-1">Dari tanggal</label>
                 <input type="date" id="dari" name="dari" class="form-control" value="{{ $dari }}">
@@ -92,8 +98,7 @@
                 </button>
 
                 @if ($adaFilter)
-                    <a href="{{ route('admin.laporan.index', ['tabel' => $tabel]) }}"
-                        class="btn btn-outline-secondary">
+                    <a href="{{ route('admin.laporan.index', ['tabel' => $tabel]) }}" class="btn btn-outline-secondary">
                         Reset
                     </a>
                 @endif
@@ -117,6 +122,9 @@
             Tanggal difilter berdasarkan tanggal pesanan dibuat.
             @if (!$adaFilter)
                 Saat ini menampilkan data dari semua waktu.
+            @endif
+            @if ($cari !== '')
+                Hasil pencarian untuk "<strong>{{ $cari }}</strong>".
             @endif
         </div>
     </div>
@@ -173,7 +181,7 @@
                                 <td class="fw-bold">#{{ $pesanan->id_pesanan }}</td>
 
                                 <td>
-                                    {{ $pesanan->nama_penerima ?: ($pesanan->pembeli->nama ?? null ?: ($pesanan->pembeli->email ?? '-')) }}
+                                    {{ $pesanan->nama_penerima ?: ($pesanan->pembeli->nama ?? null ?: $pesanan->pembeli->email ?? '-') }}
                                 </td>
 
                                 <td>
@@ -199,8 +207,12 @@
                         @empty
                             <tr>
                                 <td colspan="6" class="text-center text-secondary py-5">
-                                    Tidak ada pesanan selesai
-                                    {{ $adaFilter ? 'pada rentang tanggal tersebut.' : 'saat ini.' }}
+                                    @if ($cari !== '')
+                                        Tidak ada pesanan selesai yang cocok dengan "{{ $cari }}".
+                                    @else
+                                        Tidak ada pesanan selesai
+                                        {{ $adaFilter ? 'pada rentang tanggal tersebut.' : 'saat ini.' }}
+                                    @endif
                                 </td>
                             </tr>
                         @endforelse
@@ -219,9 +231,8 @@
             </div>
         </div>
 
-    {{-- ========================= TABEL PRODUK ========================= --}}
+        {{-- ========================= TABEL PRODUK ========================= --}}
     @else
-
         <div class="card p-3">
 
             <div class="d-flex justify-content-between flex-wrap gap-2 mb-3">
@@ -261,7 +272,11 @@
                         @empty
                             <tr>
                                 <td colspan="4" class="text-center text-secondary py-5">
-                                    Belum ada produk.
+                                    @if ($cari !== '')
+                                        Tidak ada produk yang cocok dengan "{{ $cari }}".
+                                    @else
+                                        Belum ada produk.
+                                    @endif
                                 </td>
                             </tr>
                         @endforelse

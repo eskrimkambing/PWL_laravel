@@ -165,10 +165,38 @@
             font-size: var(--fs-sm);
         }
 
-        .filter-date {
-            max-width: 260px;
+        .filter-bar {
+            background: #FFFFFF;
+            border: 1px solid rgba(139, 26, 16, 0.10);
+            border-radius: 14px;
+            padding: 16px 18px;
+        }
+
+        .filter-control {
             border-radius: 8px;
-            padding: 10px;
+            border: 1px solid rgba(139, 26, 16, 0.20);
+            color: #3b1d12;
+            font-size: var(--fs-sm);
+            padding: 9px 12px;
+        }
+
+        .filter-control:focus {
+            border-color: #E8751A;
+            box-shadow: 0 0 0 0.15rem rgba(232, 117, 26, 0.15);
+        }
+
+        .btn-reset {
+            background: #FFFFFF;
+            color: #8B1A10;
+            border: 1px solid rgba(139, 26, 16, 0.25);
+            border-radius: 7px;
+            padding: 9px 22px;
+            font-weight: 600;
+        }
+
+        .btn-reset:hover {
+            background: #F9ECE8;
+            color: #8B1A10;
         }
 
         @media (max-width: 768px) {
@@ -236,21 +264,36 @@
         </div>
     </div>
 
-    {{-- PENCARIAN BERDASARKAN TANGGAL --}}
-    <div class="mb-4">
-        <label class="form-label text-secondary">
-            Cari Pesanan Berdasarkan Tanggal
-        </label>
+    {{-- FILTER: TANGGAL, PENCARIAN, DAN PENGURUTAN --}}
+    <form action="{{ url()->current() }}" method="GET" class="filter-bar mb-4">
+        <div class="row g-3 align-items-end">
 
-        <form action="{{ url()->current() }}" method="GET" class="d-flex align-items-center gap-2 flex-wrap">
+            <div class="col-12 col-md-6 col-xl-3">
+                <label class="form-label text-secondary small mb-1">Tanggal</label>
+                <input type="date" name="tanggal" class="form-control filter-control" value="{{ $tanggal }}"
+                    required>
+            </div>
 
-            <input type="date" name="tanggal" class="form-control filter-date" value="{{ $tanggal }}" required>
+            <div class="col-12 col-md-6 col-xl-4">
+                <label class="form-label text-secondary small mb-1">Cari Pesanan</label>
+                <input type="search" name="q" class="form-control filter-control" value="{{ $cari }}"
+                    placeholder="ID (mis. 38), nama, no. HP, atau email">
+            </div>
 
-            <button type="submit" class="btn btn-cari">
-                Cari
-            </button>
-        </form>
-    </div>
+            <div class="col-12 d-flex gap-2 flex-wrap">
+                <button type="submit" class="btn btn-cari">
+                    <i class="bi bi-search"></i> Terapkan
+                </button>
+
+                @if ($cari !== '')
+                    <a href="{{ url()->current() }}?tanggal={{ $tanggal }}" class="btn btn-reset">
+                        Reset
+                    </a>
+                @endif
+            </div>
+
+        </div>
+    </form>
 
     {{-- TABEL PESANAN --}}
     <div class="order-table-card">
@@ -309,10 +352,12 @@
                                     <select name="status_pembayaran" class="form-select status-dropdown"
                                         onchange="this.form.submit()">
 
-                                        <option value="Belum Dibayar"
-                                            {{ ($pesanan->status_pembayaran ?? 'Belum Dibayar') === 'Belum Dibayar' ? 'selected' : '' }}>
-                                            Belum Dibayar
-                                        </option>
+                                        {{-- Opsi "Belum Dibayar" hanya tampil (tidak bisa dipilih) jika memang sedang Belum Dibayar --}}
+                                        @if (($pesanan->status_pembayaran ?? 'Belum Dibayar') === 'Belum Dibayar')
+                                            <option value="Belum Dibayar" selected hidden>
+                                                Belum Dibayar
+                                            </option>
+                                        @endif
 
                                         <option value="Menunggu Pembayaran"
                                             {{ ($pesanan->status_pembayaran ?? '') === 'Menunggu Pembayaran' ? 'selected' : '' }}>
@@ -342,13 +387,23 @@
 
                                     <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
 
-                                        <option value="Menunggu" {{ $pesanan->status == 'Menunggu' ? 'selected' : '' }}>
-                                            Menunggu
-                                        </option>
+                                        {{-- Opsi "Menunggu" hanya tampil (tidak bisa dipilih) jika pesanan memang sedang Menunggu --}}
+                                        @if ($pesanan->status == 'Menunggu')
+                                            <option value="Menunggu" selected hidden>
+                                                Menunggu
+                                            </option>
+                                        @endif
 
                                         <option value="Diproses" {{ $pesanan->status == 'Diproses' ? 'selected' : '' }}>
                                             Diproses
                                         </option>
+
+                                        @if ($pesanan->jenis_pesanan === 'Delivery')
+                                            <option value="Pengantaran"
+                                                {{ $pesanan->status == 'Pengantaran' ? 'selected' : '' }}>
+                                                Pengantaran
+                                            </option>
+                                        @endif
 
                                         <option value="Selesai" {{ $pesanan->status == 'Selesai' ? 'selected' : '' }}>
                                             Selesai
@@ -376,18 +431,17 @@
                     @empty
                         <tr>
                             <td colspan="8" class="text-center text-secondary py-5">
-                                Belum ada pesanan pada tanggal
-                                {{ \Carbon\Carbon::parse($tanggal)->format('d-m-Y') }}.
+                                @if ($cari !== '')
+                                    Pesanan dengan kata kunci "{{ $cari }}" tidak ditemukan pada tanggal
+                                    {{ \Carbon\Carbon::parse($tanggal)->format('d-m-Y') }}.
+                                @else
+                                    Belum ada pesanan pada tanggal
+                                    {{ \Carbon\Carbon::parse($tanggal)->format('d-m-Y') }}.
+                                @endif
                             </td>
                         </tr>
                     @endforelse
 
-                    {{-- PESAN JIKA PENCARIAN TEKS TIDAK DITEMUKAN --}}
-                    <tr id="tidakDitemukan" style="display: none;">
-                        <td colspan="8" class="text-center text-secondary py-4">
-                            Pesanan yang dicari tidak ditemukan.
-                        </td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -435,39 +489,3 @@
     </div>
 
 @endsection
-
-{{-- SCRIPT PENCARIAN TEKS --}}
-@push('scripts')
-    <script>
-        const inputCari = document.getElementById('cariPesanan');
-
-        if (inputCari) {
-            inputCari.addEventListener('input', function() {
-                const kata = this.value.toLowerCase().trim();
-
-                const baris = document.querySelectorAll(
-                    '#tabelPesanan tbody tr.baris-pesanan'
-                );
-
-                let jumlahDitemukan = 0;
-
-                baris.forEach(function(row) {
-                    const cocok = row.textContent.toLowerCase().includes(kata);
-
-                    row.style.display = cocok ? '' : 'none';
-
-                    if (cocok) {
-                        jumlahDitemukan++;
-                    }
-                });
-
-                const pesanKosong = document.getElementById('tidakDitemukan');
-
-                if (pesanKosong) {
-                    pesanKosong.style.display =
-                        (kata !== '' && jumlahDitemukan === 0) ? '' : 'none';
-                }
-            });
-        }
-    </script>
-@endpush

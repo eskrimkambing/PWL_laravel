@@ -22,26 +22,29 @@ class LaporanPenjualanController extends Controller
         $data = $this->validasi($request);
 
         $tabel = $data['tabel'];
+        $cari  = $data['cari'];
 
         if ($tabel === 'produk') {
-            $produk = $this->dataProduk($data['dari'], $data['sampai']);
+            $produk = $this->dataProduk($data['dari'], $data['sampai'], $cari);
 
             return view('laporan.index', [
                 'tabel'            => $tabel,
                 'dari'             => $data['dari'],
                 'sampai'           => $data['sampai'],
+                'cari'             => $cari,
                 'produk'           => $produk,
                 'totalJumlah'      => $produk->sum('jumlah'),
                 'totalPendapatan'  => $produk->sum('pendapatan'),
             ]);
         }
 
-        $pesanans = $this->queryPesanan($data['dari'], $data['sampai'])->get();
+        $pesanans = $this->queryPesanan($data['dari'], $data['sampai'], $cari)->get();
 
         return view('laporan.index', [
             'tabel'            => $tabel,
             'dari'             => $data['dari'],
             'sampai'           => $data['sampai'],
+            'cari'             => $cari,
             'pesanans'         => $pesanans,
             'totalPendapatan'  => $pesanans->sum('total_harga'),
         ]);
@@ -60,17 +63,21 @@ class LaporanPenjualanController extends Controller
         $dari   = $data['dari'];
         $sampai = $data['sampai'];
 
+        $cari    = $data['cari'];
         $periode = $this->labelPeriode($dari, $sampai);
+        if ($cari !== '') {
+            $periode .= ' | Kata kunci: "' . $cari . '"';
+        }
         $suffix  = ($dari || $sampai)
             ? '_' . ($dari ?: 'awal') . '_sd_' . ($sampai ?: 'sekarang')
             : '_semua';
 
         if ($data['format'] === 'pdf') {
-            return $this->exportPdf($data['tabel'], $dari, $sampai, $periode, $suffix);
+            return $this->exportPdf($data['tabel'], $dari, $sampai, $periode, $suffix, $cari);
         }
 
         if ($data['tabel'] === 'produk') {
-            $produk = $this->dataProduk($dari, $sampai);
+            $produk = $this->dataProduk($dari, $sampai, $cari);
 
             $xlsx = (new SimpleXlsx('Laporan Produk'))
                 ->lebarKolom([8, 40, 22, 24])
@@ -92,7 +99,7 @@ class LaporanPenjualanController extends Controller
             return $xlsx->unduh('laporan-penjualan-produk' . $suffix . '.xlsx');
         }
 
-        $pesanans = $this->queryPesanan($dari, $sampai)->get();
+        $pesanans = $this->queryPesanan($dari, $sampai, $cari)->get();
 
         $xlsx = (new SimpleXlsx('Laporan Pesanan'))
             ->lebarKolom([8, 12, 28, 40, 18, 22])
@@ -132,13 +139,13 @@ class LaporanPenjualanController extends Controller
     /**
      * Ekspor ke PDF sesuai tabel yang dipilih.
      */
-    private function exportPdf(string $tabel, ?string $dari, ?string $sampai, string $periode, string $suffix)
+    private function exportPdf(string $tabel, ?string $dari, ?string $sampai, string $periode, string $suffix, string $cari = '')
     {
         if ($tabel === 'produk') {
-            $isi  = $this->pdfProduk($this->dataProduk($dari, $sampai), $periode);
+            $isi  = $this->pdfProduk($this->dataProduk($dari, $sampai, $cari), $periode);
             $nama = 'laporan-penjualan-produk' . $suffix . '.pdf';
         } else {
-            $isi  = $this->pdfPesanan($this->queryPesanan($dari, $sampai)->get(), $periode);
+            $isi  = $this->pdfPesanan($this->queryPesanan($dari, $sampai, $cari)->get(), $periode);
             $nama = 'laporan-penjualan-pesanan' . $suffix . '.pdf';
         }
 
@@ -253,6 +260,7 @@ class LaporanPenjualanController extends Controller
             'sampai' => 'nullable|date|after_or_equal:dari',
             'tabel'  => 'nullable|in:pesanan,produk',
             'format' => 'nullable|in:xlsx,pdf',
+            'cari'   => 'nullable|string|max:100',
         ], [
             'dari.date'              => 'Tanggal awal tidak valid.',
             'sampai.date'            => 'Tanggal akhir tidak valid.',
@@ -264,6 +272,7 @@ class LaporanPenjualanController extends Controller
             'sampai' => $valid['sampai'] ?? null,
             'tabel'  => $valid['tabel'] ?? 'pesanan',
             'format' => $valid['format'] ?? 'xlsx',
+            'cari'   => trim((string) ($valid['cari'] ?? '')),
         ];
     }
 
@@ -278,20 +287,45 @@ class LaporanPenjualanController extends Controller
             ->when($sampai, fn($q) => $q->whereDate('created_at', '<=', $sampai));
     }
 
-    private function queryPesanan(?string $dari, ?string $sampai)
+    private function queryPesanan(?string $dari, ?string $sampai, string $cari = '')
     {
-        return $this->filterSelesai(
+        $query = $this->filterSelesai(
             Pesanan::with(['pembeli', 'detailPesanans.product']),
             $dari,
             $sampai
-        )->orderByDesc('created_at')->orderByDesc('id_pesanan');
+        );
+
+        // Pencarian: ID, nama penerima, no. HP, email, nama/email pembeli, atau nama produk.
+        if ($cari !== '') {
+            $kata   = '%' . $cari . '%';
+            $idCari = ltrim($cari, '#');
+
+            $query->where(function ($q) use ($kata, $idCari) {
+                if (ctype_digit($idCari)) {
+                    $q->orWhere('id_pesanan', (int) $idCari);
+                }
+
+                $q->orWhere('nama_penerima', 'like', $kata)
+                    ->orWhere('no_telp', 'like', $kata)
+                    ->orWhere('email', 'like', $kata)
+                    ->orWhereHas('pembeli', function ($p) use ($kata) {
+                        $p->where('nama', 'like', $kata)
+                            ->orWhere('email', 'like', $kata);
+                    })
+                    ->orWhereHas('detailPesanans.product', function ($p) use ($kata) {
+                        $p->where('nama', 'like', $kata);
+                    });
+            });
+        }
+
+        return $query->orderByDesc('created_at')->orderByDesc('id_pesanan');
     }
 
     /**
      * Semua produk, diurutkan dari yang paling banyak dipesan.
      * Produk yang belum pernah dipesan di rentang tersebut tetap tampil (jumlah 0).
      */
-    private function dataProduk(?string $dari, ?string $sampai)
+    private function dataProduk(?string $dari, ?string $sampai, string $cari = '')
     {
         $rekap = DetailPesanan::query()
             ->selectRaw('product_id, SUM(jumlah) as total_jumlah, SUM(subtotal) as total_pendapatan')
@@ -306,6 +340,10 @@ class LaporanPenjualanController extends Controller
                 'jumlah'     => (int) ($rekap[$p->id]->total_jumlah ?? 0),
                 'pendapatan' => (int) ($rekap[$p->id]->total_pendapatan ?? 0),
             ])
+            ->filter(fn($p) => $cari === '' || str_contains(
+                mb_strtolower($p['nama']),
+                mb_strtolower($cari)
+            ))
             ->sortBy([['jumlah', 'desc'], ['nama', 'asc']])
             ->values();
     }

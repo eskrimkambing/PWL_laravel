@@ -66,6 +66,54 @@
         </div>
     @endif
 
+    {{-- ERROR VALIDASI FILTER --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            @foreach ($errors->all() as $error)
+                <div>{{ $error }}</div>
+            @endforeach
+        </div>
+    @endif
+
+    {{-- PENCARIAN DAN FILTER TANGGAL --}}
+    @php
+        $adaFilter = $cari !== '' || $dari || $sampai;
+    @endphp
+
+    <form action="{{ route('pesanans.index') }}" method="GET" class="order-card p-3 mb-4">
+        <div class="row g-3 align-items-end">
+
+            <div class="col-12">
+                <label for="q" class="form-label fw-semibold mb-1">Cari Riwayat Pesanan</label>
+                <input type="search" id="q" name="q" class="form-control" value="{{ $cari }}"
+                    placeholder="ID pesanan (mis. 38), nama produk, atau status">
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <label for="dari" class="form-label fw-semibold mb-1">Dari tanggal</label>
+                <input type="date" id="dari" name="dari" class="form-control" value="{{ $dari }}">
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <label for="sampai" class="form-label fw-semibold mb-1">Sampai tanggal</label>
+                <input type="date" id="sampai" name="sampai" class="form-control" value="{{ $sampai }}">
+            </div>
+
+            <div class="col-md-4 d-flex flex-wrap gap-2">
+                <button type="submit" class="btn btn-warning fw-semibold">
+                    Terapkan
+                </button>
+
+                @if ($adaFilter)
+                    <a href="{{ route('pesanans.index') }}" class="btn btn-outline-secondary">
+                        Reset
+                    </a>
+                @endif
+            </div>
+
+        </div>
+    </form>
+
     @forelse ($pesanans as $pesanan)
         <div class="order-card p-4 mb-3">
 
@@ -149,11 +197,19 @@
         <div class="order-card p-5 text-center">
             <div class="fs-1 mb-3">📋</div>
 
-            <h5>Belum Ada Pesanan</h5>
+            @if ($adaFilter)
+                <h5>Pesanan Tidak Ditemukan</h5>
 
-            <p class="text-secondary mb-0">
-                Kamu belum membuat pesanan.
-            </p>
+                <p class="text-secondary mb-0">
+                    Tidak ada pesanan yang cocok dengan pencarian atau rentang tanggal tersebut.
+                </p>
+            @else
+                <h5>Belum Ada Pesanan</h5>
+
+                <p class="text-secondary mb-0">
+                    Kamu belum membuat pesanan.
+                </p>
+            @endif
         </div>
     @endforelse
 
