@@ -26,6 +26,7 @@ class PesananController extends Controller
                 'q' => 'nullable|string|max:100',
                 'dari' => 'nullable|date_format:Y-m-d',
                 'sampai' => 'nullable|date_format:Y-m-d|after_or_equal:dari',
+                'aktif' => 'nullable|in:1',
             ], [
                 'sampai.after_or_equal' => 'Tanggal akhir tidak boleh lebih awal dari tanggal awal.',
             ]);
@@ -33,12 +34,18 @@ class PesananController extends Controller
             $cari = trim((string) $request->input('q', ''));
             $dari = $request->input('dari') ?: null;
             $sampai = $request->input('sampai') ?: null;
+            $aktif = $request->input('aktif') === '1';
 
             $query = Pesanan::with([
                 'pembeli',
                 'detailPesanans.product'
             ])
                 ->where('pembeli_id', session('user_id'));
+
+            // Filter pesanan yang belum selesai (Pesanan Berjalan).
+            if ($aktif) {
+                $query->whereNotIn('status', ['Selesai', 'Dibatalkan']);
+            }
 
             // Filter rentang tanggal pesanan dibuat.
             if ($dari) {
@@ -71,7 +78,7 @@ class PesananController extends Controller
 
             $pesanans = $query->latest()->get();
 
-            return view('pesanans.index', compact('pesanans', 'cari', 'dari', 'sampai'));
+            return view('pesanans.index', compact('pesanans', 'cari', 'dari', 'sampai', 'aktif'));
         }
 
         // TAMPILAN ADMIN

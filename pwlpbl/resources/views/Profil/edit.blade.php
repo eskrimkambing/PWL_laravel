@@ -5,15 +5,101 @@
 @push('styles')
     <style>
         .pe-wrap {
-            max-width: 560px;
+            max-width: 1500px;
             margin: 0 auto;
         }
 
+        .pe-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 18px;
+        }
+
+        .pe-full {
+            grid-column: 1 / -1;
+        }
+
+
+        .pe-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1100px) minmax(0, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .pe-side-UNUSED {
+            background: #FFFBF0;
+            border: 1px solid rgba(139, 26, 16, 0.12);
+            border-radius: 16px;
+            padding: 24px 22px;
+            color: #2B1B14;
+            position: sticky;
+            top: 20px;
+        }
+
+        .pe-side-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #8B1A10;
+            margin-bottom: 12px;
+        }
+
+        .pe-side-link {
+            display: block;
+            background: #FDF0C4;
+            color: #8B1A10;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .pe-side-link:hover {
+            background: #FCE3B8;
+            color: #8B1A10;
+        }
+
+        .pe-side-text {
+            font-size: 14px;
+            color: #6B4A3A;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+
+        .pe-deco {
+            position: sticky;
+            top: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 40px;
+            opacity: 0.95;
+        }
+
+        @media (max-width: 991px) {
+            .pe-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .pe-deco {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .pe-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .pe-card {
+            padding: 48px 56px;
             background: var(--moza-cream-card, #FFFBF0);
             border: 1px solid rgba(139, 26, 16, 0.12);
             border-radius: 16px;
-            padding: 24px;
             color: #2B1B14;
         }
 
@@ -34,7 +120,7 @@
         }
 
         .pe-field {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .pe-input {
@@ -42,8 +128,8 @@
             background: #FDF8EE;
             border: 1px solid rgba(139, 26, 16, 0.2);
             border-radius: 10px;
-            padding: 11px 14px;
-            font-size: 15px;
+            padding: 12px 15px;
+            font-size: 16px;
             color: #2B1B14;
         }
 
@@ -159,74 +245,94 @@
             </div>
         @endif
 
-        <div class="pe-card">
-            <div class="pe-title">Edit Profile</div>
+        <div class="pe-layout">
+            <div class="pe-deco" aria-hidden="true">
+                <img src="{{ asset('images/pizza/pizza-1.png') }}" alt="" width="190"
+                    style="display:block; margin:0 auto 22px; transform: rotate(-6deg);">
+                <img src="{{ asset('images/pizza/pizza-4.png') }}" alt="" width="160"
+                    style="display:block; margin:0 auto 22px; transform: rotate(8deg);">
+            </div>
+            <div>
+                <div class="pe-card">
+                    <div class="pe-title">Edit Profile</div>
 
-            <form action="{{ route('profil.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+                    <form action="{{ route('profil.update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
 
-                {{-- FOTO PROFIL --}}
-                <div class="pe-field text-center">
-                    <img id="fotoPreview" src="{{ $pembeli->foto }}" alt="Foto profil"
-                        class="pe-foto mb-2 {{ $pembeli->foto ? '' : 'd-none' }}">
+                        {{-- FOTO PROFIL --}}
+                        <div class="pe-field text-center">
+                            <img id="fotoPreview" src="{{ $pembeli->foto }}" alt="Foto profil"
+                                class="pe-foto mb-2 {{ $pembeli->foto ? '' : 'd-none' }}">
 
-                    <div id="fotoPlaceholder"
-                        class="pe-foto-placeholder d-inline-flex align-items-center justify-content-center mb-2 {{ $pembeli->foto ? 'd-none' : '' }}">
-                        {{ strtoupper(substr($pembeli->nama ?? ($pembeli->email ?? 'P'), 0, 1)) }}
-                    </div>
+                            <div id="fotoPlaceholder"
+                                class="pe-foto-placeholder d-inline-flex align-items-center justify-content-center mb-2 {{ $pembeli->foto ? 'd-none' : '' }}">
+                                {{ strtoupper(substr($pembeli->nama ?? ($pembeli->email ?? 'P'), 0, 1)) }}
+                            </div>
 
-                    <input type="file" name="foto" id="fotoInput" class="pe-input"
-                        accept="image/png, image/jpeg, image/webp">
-                    <div class="pe-hint">Format JPG, PNG, atau WEBP. Maksimal 5 MB.</div>
+                            <input type="file" name="foto" id="fotoInput" class="pe-input"
+                                accept="image/png, image/jpeg, image/webp">
+                            <div class="pe-hint">Format JPG, PNG, atau WEBP. Maksimal 5 MB.</div>
 
-                    @if ($pembeli->foto)
-                        <div class="form-check d-inline-block mt-2">
-                            <input class="form-check-input" type="checkbox" name="hapus_foto" id="hapus_foto"
-                                value="1">
-                            <label class="form-check-label" for="hapus_foto">Hapus foto profil</label>
+                            @if ($pembeli->foto)
+                                <div class="form-check d-inline-block mt-2">
+                                    <input class="form-check-input" type="checkbox" name="hapus_foto" id="hapus_foto"
+                                        value="1">
+                                    <label class="form-check-label" for="hapus_foto">Hapus foto profil</label>
+                                </div>
+                            @endif
                         </div>
-                    @endif
-                </div>
 
-                {{-- NAMA --}}
-                <div class="pe-field">
-                    <label class="pe-label" for="nama">Name</label>
-                    <input type="text" id="nama" name="nama" class="pe-input"
-                        value="{{ old('nama', $pembeli->nama) }}" placeholder="Masukkan nama lengkap" required>
-                </div>
+                        <div class="pe-grid">
+                            {{-- NAMA --}}
+                            <div class="pe-field">
+                                <label class="pe-label" for="nama">Name</label>
+                                <input type="text" id="nama" name="nama" class="pe-input"
+                                    value="{{ old('nama', $pembeli->nama) }}" placeholder="Masukkan nama lengkap" required>
+                            </div>
 
-                {{-- EMAIL (tidak bisa diubah) --}}
-                <div class="pe-field">
-                    <label class="pe-label" for="email">Email</label>
-                    <input type="email" id="email" class="pe-input pe-input-muted" value="{{ $pembeli->email }}"
-                        readonly>
-                    <div class="pe-hint">Email tidak bisa diubah karena dipakai untuk login.</div>
-                </div>
+                            {{-- EMAIL (tidak bisa diubah) --}}
+                            <div class="pe-field">
+                                <label class="pe-label" for="email">Email</label>
+                                <input type="email" id="email" class="pe-input pe-input-muted"
+                                    value="{{ $pembeli->email }}" readonly>
+                                <div class="pe-hint">Email tidak bisa diubah karena dipakai untuk login.</div>
+                            </div>
 
-                {{-- NOMOR HP --}}
-                @php
-                    $telpTampil = ltrim(old('no_telp', $pembeli->no_telp ?? ''), '0');
-                    $telpTampil = preg_replace('/^62/', '', $telpTampil);
-                @endphp
-                <div class="pe-field">
-                    <span class="pe-label">Nomor HP</span>
-                    <div class="pe-phone">
-                        <span class="pe-phone-prefix">+62</span>
-                        <input type="text" name="no_telp" class="pe-input" inputmode="numeric"
-                            value="{{ $telpTampil }}" placeholder="81234567890" required>
-                    </div>
-                </div>
+                            {{-- NOMOR HP --}}
+                            @php
+                                $telpTampil = ltrim(old('no_telp', $pembeli->no_telp ?? ''), '0');
+                                $telpTampil = preg_replace('/^62/', '', $telpTampil);
+                            @endphp
+                            <div class="pe-field">
+                                <span class="pe-label">Nomor HP</span>
+                                <div class="pe-phone">
+                                    <span class="pe-phone-prefix">+62</span>
+                                    <input type="text" name="no_telp" class="pe-input" inputmode="numeric"
+                                        value="{{ $telpTampil }}" placeholder="81234567890" required>
+                                </div>
+                            </div>
 
-                {{-- ALAMAT --}}
-                <div class="pe-field">
-                    <label class="pe-label" for="alamat">Alamat</label>
-                    <textarea id="alamat" name="alamat" class="pe-input" rows="3" placeholder="Masukkan alamat lengkap" required>{{ old('alamat', $pembeli->alamat) }}</textarea>
-                </div>
+                        </div>
 
-                <button type="submit" class="pe-btn">Simpan</button>
-                <a href="{{ route('profil.show') }}" class="pe-btn-batal">Batal</a>
-            </form>
+                        {{-- ALAMAT --}}
+                        <div class="pe-field pe-full">
+                            <label class="pe-label" for="alamat">Alamat</label>
+                            <textarea id="alamat" name="alamat" class="pe-input" rows="3" placeholder="Masukkan alamat lengkap" required>{{ old('alamat', $pembeli->alamat) }}</textarea>
+                        </div>
+
+                        <button type="submit" class="pe-btn">Simpan</button>
+                        <a href="{{ route('profil.show') }}" class="pe-btn-batal">Batal</a>
+                    </form>
+                </div>
+            </div>
+
+            <div class="pe-deco" aria-hidden="true">
+                <img src="{{ asset('images/pizza/pizza-2.png') }}" alt="" width="160"
+                    style="display:block; margin:0 auto 22px; transform: rotate(10deg);">
+                <img src="{{ asset('images/pizza/pizza-3.png') }}" alt="" width="140"
+                    style="display:block; margin:0 auto 22px; transform: rotate(-8deg);">
+            </div>
         </div>
 
     </div>
