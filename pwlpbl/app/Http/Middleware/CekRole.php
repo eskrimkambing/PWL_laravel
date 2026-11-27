@@ -16,7 +16,12 @@ class CekRole
                 session(['url.intended' => $request->fullUrl()]);
             }
 
-            return redirect()->route('login');
+            $pesan = $role === 'pembeli'
+                ? 'Silakan login terlebih dahulu untuk melanjutkan pesanan.'
+                : null;
+
+            return redirect()->route('login')
+                ->with('error', $pesan);
         }
         return $next($request);
     }

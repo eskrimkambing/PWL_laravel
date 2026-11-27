@@ -15,7 +15,7 @@ class CheckoutController extends Controller
 {
     /**
      * Mengambil data pembeli yang sedang login.
-     * Pengunjung/tamu dan admin tidak dianggap sebagai pembeli.
+     * Route checkout sudah dilindungi middleware role:pembeli.
      */
     private function pembeliLogin(): ?Pembeli
     {
@@ -32,7 +32,7 @@ class CheckoutController extends Controller
         return Pembeli::find(session('user_id'));
     }
 
-    /** Menampilkan halaman checkout untuk pembeli maupun tamu. */
+    /** Menampilkan halaman checkout (khusus pembeli yang sudah login). */
     public function index()
     {
         $products = Product::with('sizes')
@@ -52,6 +52,16 @@ class CheckoutController extends Controller
     /** Menyimpan pesanan, mengurangi stok, dan memproses pembayaran. */
     public function store(Request $request)
     {
+        $pembeli = $this->pembeliLogin();
+
+        if (!$pembeli) {
+            return redirect()->route('login')
+                ->with('error', 'Silakan login terlebih dahulu untuk memesan.');
+        }
+
+        // Email selalu memakai email akun yang sedang login.
+        $request->merge(['email' => $pembeli->email]);
+
         $validated = $request->validate([
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|integer|exists:products,id',
@@ -74,8 +84,6 @@ class CheckoutController extends Controller
             'items.required' => 'Keranjang pesanan masih kosong.',
             'metode_pembayaran.required' => 'Silakan pilih metode pembayaran.',
         ]);
-
-        $pembeli = $this->pembeliLogin();
 
         // Pesanan, detail, dan pengurangan stok diproses dalam satu transaksi.
         $pesanan = DB::transaction(function () use ($validated, $pembeli) {
@@ -100,8 +108,8 @@ class CheckoutController extends Controller
 
             // Ambil dan kunci topping yang dipilih.
             $idToppingSemua = collect($validated['items'])
-                ->flatMap(fn ($item) => $item['toppings'] ?? [])
-                ->map(fn ($id) => (int) $id)
+                ->flatMap(fn($item) => $item['toppings'] ?? [])
+                ->map(fn($id) => (int) $id)
                 ->unique()
                 ->values();
 
@@ -232,9 +240,9 @@ class CheckoutController extends Controller
                 ];
             }
 
-            // Buat pesanan utama; pembeli_id null untuk checkout sebagai tamu.
+            // Buat pesanan utama milik pembeli yang login.
             $pesanan = Pesanan::forceCreate([
-                'pembeli_id' => $pembeli ? $pembeli->id_pembeli : null,
+                'pembeli_id' => $pembeli->id_pembeli,
                 'nama_penerima' => $validated['nama_penerima'],
                 'no_telp' => $validated['no_telp'],
                 'email' => $validated['email'],
@@ -278,6 +286,22 @@ class CheckoutController extends Controller
 
             return $pesanan;
         });
+
+        // Simpan nama, nomor HP, dan alamat ke akun pembeli supaya
+        // pesanan berikutnya (login dengan email yang sama) terisi otomatis.
+        $dataProfil = [
+            'nama' => $validated['nama_penerima'],
+            'no_telp' => $validated['no_telp'],
+        ];
+
+        if (
+            $validated['jenis_pesanan'] === 'Delivery'
+            && !empty($validated['alamat'])
+        ) {
+            $dataProfil['alamat'] = $validated['alamat'];
+        }
+
+        $pembeli->update($dataProfil);
 
         // Pembayaran tunai.
         if ($pesanan->metode_pembayaran === 'Cash') {
@@ -328,48 +352,47 @@ class CheckoutController extends Controller
             return $this->redirectPesanan(
                 $pesanan,
                 $pembeli,
-                'Pesanan berhasil dibuat, tetapi pembayaran Midtrans belum dapat diproses. '
+                'Pesanan berhasil dibuat!',
+                'Pembayaran Midtrans belum dapat diproses. '
                     . 'Silakan hubungi admin sebelum mencoba checkout kembali.'
             );
         }
     }
 
-    /** Mengarahkan pembeli login atau tamu ke halaman pesanan selesai. */
+    /** Mengarahkan pembeli ke halaman pesanan berhasil. */
     private function redirectPesanan(
         Pesanan $pesanan,
-        ?Pembeli $pembeli,
-        string $pesan
+        Pembeli $pembeli,
+        string $pesan,
+        ?string $peringatan = null
     ) {
-        if ($pembeli) {
-            return redirect()
-                ->route('pesanans.show', $pesanan->id_pesanan)
-                ->with('success', $pesan);
-        }
-
-        session([
-            'pesanan_tamu' => $pesanan->id_pesanan,
-        ]);
-
-        return redirect()
+        $redirect = redirect()
             ->route('checkout.selesai', $pesanan->id_pesanan)
             ->with('success', $pesan);
+
+        if ($peringatan) {
+            $redirect->with('warning', $peringatan);
+        }
+
+        return $redirect;
     }
 
-    /** Halaman pesanan selesai untuk tamu. */
+    /** Halaman "Pesanan Berhasil Dibuat!" untuk pembeli yang login. */
     public function selesai($id)
     {
+        $pesanan = Pesanan::with('detailPesanans')->findOrFail($id);
+
+        // Pembeli hanya boleh melihat pesanannya sendiri.
         abort_unless(
-            (string) session('pesanan_tamu') === (string) $id,
+            (int) $pesanan->pembeli_id === (int) session('user_id'),
             403
         );
-
-        $pesanan = Pesanan::with('detailPesanans')->findOrFail($id);
 
         $items = $pesanan->detailPesanans->map(function ($detail) {
             $product = Product::find($detail->product_id);
             $dataTopping = $detail->toppings ?? [];
 
-            // Mendukung kolom toppings yang disimpan sebagai JSON maupun array cast.
+            // Mendukung kolom toppings berupa JSON maupun array cast.
             if (is_string($dataTopping)) {
                 $dataTopping = json_decode($dataTopping, true) ?: [];
             }
@@ -384,9 +407,6 @@ class CheckoutController extends Controller
             ];
         });
 
-        return view('checkout.selesai', compact(
-            'pesanan',
-            'items'
-        ));
+        return view('checkout.selesai', compact('pesanan', 'items'));
     }
 }

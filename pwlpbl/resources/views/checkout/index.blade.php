@@ -382,7 +382,9 @@
 
         $telpTampil = preg_replace('/^(62|0)/', '', preg_replace('/\D/', '', (string) $telpRaw));
 
-        $emailAwal = old('email', optional(auth()->user())->email ?? optional($pembeli ?? null)->email);
+        $emailAwal = $pembeli->email;
+
+        $alamatAwal = old('alamat', $pembeli->alamat);
     @endphp
     <div class="mb-4">
         <div class="d-flex align-items-center gap-3 mb-2">
@@ -401,12 +403,6 @@
             Periksa pesananmu, lalu lengkapi data dan pembayaran.
         </p>
 
-        @if (empty($pembeli))
-            <p class="small mb-0 mt-1">
-                Tidak perlu daftar untuk memesan. Sudah punya akun?
-                <a href="{{ route('login') }}" class="fw-semibold">Login</a>
-            </p>
-        @endif
     </div>
 
     @if (session('error'))
@@ -481,7 +477,7 @@
                             </label>
 
                             <textarea name="alamat" id="alamat" class="form-control field-input" rows="3" maxlength="500"
-                                placeholder="Masukkan alamat lengkap">{{ old('alamat') }}</textarea>
+                                placeholder="Masukkan alamat lengkap">{{ $alamatAwal }}</textarea>
                         </div>
                     </div>
 
@@ -535,7 +531,8 @@
                                 </label>
 
                                 <input type="email" id="email" name="email" class="form-control field-input"
-                                    value="{{ $emailAwal }}" placeholder="contoh: pizzamoza@mail.com" required>
+                                    value="{{ $emailAwal }}" readonly required>
+                                <small class="text-secondary">Email mengikuti akun yang sedang login.</small>
                             </div>
 
                             <div class="col-12">

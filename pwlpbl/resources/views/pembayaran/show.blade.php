@@ -37,7 +37,7 @@
 
         .table {
             --bs-table-bg: transparent;
-            --bs-table-color: #f3e9e1;
+            --bs-table-color: #3b1d12;
         }
 
         .table th,
@@ -96,14 +96,14 @@
             <div class="col-md-6 info-item">
                 <div class="info-label">Pembeli</div>
                 <div class="info-value">
-                    {{ $pembayaran->pembeli->nama ?? ($pembayaran->pembeli->email ?? '-') }}
+                    {{ $pembayaran->nama_penerima ?? ($pembayaran->pembeli->nama ?? ($pembayaran->pembeli->email ?? '-')) }}
                 </div>
             </div>
 
             {{-- EMAIL --}}
             <div class="col-md-6 info-item">
                 <div class="info-label">Email</div>
-                <div class="info-value">{{ $pembayaran->pembeli->email ?? '-' }}</div>
+                <div class="info-value">{{ $pembayaran->email ?? ($pembayaran->pembeli->email ?? '-') }}</div>
             </div>
 
             {{-- TOTAL --}}
@@ -183,7 +183,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    {{ $detail->product->name ?? ($detail->product->nama_produk ?? '-') }}
+                                    {{ $detail->product->nama ?? ($detail->product->name ?? ($detail->product->nama_produk ?? '-')) }}
                                 </td>
                                 <td>Rp {{ number_format($detail->harga, 0, ',', '.') }}</td>
                                 <td>{{ $detail->jumlah }}</td>

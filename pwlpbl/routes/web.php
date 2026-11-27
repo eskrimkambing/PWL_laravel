@@ -33,7 +33,6 @@ Route::get('/', function () {
     $toppings = \App\Models\Topping::orderBy('nama')->get();
 
     return view('beranda', compact('products', 'toppings'));
-
 })->name('home');
 
 
@@ -60,18 +59,6 @@ Route::post('/logout', [AuthController::class, 'logout'])
 // ==========================================================
 // CHECKOUT DAN PEMBAYARAN MIDTRANS
 // ==========================================================
-
-// Halaman checkout
-Route::get('/checkout', [CheckoutController::class, 'index'])
-    ->name('checkout.index');
-
-// Proses checkout
-Route::post('/checkout', [CheckoutController::class, 'store'])
-    ->name('checkout.store');
-
-// Halaman selesai pesanan tamu
-Route::get('/checkout/selesai/{id}', [CheckoutController::class, 'selesai'])
-    ->name('checkout.selesai');
 
 // Notifikasi pembayaran otomatis dari Midtrans
 Route::post('/midtrans/notification', [
@@ -238,6 +225,17 @@ Route::middleware('role:admin')->group(function () {
 
 Route::middleware('role:pembeli')->group(function () {
 
+    // CHECKOUT (wajib login; kalau belum login diarahkan ke halaman login)
+    Route::get('/checkout', [CheckoutController::class, 'index'])
+        ->name('checkout.index');
+
+    Route::post('/checkout', [CheckoutController::class, 'store'])
+        ->name('checkout.store');
+
+    // Halaman pesanan berhasil dibuat
+    Route::get('/checkout/selesai/{id}', [CheckoutController::class, 'selesai'])
+        ->name('checkout.selesai');
+
     // Dashboard Pembeli
     Route::get('/pembeli/dashboard', function () {
         return redirect()->route('home');
@@ -282,4 +280,3 @@ Route::middleware('role:pembeli')->group(function () {
     Route::delete('/profil', [ProfilController::class, 'destroy'])
         ->name('profil.destroy');
 });
-

@@ -56,7 +56,7 @@ class DashboardController extends Controller
         // ---------- Rekap pesanan ----------
         $pesananSelesai    = Pesanan::where('status', 'Selesai')->count();
         $pesananBatal      = Pesanan::where('status', 'Dibatalkan')->count();
-        $pesananBelum      = Pesanan::whereIn('status', ['Menunggu', 'Diproses'])->count();
+        $pesananBelum      = Pesanan::whereIn('status', ['Menunggu', 'Diproses', 'Pengantaran'])->count();
 
         // ---------- Transaksi terakhir (sama dengan menu Kelola Transaksi) ----------
         $transaksiTerakhir = Pesanan::with('pembeli')
