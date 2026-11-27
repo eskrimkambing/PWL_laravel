@@ -1,6 +1,6 @@
 @extends('dashboard.admin')
 
-@section('title', 'Detail Perhitungan AHP dan SAW')
+@section('title', 'Cara Perhitungan Pelanggan Setia')
 
 @section('content')
 
@@ -89,7 +89,7 @@
 
     {{-- JUDUL --}}
     <div class="mb-4">
-        <h3 class="fw-bold mb-1">Detail Perhitungan AHP dan SAW</h3>
+        <h3 class="fw-bold mb-1">Cara Perhitungan Pelanggan Setia</h3>
         <p class="text-secondary mb-0">
             Langkah-langkah perhitungan dari data awal sampai nilai akhir
         </p>
@@ -98,7 +98,7 @@
     {{-- PERIODE --}}
     <div class="card mb-4">
         <div class="card-body">
-            <strong>Periode Analisis:</strong>
+            <strong>Periode:</strong>
             {{ \Carbon\Carbon::createFromFormat('!Y-m', $bulan)->translatedFormat('F Y') }}
         </div>
     </div>
