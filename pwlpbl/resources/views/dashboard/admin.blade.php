@@ -676,8 +676,8 @@
 
                 <a class="nav-link {{ request()->routeIs('admin.analisis.*') ? 'active' : '' }}"
                     href="{{ route('admin.analisis.index') }}">
-                    <span>📊</span>
-                    Analisis Keputusan
+                    <span></span>
+                    Pelanggan Setia
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}"
