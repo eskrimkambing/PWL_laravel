@@ -26,11 +26,18 @@ class ProfilController extends Controller
 
     public function update(Request $request)
     {
+        // Nomor HP disimpan dengan format 08xxxx: angka saja, tanpa +62 atau 0 di depan.
+        $telp = preg_replace('/\D/', '', (string) $request->input('no_telp', ''));
+        $telp = preg_replace('/^(62|0)/', '', $telp);
+        $request->merge(['no_telp' => $telp === '' ? '' : '0' . $telp]);
+
         $request->validate([
-            'nama'    => 'required|string|max:100',
-            'no_telp' => 'required|string|max:20',
-            'alamat'  => 'required|string',
-            'foto'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120', // maks 5 MB
+            'nama'          => 'required|string|max:100',
+            'no_telp'       => 'required|regex:/^08[0-9]{7,12}$/',
+            'alamat'        => 'required|string',
+            'foto'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120', // maks 5 MB
+        ], [
+            'no_telp.regex' => 'Nomor HP harus diawali 08 dan hanya berisi angka.',
         ]);
 
         $pembeli = Pembeli::findOrFail(session('user_id'));

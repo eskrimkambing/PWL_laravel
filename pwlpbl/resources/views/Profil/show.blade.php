@@ -4,147 +4,240 @@
 
 @push('styles')
     <style>
-        .profile-avatar {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: var(--moza-accent);
-            color: var(--moza-accent-text);
-            font-size: var(--fs-3xl);
-            font-weight: bold;
-            flex-shrink: 0;
+        .pv-wrap {
+            max-width: 560px;
+            margin: 0 auto;
         }
 
-        .profile-avatar-img {
-            width: 90px;
-            height: 90px;
+        .pv-card {
+            background: #FFFBF0;
+            border: 1px solid rgba(139, 26, 16, 0.12);
+            border-radius: 16px;
+            padding: 28px 24px;
+            color: #2B1B14;
+        }
+
+        .pv-head {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 22px;
+            margin-bottom: 22px;
+            border-bottom: 1px solid rgba(139, 26, 16, 0.12);
+        }
+
+        .pv-avatar,
+        .pv-avatar-img {
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
+            margin-bottom: 14px;
+        }
+
+        .pv-avatar {
+            background: #E8751A;
+            color: #fff;
+            font-size: 36px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pv-avatar-img {
             object-fit: cover;
-            flex-shrink: 0;
-            border: 2px solid var(--moza-accent);
+            border: 3px solid #FDF0C4;
         }
 
-        .info-box {
-            background: var(--bs-tertiary-bg);
+        .pv-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #8B1A10;
+            margin-bottom: 4px;
+        }
+
+        .pv-email {
+            font-size: 14px;
+            color: #6B4A3A;
+        }
+
+        .pv-row {
+            background: #FDF0C4;
             border-radius: 12px;
-            padding: 16px 18px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
         }
 
-        .btn-outline-moza {
-            border: 1px solid var(--moza-accent);
-            color: var(--moza-accent);
+        .pv-label {
+            font-size: 12px;
+            color: #6B4A3A;
+            margin-bottom: 2px;
+        }
+
+        .pv-value {
+            font-size: 15px;
+            color: #2B1B14;
+            word-break: break-word;
+        }
+
+        .pv-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .pv-btn-edit {
+            flex: 1;
+            text-align: center;
+            background: #E8751A;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .pv-btn-edit:hover {
+            background: #8B1A10;
+            color: #fff;
+        }
+
+        .pv-btn-back {
+            flex: 1;
+            text-align: center;
+            background: transparent;
+            color: #8B1A10;
+            border: 1px solid rgba(139, 26, 16, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .pv-btn-back:hover {
+            background: #FDF0C4;
+            color: #8B1A10;
+        }
+
+        .pv-danger {
+            margin-top: 20px;
+            background: #FFF5F3;
+            border: 1px solid rgba(210, 57, 43, 0.25);
+            border-radius: 14px;
+            padding: 18px 20px;
+        }
+
+        .pv-danger-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #A32D1F;
+            margin-bottom: 2px;
+        }
+
+        .pv-danger-desc {
+            font-size: 13px;
+            color: #6B4A3A;
+            margin-bottom: 12px;
+        }
+
+        .pv-btn-hapus {
+            width: 100%;
+            background: transparent;
+            color: #D2392B;
+            border: 1px solid #D2392B;
+            border-radius: 10px;
+            padding: 10px;
             font-weight: 600;
         }
 
-        .btn-outline-moza:hover {
-            background: var(--moza-accent);
-            color: var(--moza-accent-text);
-        }
-
-        .danger-zone {
-            border: 1px solid rgba(220, 53, 69, 0.4);
-            background: rgba(220, 53, 69, 0.06);
-            border-radius: 14px;
+        .pv-btn-hapus:hover {
+            background: #D2392B;
+            color: #fff;
         }
     </style>
 @endpush
 
 @section('content')
-    <div class="mb-4">
-        <h2 class="fw-bold mb-1">Profil Saya</h2>
-        <p class="text-secondary mb-0">Lihat dan kelola informasi akun kamu.</p>
-    </div>
+    <div class="pv-wrap">
 
-    {{-- NOTIFIKASI --}}
-    @if (session('sukses'))
-        <div class="alert alert-success" style="max-width: 850px;">{{ session('sukses') }}</div>
-    @endif
+        <div class="mb-3 text-center">
+            <h2 class="fw-bold mb-1">Profil Saya</h2>
+            <p class="mb-0" style="color: #6B4A3A;">Lihat dan kelola informasi akun kamu.</p>
+        </div>
 
-    @if (session('error'))
-        <div class="alert alert-danger" style="max-width: 850px;">{{ session('error') }}</div>
-    @endif
+        {{-- NOTIFIKASI --}}
+        @if (session('sukses'))
+            <div class="alert alert-success">{{ session('sukses') }}</div>
+        @endif
 
-    <div class="card mb-4" style="max-width: 850px;">
-        <div class="card-body p-4">
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+
+        <div class="pv-card">
 
             {{-- HEADER PROFIL --}}
-            <div class="d-flex align-items-center gap-3 pb-4 mb-4 border-bottom">
-
+            <div class="pv-head">
                 @if ($pembeli->foto)
-                    <img src="{{ $pembeli->foto }}" alt="Foto profil" class="profile-avatar-img">
+                    <img src="{{ $pembeli->foto }}" alt="Foto profil" class="pv-avatar-img">
                 @else
-                    <div class="profile-avatar d-flex align-items-center justify-content-center">
+                    <div class="pv-avatar">
                         {{ strtoupper(substr($pembeli->nama ?? ($pembeli->email ?? 'P'), 0, 1)) }}
                     </div>
                 @endif
 
-                <div>
-                    <h4 class="mb-1">{{ $pembeli->nama ?? 'Pembeli' }}</h4>
-                    <p class="text-secondary mb-0">{{ $pembeli->email ?? '-' }}</p>
-                </div>
+                <div class="pv-name">{{ $pembeli->nama ?? 'Pembeli' }}</div>
+                <div class="pv-email">{{ $pembeli->email ?? '-' }}</div>
             </div>
 
             {{-- DATA PROFIL --}}
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <div class="info-box">
-                        <div class="text-secondary small mb-1">Nama Lengkap</div>
-                        <div>{{ $pembeli->nama ?? '-' }}</div>
-                    </div>
-                </div>
+            <div class="pv-row">
+                <div class="pv-label">Nama Lengkap</div>
+                <div class="pv-value">{{ $pembeli->nama ?? '-' }}</div>
+            </div>
 
-                <div class="col-md-6">
-                    <div class="info-box">
-                        <div class="text-secondary small mb-1">Email</div>
-                        <div>{{ $pembeli->email ?? '-' }}</div>
-                    </div>
-                </div>
+            <div class="pv-row">
+                <div class="pv-label">Email</div>
+                <div class="pv-value">{{ $pembeli->email ?? '-' }}</div>
+            </div>
 
-                <div class="col-md-6">
-                    <div class="info-box">
-                        <div class="text-secondary small mb-1">Nomor Telepon</div>
-                        <div>{{ $pembeli->no_telp ?? '-' }}</div>
-                    </div>
-                </div>
+            <div class="pv-row">
+                <div class="pv-label">Nomor Telepon</div>
+                <div class="pv-value">{{ $pembeli->no_telp ?? '-' }}</div>
+            </div>
 
-                <div class="col-md-6">
-                    <div class="info-box">
-                        <div class="text-secondary small mb-1">ID Pembeli</div>
-                        <div>{{ $pembeli->id_pembeli }}</div>
-                    </div>
-                </div>
+            <div class="pv-row">
+                <div class="pv-label">Alamat</div>
+                <div class="pv-value">{{ $pembeli->alamat ?? '-' }}</div>
+            </div>
 
-                <div class="col-12">
-                    <div class="info-box">
-                        <div class="text-secondary small mb-1">Alamat</div>
-                        <div>{{ $pembeli->alamat ?? '-' }}</div>
-                    </div>
-                </div>
+            <div class="pv-row">
+                <div class="pv-label">ID Pembeli</div>
+                <div class="pv-value">{{ $pembeli->id_pembeli }}</div>
             </div>
 
             {{-- TOMBOL --}}
-            <div class="d-flex gap-2 mt-4">
-                <a href="{{ route('profil.edit') }}" class="btn btn-moza">✏️ Edit Profil</a>
-                <a href="{{ route('dashboard.pembeli') }}" class="btn btn-outline-moza">Kembali</a>
+            <div class="pv-actions">
+                <a href="{{ route('profil.edit') }}" class="pv-btn-edit">Edit Profil</a>
+                <a href="{{ route('dashboard.pembeli') }}" class="pv-btn-back">Kembali</a>
             </div>
 
         </div>
-    </div>
 
-    {{-- ================= HAPUS AKUN ================= --}}
-    <div class="danger-zone p-4" style="max-width: 850px;">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <div>
-                <h5 class="text-danger mb-1">Hapus Akun</h5>
-                <p class="text-secondary small mb-0">
-                    Akun dan data profil kamu akan dihapus permanen dan tidak bisa dikembalikan.
-                </p>
+        {{-- HAPUS AKUN --}}
+        <div class="pv-danger">
+            <div class="pv-danger-title">Hapus Akun</div>
+            <div class="pv-danger-desc">
+                Akun dan data profil kamu akan dihapus permanen dan tidak bisa dikembalikan.
             </div>
 
-            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalHapusAkun">
-                🗑️ Hapus Akun Saya
+            <button type="button" class="pv-btn-hapus" data-bs-toggle="modal" data-bs-target="#modalHapusAkun">
+                Hapus Akun Saya
             </button>
         </div>
+
     </div>
 
     {{-- MODAL KONFIRMASI --}}

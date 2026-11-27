@@ -4,105 +4,181 @@
 
 @push('styles')
     <style>
-        .form-control {
-            background: var(--bs-tertiary-bg);
-            border: 1px solid rgba(255, 255, 255, .1);
-            color: var(--bs-body-color);
-            border-radius: 9px;
-            padding: 11px 13px;
+        .pe-wrap {
+            max-width: 560px;
+            margin: 0 auto;
         }
 
-        .form-control:focus {
-            background: var(--bs-tertiary-bg);
-            color: #fff;
-            border-color: var(--moza-accent);
-            box-shadow: none;
+        .pe-card {
+            background: var(--moza-cream-card, #FFFBF0);
+            border: 1px solid rgba(139, 26, 16, 0.12);
+            border-radius: 16px;
+            padding: 24px;
+            color: #2B1B14;
         }
 
-        .form-control::placeholder {
-            color: #8f7e73;
-        }
-
-        textarea.form-control {
-            min-height: 110px;
-            resize: vertical;
-        }
-
-        .btn-outline-moza {
-            border: 1px solid var(--moza-accent);
-            color: var(--moza-accent);
+        .pe-title {
+            font-size: 18px;
             font-weight: 600;
+            color: #8B1A10;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(139, 26, 16, 0.12);
         }
 
-        .btn-outline-moza:hover {
-            background: var(--moza-accent);
-            color: var(--moza-accent-text);
+        .pe-label {
+            display: block;
+            font-size: 14px;
+            color: #2B1B14;
+            margin-bottom: 6px;
         }
 
-        /* Foto profil */
-        .foto-preview {
-            width: 110px;
-            height: 110px;
+        .pe-field {
+            margin-bottom: 18px;
+        }
+
+        .pe-input {
+            width: 100%;
+            background: #FDF8EE;
+            border: 1px solid rgba(139, 26, 16, 0.2);
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 15px;
+            color: #2B1B14;
+        }
+
+        .pe-input:focus {
+            outline: none;
+            border-color: #E8751A;
+            box-shadow: 0 0 0 3px rgba(232, 117, 26, 0.2);
+        }
+
+        .pe-input-muted {
+            background: #FBE7A1;
+            border-color: rgba(139, 26, 16, 0.12);
+            color: #6B4A3A;
+        }
+
+        .pe-input-muted:focus {
+            box-shadow: none;
+            border-color: rgba(139, 26, 16, 0.12);
+        }
+
+        .pe-hint {
+            font-size: 12px;
+            color: #6B4A3A;
+            margin-top: 4px;
+        }
+
+        /* Nomor HP dengan prefiks +62 */
+        .pe-phone {
+            display: flex;
+            align-items: stretch;
+        }
+
+        .pe-phone-prefix {
+            background: #E8751A;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 11px 14px;
+            border-radius: 10px 0 0 10px;
+            border: 1px solid #E8751A;
+            border-right: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .pe-phone .pe-input {
+            border-radius: 0 10px 10px 0;
+            background: #FBE7A1;
+            border-color: rgba(139, 26, 16, 0.12);
+        }
+
+        .pe-btn {
+            width: 100%;
+            background: #E8751A;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 13px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .pe-btn:hover {
+            background: #8B1A10;
+        }
+
+        .pe-btn-batal {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #6B4A3A;
+            text-decoration: none;
+        }
+
+        .pe-foto {
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--moza-accent);
+            border: 2px solid #E8751A;
         }
 
-        .foto-placeholder {
-            width: 110px;
-            height: 110px;
+        .pe-foto-placeholder {
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
-            background: var(--moza-accent);
-            color: var(--moza-accent-text);
-            font-size: var(--fs-4xl);
-            font-weight: bold;
+            background: #E8751A;
+            color: #fff;
+            font-size: 32px;
+            font-weight: 700;
         }
     </style>
 @endpush
 
 @section('content')
-    <div class="mb-4">
-        <h2 class="fw-bold mb-1">Edit Profil</h2>
-        <p class="text-secondary mb-0">Perbarui informasi akun kamu di sini.</p>
-    </div>
+    <div class="pe-wrap">
 
-    {{-- ERROR --}}
-    @if ($errors->any())
-        <div class="alert alert-danger" style="max-width: 850px;">
-            <strong>Data belum benar.</strong>
-            <ul class="mb-0 mt-2">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+        <div class="mb-3 text-center">
+            <h2 class="fw-bold mb-1">Edit Profil</h2>
+            <p class="mb-0" style="color: #6B4A3A;">Perbarui informasi akun kamu di sini.</p>
         </div>
-    @endif
 
-    <div class="card" style="max-width: 850px;">
-        <div class="card-body p-4">
+        {{-- ERROR --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>Data belum benar.</strong>
+                <ul class="mb-0 mt-2">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div class="pe-card">
+            <div class="pe-title">Edit Profile</div>
 
             <form action="{{ route('profil.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
                 {{-- FOTO PROFIL --}}
-                <div class="text-center mb-4">
-
+                <div class="pe-field text-center">
                     <img id="fotoPreview" src="{{ $pembeli->foto }}" alt="Foto profil"
-                        class="foto-preview mb-3 {{ $pembeli->foto ? '' : 'd-none' }}">
+                        class="pe-foto mb-2 {{ $pembeli->foto ? '' : 'd-none' }}">
 
                     <div id="fotoPlaceholder"
-                        class="foto-placeholder d-inline-flex align-items-center justify-content-center mb-3 {{ $pembeli->foto ? 'd-none' : '' }}">
+                        class="pe-foto-placeholder d-inline-flex align-items-center justify-content-center mb-2 {{ $pembeli->foto ? 'd-none' : '' }}">
                         {{ strtoupper(substr($pembeli->nama ?? ($pembeli->email ?? 'P'), 0, 1)) }}
                     </div>
 
-                    <div style="max-width: 360px; margin: 0 auto;">
-                        <input type="file" name="foto" id="fotoInput" class="form-control"
-                            accept="image/png, image/jpeg, image/webp">
-                        <div class="text-secondary small mt-1">
-                            Format JPG, PNG, atau WEBP. Maksimal 5 MB.
-                        </div>
-                    </div>
+                    <input type="file" name="foto" id="fotoInput" class="pe-input"
+                        accept="image/png, image/jpeg, image/webp">
+                    <div class="pe-hint">Format JPG, PNG, atau WEBP. Maksimal 5 MB.</div>
 
                     @if ($pembeli->foto)
                         <div class="form-check d-inline-block mt-2">
@@ -113,36 +189,46 @@
                     @endif
                 </div>
 
-                <hr class="mb-4">
-
                 {{-- NAMA --}}
-                <div class="mb-3">
-                    <label class="form-label">Nama Lengkap</label>
-                    <input type="text" name="nama" class="form-control" value="{{ old('nama', $pembeli->nama) }}"
-                        placeholder="Masukkan nama lengkap" required>
+                <div class="pe-field">
+                    <label class="pe-label" for="nama">Name</label>
+                    <input type="text" id="nama" name="nama" class="pe-input"
+                        value="{{ old('nama', $pembeli->nama) }}" placeholder="Masukkan nama lengkap" required>
                 </div>
 
-                {{-- NOMOR TELEPON --}}
-                <div class="mb-3">
-                    <label class="form-label">Nomor Telepon</label>
-                    <input type="text" name="no_telp" class="form-control"
-                        value="{{ old('no_telp', $pembeli->no_telp) }}" placeholder="Masukkan nomor telepon" required>
+                {{-- EMAIL (tidak bisa diubah) --}}
+                <div class="pe-field">
+                    <label class="pe-label" for="email">Email</label>
+                    <input type="email" id="email" class="pe-input pe-input-muted" value="{{ $pembeli->email }}"
+                        readonly>
+                    <div class="pe-hint">Email tidak bisa diubah karena dipakai untuk login.</div>
+                </div>
+
+                {{-- NOMOR HP --}}
+                @php
+                    $telpTampil = ltrim(old('no_telp', $pembeli->no_telp ?? ''), '0');
+                    $telpTampil = preg_replace('/^62/', '', $telpTampil);
+                @endphp
+                <div class="pe-field">
+                    <span class="pe-label">Nomor HP</span>
+                    <div class="pe-phone">
+                        <span class="pe-phone-prefix">+62</span>
+                        <input type="text" name="no_telp" class="pe-input" inputmode="numeric"
+                            value="{{ $telpTampil }}" placeholder="81234567890" required>
+                    </div>
                 </div>
 
                 {{-- ALAMAT --}}
-                <div class="mb-4">
-                    <label class="form-label">Alamat</label>
-                    <textarea name="alamat" class="form-control" placeholder="Masukkan alamat lengkap" required>{{ old('alamat', $pembeli->alamat) }}</textarea>
+                <div class="pe-field">
+                    <label class="pe-label" for="alamat">Alamat</label>
+                    <textarea id="alamat" name="alamat" class="pe-input" rows="3" placeholder="Masukkan alamat lengkap" required>{{ old('alamat', $pembeli->alamat) }}</textarea>
                 </div>
 
-                {{-- TOMBOL --}}
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-moza">💾 Simpan Perubahan</button>
-                    <a href="{{ route('profil.show') }}" class="btn btn-outline-moza">Batal</a>
-                </div>
+                <button type="submit" class="pe-btn">Simpan</button>
+                <a href="{{ route('profil.show') }}" class="pe-btn-batal">Batal</a>
             </form>
-
         </div>
+
     </div>
 @endsection
 
