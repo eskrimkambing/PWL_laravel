@@ -89,7 +89,7 @@
 
         <div class="d-flex flex-wrap justify-content-center gap-2">
             <a href="{{ route('home') }}#menu" class="btn btn-moza px-4">Pesan Lagi</a>
-            <a href="{{ route('pesanans.index') }}" class="btn btn-outline-secondary px-4">Pesanan Saya</a>
+            <a href="{{ route('pesanans.index') }}" class="btn btn-outline-secondary px-4">Riwayat Pesanan Saya</a>
         </div>
 
     </div>

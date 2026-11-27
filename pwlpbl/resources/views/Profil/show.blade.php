@@ -4,147 +4,349 @@
 
 @push('styles')
     <style>
-        .profile-avatar {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: var(--moza-accent);
-            color: var(--moza-accent-text);
-            font-size: var(--fs-3xl);
-            font-weight: bold;
-            flex-shrink: 0;
+        .pv-wrap {
+            max-width: 1500px;
+            margin: 0 auto;
         }
 
-        .profile-avatar-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-            border: 2px solid var(--moza-accent);
+        .pv-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 14px;
         }
 
-        .info-box {
-            background: var(--bs-tertiary-bg);
+        .pv-full {
+            grid-column: 1 / -1;
+        }
+
+
+        .pv-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1100px) minmax(0, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .pv-side-UNUSED {
+            background: #FFFBF0;
+            border: 1px solid rgba(139, 26, 16, 0.12);
+            border-radius: 16px;
+            padding: 24px 22px;
+            color: #2B1B14;
+            position: sticky;
+            top: 20px;
+        }
+
+        .pv-side-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #8B1A10;
+            margin-bottom: 12px;
+        }
+
+        .pv-side-link {
+            display: block;
+            background: #FDF0C4;
+            color: #8B1A10;
             border-radius: 12px;
-            padding: 16px 18px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-decoration: none;
         }
 
-        .btn-outline-moza {
-            border: 1px solid var(--moza-accent);
-            color: var(--moza-accent);
+        .pv-side-link:hover {
+            background: #FCE3B8;
+            color: #8B1A10;
+        }
+
+        .pv-side-text {
+            font-size: 14px;
+            color: #6B4A3A;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+
+        .pv-deco {
+            position: sticky;
+            top: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 40px;
+            opacity: 0.95;
+        }
+
+        @media (max-width: 991px) {
+            .pv-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .pv-deco {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .pv-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pv-card {
+            background: #FFFBF0;
+            border: 1px solid rgba(139, 26, 16, 0.12);
+            border-radius: 16px;
+            padding: 48px 56px;
+            color: #2B1B14;
+        }
+
+        .pv-head {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 22px;
+            margin-bottom: 22px;
+            border-bottom: 1px solid rgba(139, 26, 16, 0.12);
+        }
+
+        .pv-avatar,
+        .pv-avatar-img {
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            margin-bottom: 14px;
+        }
+
+        .pv-avatar {
+            background: #E8751A;
+            color: #fff;
+            font-size: 36px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pv-avatar-img {
+            object-fit: cover;
+            border: 3px solid #FDF0C4;
+        }
+
+        .pv-name {
+            font-size: 30px;
+            font-weight: 700;
+            color: #8B1A10;
+            margin-bottom: 4px;
+        }
+
+        .pv-email {
+            font-size: 14px;
+            color: #6B4A3A;
+        }
+
+        .pv-row {
+            background: #FDF0C4;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+        }
+
+        .pv-label {
+            font-size: 12px;
+            color: #6B4A3A;
+            margin-bottom: 2px;
+        }
+
+        .pv-value {
+            font-size: 16px;
+            color: #2B1B14;
+            word-break: break-word;
+        }
+
+        .pv-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pv-btn-edit {
+            flex: 1;
+            text-align: center;
+            background: #E8751A;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .pv-btn-edit:hover {
+            background: #8B1A10;
+            color: #fff;
+        }
+
+        .pv-btn-back {
+            flex: 1;
+            text-align: center;
+            background: transparent;
+            color: #8B1A10;
+            border: 1px solid rgba(139, 26, 16, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .pv-btn-back:hover {
+            background: #FDF0C4;
+            color: #8B1A10;
+        }
+
+        .pv-danger {
+            margin-top: 20px;
+            background: #FFF5F3;
+            border: 1px solid rgba(210, 57, 43, 0.25);
+            border-radius: 14px;
+            padding: 18px 20px;
+        }
+
+        .pv-danger-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #A32D1F;
+            margin-bottom: 2px;
+        }
+
+        .pv-danger-desc {
+            font-size: 13px;
+            color: #6B4A3A;
+            margin-bottom: 12px;
+        }
+
+        .pv-btn-hapus {
+            width: 100%;
+            background: transparent;
+            color: #D2392B;
+            border: 1px solid #D2392B;
+            border-radius: 10px;
+            padding: 10px;
             font-weight: 600;
         }
 
-        .btn-outline-moza:hover {
-            background: var(--moza-accent);
-            color: var(--moza-accent-text);
-        }
-
-        .danger-zone {
-            border: 1px solid rgba(220, 53, 69, 0.4);
-            background: rgba(220, 53, 69, 0.06);
-            border-radius: 14px;
+        .pv-btn-hapus:hover {
+            background: #D2392B;
+            color: #fff;
         }
     </style>
 @endpush
 
 @section('content')
-    <div class="mb-4">
-        <h2 class="fw-bold mb-1">Profil Saya</h2>
-        <p class="text-secondary mb-0">Lihat dan kelola informasi akun kamu.</p>
-    </div>
+    <div class="pv-wrap">
 
-    {{-- NOTIFIKASI --}}
-    @if (session('sukses'))
-        <div class="alert alert-success" style="max-width: 850px;">{{ session('sukses') }}</div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger" style="max-width: 850px;">{{ session('error') }}</div>
-    @endif
-
-    <div class="card mb-4" style="max-width: 850px;">
-        <div class="card-body p-4">
-
-            {{-- HEADER PROFIL --}}
-            <div class="d-flex align-items-center gap-3 pb-4 mb-4 border-bottom">
-
-                @if ($pembeli->foto)
-                    <img src="{{ $pembeli->foto }}" alt="Foto profil" class="profile-avatar-img">
-                @else
-                    <div class="profile-avatar d-flex align-items-center justify-content-center">
-                        {{ strtoupper(substr($pembeli->nama ?? ($pembeli->email ?? 'P'), 0, 1)) }}
-                    </div>
-                @endif
-
-                <div>
-                    <h4 class="mb-1">{{ $pembeli->nama ?? 'Pembeli' }}</h4>
-                    <p class="text-secondary mb-0">{{ $pembeli->email ?? '-' }}</p>
-                </div>
-            </div>
-
-            {{-- DATA PROFIL --}}
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <div class="info-box">
-                        <div class="text-secondary small mb-1">Nama Lengkap</div>
-                        <div>{{ $pembeli->nama ?? '-' }}</div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="info-box">
-                        <div class="text-secondary small mb-1">Email</div>
-                        <div>{{ $pembeli->email ?? '-' }}</div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="info-box">
-                        <div class="text-secondary small mb-1">Nomor Telepon</div>
-                        <div>{{ $pembeli->no_telp ?? '-' }}</div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="info-box">
-                        <div class="text-secondary small mb-1">ID Pembeli</div>
-                        <div>{{ $pembeli->id_pembeli }}</div>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="info-box">
-                        <div class="text-secondary small mb-1">Alamat</div>
-                        <div>{{ $pembeli->alamat ?? '-' }}</div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- TOMBOL --}}
-            <div class="d-flex gap-2 mt-4">
-                <a href="{{ route('profil.edit') }}" class="btn btn-moza">✏️ Edit Profil</a>
-                <a href="{{ route('dashboard.pembeli') }}" class="btn btn-outline-moza">Kembali</a>
-            </div>
-
+        <div class="mb-3 text-center">
+            <h2 class="fw-bold mb-1">Profil Saya</h2>
+            <p class="mb-0" style="color: #6B4A3A;">Lihat dan kelola informasi akun kamu.</p>
         </div>
-    </div>
 
-    {{-- ================= HAPUS AKUN ================= --}}
-    <div class="danger-zone p-4" style="max-width: 850px;">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        {{-- NOTIFIKASI --}}
+        @if (session('sukses'))
+            <div class="alert alert-success">{{ session('sukses') }}</div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+
+        <div class="pv-layout">
+            <div class="pv-deco" aria-hidden="true">
+                <img src="{{ asset('images/pizza/pizza-1.png') }}" alt="" width="190"
+                    style="display:block; margin:0 auto 22px; transform: rotate(-6deg);">
+                <img src="{{ asset('images/pizza/pizza-4.png') }}" alt="" width="160"
+                    style="display:block; margin:0 auto 22px; transform: rotate(8deg);">
+            </div>
             <div>
-                <h5 class="text-danger mb-1">Hapus Akun</h5>
-                <p class="text-secondary small mb-0">
-                    Akun dan data profil kamu akan dihapus permanen dan tidak bisa dikembalikan.
-                </p>
+                <div class="pv-card">
+
+                    {{-- HEADER PROFIL --}}
+                    <div class="pv-head">
+                        @if ($pembeli->foto)
+                            <img src="{{ $pembeli->foto }}" alt="Foto profil" class="pv-avatar-img">
+                        @else
+                            <div class="pv-avatar">
+                                {{ strtoupper(substr($pembeli->nama ?? ($pembeli->email ?? 'P'), 0, 1)) }}
+                            </div>
+                        @endif
+
+                        <div class="pv-name">{{ $pembeli->nama ?? 'Pembeli' }}</div>
+                        <div class="pv-email">{{ $pembeli->email ?? '-' }}</div>
+                    </div>
+
+                    {{-- DATA PROFIL --}}
+                    <div class="pv-grid">
+                        <div class="pv-row">
+                            <div class="pv-label">Nama Lengkap</div>
+                            <div class="pv-value">{{ $pembeli->nama ?? '-' }}</div>
+                        </div>
+
+                        <div class="pv-row">
+                            <div class="pv-label">Email</div>
+                            <div class="pv-value">{{ $pembeli->email ?? '-' }}</div>
+                        </div>
+
+                        <div class="pv-row">
+                            <div class="pv-label">Nomor Telepon</div>
+                            <div class="pv-value">{{ $pembeli->no_telp ?? '-' }}</div>
+                        </div>
+
+                        <div class="pv-row pv-full">
+                            <div class="pv-label">Alamat</div>
+                            <div class="pv-value">{{ $pembeli->alamat ?? '-' }}</div>
+                        </div>
+
+                        <div class="pv-row">
+                            <div class="pv-label">ID Pembeli</div>
+                            <div class="pv-value">{{ $pembeli->id_pembeli }}</div>
+                        </div>
+
+                    </div>
+
+                    {{-- TOMBOL --}}
+                    <div class="pv-actions">
+                        <a href="{{ route('profil.edit') }}" class="pv-btn-edit">Edit Profil</a>
+                        <a href="{{ route('dashboard.pembeli') }}" class="pv-btn-back">Kembali</a>
+                    </div>
+
+                </div>
+
+                {{-- HAPUS AKUN --}}
+                <div class="pv-danger">
+                    <div class="pv-danger-title">Hapus Akun</div>
+                    <div class="pv-danger-desc">
+                        Akun dan data profil kamu akan dihapus permanen dan tidak bisa dikembalikan.
+                    </div>
+
+                    <button type="button" class="pv-btn-hapus" data-bs-toggle="modal" data-bs-target="#modalHapusAkun">
+                        Hapus Akun Saya
+                    </button>
+                </div>
             </div>
 
-            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalHapusAkun">
-                🗑️ Hapus Akun Saya
-            </button>
+            <div class="pv-deco" aria-hidden="true">
+                <img src="{{ asset('images/pizza/pizza-2.png') }}" alt="" width="160"
+                    style="display:block; margin:0 auto 22px; transform: rotate(10deg);">
+                <img src="{{ asset('images/pizza/pizza-3.png') }}" alt="" width="140"
+                    style="display:block; margin:0 auto 22px; transform: rotate(-8deg);">
+            </div>
         </div>
+
     </div>
 
     {{-- MODAL KONFIRMASI --}}

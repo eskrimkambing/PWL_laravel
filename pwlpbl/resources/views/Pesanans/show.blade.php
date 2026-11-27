@@ -4,347 +4,372 @@
 
 @push('styles')
     <style>
-        .content-card {
-            background: var(--bs-card-bg);
-            border: 1px solid var(--bs-border-color);
-            border-radius: 14px;
+        .dp-wrap {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 24px;
         }
 
-        .info-box {
-            background: var(--bs-body-bg);
-            border: 1px solid var(--bs-border-color);
-            border-radius: 10px;
-            padding: 14px;
-            height: 100%;
+        .dp-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0 20px;
         }
 
-        .info-label {
-            color: var(--bs-secondary-color);
-            font-size: var(--fs-sm);
-            margin-bottom: 4px;
+        @media (min-width: 900px) {
+            .dp-layout {
+                grid-template-columns: 1fr 1fr;
+                align-items: start;
+            }
         }
 
-        .total-box {
-            border-top: 1px solid var(--bs-border-color);
+        .dp-head {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
         }
 
-        .price {
-            color: var(--moza-accent);
-        }
-
-        .table {
-            --bs-table-bg: transparent;
-            --bs-table-color: #3b1d12;
-            --bs-table-border-color: var(--bs-border-color);
-        }
-
-        .table td.price {
-            color: #c2570c;
-        }
-
-        .order-thumb {
-            width: 56px;
-            height: 56px;
-            object-fit: cover;
-            border-radius: 10px;
+        .dp-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
             flex-shrink: 0;
-            border: 1px solid var(--bs-border-color);
-        }
-
-        .back-arrow {
-            font-size: var(--fs-3xl);
-            color: #7f1d1d;
+            background: #FFFFFF;
+            border: 1px solid rgba(139, 26, 16, 0.25);
+            border-radius: 12px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #8B1A10;
             text-decoration: none;
-            font-weight: bold;
-            transition: 0.2s;
+            line-height: 1;
         }
 
-        .back-arrow:hover {
-            color: #b91c1c;
-            transform: translateX(-3px);
+        .dp-back:hover {
+            background: #FCE3B8;
+            color: #8B1A10;
+        }
+
+        .dp-order-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #E8751A;
+        }
+
+        .dp-order-id {
+            font-size: 17px;
+            font-weight: 700;
+            color: #222222;
+        }
+
+        .dp-brand {
+            font-size: 14px;
+            font-weight: 700;
+            color: #222222;
+            margin-top: 4px;
+        }
+
+        .dp-date {
+            font-size: 13px;
+            color: #555555;
+            margin-bottom: 14px;
+        }
+
+        .dp-card {
+            background: #FFFFFF;
+            border: 1.5px solid #FFD600;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 14px;
+            color: #222222;
+        }
+
+        .dp-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            padding: 6px 0;
+            font-size: 14px;
+            color: #222222;
+        }
+
+        .dp-step:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            left: 10px;
+            top: 30px;
+            width: 2px;
+            height: calc(100% - 12px);
+            background: #E0E0D8;
+        }
+
+        .dp-step.on:not(:last-child)::after {
+            background: #E8751A;
+        }
+
+        .dp-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #D9D9D0;
+            background: #FFFFFF;
+            color: #FFFFFF;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .dp-step.on .dp-dot {
+            background: #E8751A;
+            border-color: #E8751A;
+        }
+
+        .dp-step.off {
+            color: #A8A8A0;
+        }
+
+        .dp-total-label {
+            font-size: 14px;
+            color: #555555;
+        }
+
+        .dp-total {
+            font-size: 22px;
+            font-weight: 600;
+            color: #222222;
+        }
+
+        .dp-paid {
+            font-size: 15px;
+            font-weight: 700;
+            color: #2E9E2E;
+        }
+
+        .dp-paid-dot {
+            display: inline-flex;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #FFD600;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #222222;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .dp-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #EFEFE8;
+            font-size: 14px;
+        }
+
+        .dp-row:last-child {
+            border-bottom: none;
+        }
+
+        .dp-sub {
+            font-size: 12px;
+            color: #777777;
+        }
+
+        .dp-muted {
+            font-size: 14px;
+            color: #555555;
+        }
+
+        .dp-grand {
+            font-size: 18px;
+            font-weight: 700;
+            color: #E8751A;
+        }
+
+        .dp-btn {
+            width: 100%;
+            background: #E8751A;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .dp-btn:hover {
+            background: #8B1A10;
+            color: #FFFFFF;
+        }
+
+        .dp-batal {
+            background: #FFF5F3;
+            border: 1px solid rgba(210, 57, 43, 0.3);
+            color: #A32D1F;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            font-size: 14px;
         }
     </style>
 @endpush
 
 @section('content')
-
     @php
-        // FOTO CADANGAN untuk produk yang belum punya gambar di database
-        $fotoPizza = [
-            'Extra Chicken' => 'extra-chicken.jpeg',
-            'Cheese Volcano' => 'cheese-volcano.jpeg',
-            'Ekstra Beef' => 'ekstra-beef.jpeg',
-            'Original Mozza' => 'original-mozza.jpeg',
-            'Original Cheese Volcano' => 'original-cheese-volcano.jpeg',
-            'Long Pizza' => 'long-pizza.jpeg',
-        ];
-
-        $fotoCemilan = [
-            'Tape Bakar Original' => 'tape-bakar-original.jpeg',
-            'Singkong Keju' => 'singkong-keju.jpeg',
-            'Tape Bakar Topping Keju' => 'tape-bakar-topping-keju.jpeg',
-        ];
-
-        $fotoDefault = asset('images/pizza.jpg');
+        $sudahBayar = $pesanan->status_pembayaran === 'Dibayar';
+        $dibatalkan = $pesanan->status === 'Dibatalkan';
+        $dikonfirmasi = $sudahBayar || in_array($pesanan->status, ['Diproses', 'Pengantaran', 'Selesai']);
+        $diterima = $pesanan->status === 'Selesai';
+        $labelJenis = $pesanan->jenis_pesanan;
     @endphp
 
-    {{-- JUDUL --}}
-    <div class="mb-4">
-        <div class="d-flex align-items-center gap-3 mb-1">
+    <div class="dp-wrap">
 
-            <a href="{{ route('pesanans.index') }}" class="back-arrow" title="Kembali ke Pesanan">
-                ←
-            </a>
+        {{-- NOTIFIKASI --}}
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
-            <h2 class="fw-bold mb-0">Detail Pesanan</h2>
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
 
-        </div>
-
-        <p class="text-secondary mb-0">
-            Informasi lengkap mengenai pesanan kamu.
-        </p>
-    </div>
-
-    {{-- SUCCESS --}}
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    {{-- ERROR --}}
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-
-    {{-- ================= INFORMASI PESANAN ================= --}}
-    <div class="content-card p-4 mb-4">
-
-        <div class="d-flex justify-content-between align-items-start mb-4">
+        {{-- HEADER --}}
+        <div class="dp-head">
+            <a href="{{ route('pesanans.index') }}" class="dp-back" title="Kembali ke riwayat pesanan">←</a>
             <div>
-                <h5 class="mb-1">Pesanan #{{ $pesanan->id_pesanan }}</h5>
-                <small class="text-secondary">
-                    {{ $pesanan->created_at ? $pesanan->created_at->format('d M Y, H:i') : '-' }}
-                </small>
+                <div class="dp-order-label">Order ID</div>
+                <div class="dp-order-id">#{{ $pesanan->id_pesanan }}</div>
             </div>
-
-            @if ($pesanan->status === 'Menunggu')
-                <span class="badge bg-warning text-dark">Menunggu</span>
-            @elseif ($pesanan->status === 'Diproses')
-                <span class="badge bg-info text-dark">Diproses</span>
-            @elseif ($pesanan->status === 'Selesai')
-                <span class="badge bg-success">Selesai</span>
-            @elseif ($pesanan->status === 'Dibatalkan')
-                <span class="badge bg-danger">Dibatalkan</span>
-            @else
-                <span class="badge bg-secondary">{{ $pesanan->status }}</span>
-            @endif
         </div>
 
-        <div class="row g-3">
-            <div class="col-md-4">
-                <div class="info-box">
-                    <div class="info-label">Jenis Pesanan</div>
-                    <div class="fw-semibold">{{ $pesanan->jenis_pesanan }}</div>
-                </div>
-            </div>
+        <div class="dp-brand">Pizza Moza · {{ $labelJenis }}</div>
+        <div class="dp-date">
+            {{ $pesanan->created_at ? $pesanan->created_at->format('d M Y, H:i') : '-' }}
+        </div>
 
-            <div class="col-md-4">
-                <div class="info-box">
-                    <div class="info-label">Metode Pembayaran</div>
-                    <div class="fw-semibold">{{ $pesanan->metode_pembayaran ?? '-' }}</div>
-                </div>
-            </div>
+        @if ($dibatalkan)
+            <div class="dp-batal">Pesanan ini dibatalkan.</div>
+        @endif
 
-            <div class="col-md-4">
-                <div class="info-box">
-                    <div class="info-label">Status Pembayaran</div>
-                    <div>
-                        @if ($pesanan->status_pembayaran === 'Dibayar')
-                            <span class="badge bg-success">Dibayar</span>
-                        @elseif ($pesanan->status_pembayaran === 'Gagal')
-                            <span class="badge bg-danger">Gagal</span>
-                        @elseif ($pesanan->status_pembayaran === 'Menunggu Pembayaran')
-                            <span class="badge bg-warning text-dark">Menunggu Pembayaran</span>
-                        @else
-                            <span class="badge bg-secondary">{{ $pesanan->status_pembayaran ?? '-' }}</span>
+        <div class="dp-layout">
+            <div>
+                {{-- PROGRES PESANAN --}}
+                <div class="dp-card">
+                    <div class="dp-step on">
+                        <span class="dp-dot">✓</span>
+                        <span>Menunggu Pembayaran</span>
+                    </div>
+
+                    <div class="dp-step {{ $dikonfirmasi ? 'on' : 'off' }}">
+                        <span class="dp-dot">{{ $dikonfirmasi ? '✓' : '' }}</span>
+                        <span>Pesanan dikonfirmasi</span>
+                    </div>
+
+                    <div class="dp-step {{ $diterima ? 'on' : 'off' }}">
+                        <span class="dp-dot">{{ $diterima ? '✓' : '' }}</span>
+                        <span>Pesanan diterima</span>
+                    </div>
+                </div>
+
+                {{-- TOTAL DAN PEMBAYARAN --}}
+                <div class="dp-card">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <div class="dp-total-label">Grand Total</div>
+                            <div class="dp-total">Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</div>
+                        </div>
+
+                        @if ($sudahBayar)
+                            <div class="dp-paid">
+                                paid <span class="dp-paid-dot">✓</span>
+                            </div>
                         @endif
                     </div>
+
+                    <div class="dp-total-label mb-1">Metode Pembayaran</div>
+                    <div class="fw-semibold">{{ $pesanan->metode_pembayaran ?? '-' }}</div>
                 </div>
+
             </div>
-        </div>
-
-    </div>
-
-    {{-- ================= DATA PENERIMA ================= --}}
-    <div class="content-card p-4 mb-4">
-
-        <h5 class="mb-3">Data Penerima</h5>
-
-        <div class="row g-3">
-            <div class="col-md-6">
-                <div class="info-box">
-                    <div class="info-label">Nama Penerima</div>
-                    <div class="fw-semibold">{{ $pesanan->nama_penerima ?? '-' }}</div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="info-box">
-                    <div class="info-label">Nomor HP</div>
-                    <div class="fw-semibold">{{ $pesanan->no_telp ?? '-' }}</div>
-                </div>
-            </div>
-
-            <div class="col-12">
-                <div class="info-box">
-                    <div class="info-label">Alamat</div>
-                    <div class="fw-semibold">{{ $pesanan->alamat ?? '-' }}</div>
-                </div>
-            </div>
-
-            <div class="col-12">
-                <div class="info-box">
-                    <div class="info-label">Catatan</div>
-                    <div class="fw-semibold" style="white-space: pre-line;">
-                        {{ $pesanan->catatan ?: '-' }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    {{-- ================= DETAIL PRODUK ================= --}}
-    <div class="content-card p-4 mb-4">
-
-        <h5 class="mb-3">Produk Pesanan</h5>
-
-        <div class="table-responsive">
-            <table class="table align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Produk</th>
-                        <th class="text-center">Jumlah</th>
-                        <th class="text-end">Harga</th>
-                        <th class="text-end">Subtotal</th>
-                    </tr>
-                </thead>
-
-                <tbody>
+            <div>
+                {{-- PRODUK --}}
+                <div class="dp-card">
                     @forelse ($pesanan->detailPesanans as $detail)
-
-                        @php
-                            $produk = $detail->product;
-                            $namaProduk = $produk->nama ?? null;
-
-                            // Pakai gambar dari database kalau tersedia
-                            if ($produk && !empty($produk->image)) {
-                                if (\Illuminate\Support\Str::startsWith($produk->image, ['http://', 'https://'])) {
-                                    $srcFoto = $produk->image;
-                                } else {
-                                    $srcFoto = asset(ltrim($produk->image, '/'));
-                                }
-                            } else {
-                                if ($namaProduk && isset($fotoPizza[$namaProduk])) {
-                                    $pathFoto = 'images/pizza/' . $fotoPizza[$namaProduk];
-                                } elseif ($namaProduk && isset($fotoCemilan[$namaProduk])) {
-                                    $pathFoto = 'images/cemilan/' . $fotoCemilan[$namaProduk];
-                                } else {
-                                    $pathFoto = 'images/pizza.jpg';
-                                }
-
-                                $srcFoto = asset($pathFoto);
-                            }
-                        @endphp
-
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-3">
-
-                                    {{-- GAMBAR PRODUK --}}
-                                    <img src="{{ $srcFoto }}" alt="{{ $namaProduk ?? 'Produk' }}" class="order-thumb"
-                                        onerror="this.onerror=null; this.src='{{ $fotoDefault }}';">
-
-                                    <div>
-                                        <span>{{ $namaProduk ?? 'Produk tidak ditemukan' }}</span>
-                                        @if ($detail->ukuran || !empty($detail->toppings))
-                                            <small class="d-block text-secondary">
-                                                @if ($detail->ukuran)
-                                                    Ukuran: {{ $detail->ukuran }}
-                                                @endif
-                                                @if (!empty($detail->toppings))
-                                                    <span class="d-block">Topping:
-                                                        {{ collect($detail->toppings)->pluck('nama')->implode(', ') }}</span>
-                                                @endif
-                                            </small>
+                        <div class="dp-row">
+                            <div class="flex-grow-1">
+                                <div>{{ $detail->product->nama ?? 'Produk tidak ditemukan' }}</div>
+                                @if ($detail->ukuran || !empty($detail->toppings))
+                                    <div class="dp-sub">
+                                        @if ($detail->ukuran)
+                                            Ukuran: {{ $detail->ukuran }}
+                                        @endif
+                                        @if (!empty($detail->toppings))
+                                            @if ($detail->ukuran)
+                                                ·
+                                            @endif
+                                            Topping: {{ collect($detail->toppings)->pluck('nama')->implode(', ') }}
                                         @endif
                                     </div>
-                                </div>
-                            </td>
+                                @endif
+                            </div>
 
-                            <td class="text-center">{{ $detail->jumlah }}</td>
+                            <div style="min-width: 36px; text-align: center;">{{ $detail->jumlah }}</div>
 
-                            <td class="text-end">
-                                Rp {{ number_format($detail->harga, 0, ',', '.') }}
-                            </td>
-
-                            <td class="text-end price fw-semibold">
+                            <div style="min-width: 110px; text-align: right;">
                                 Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
-                            </td>
-                        </tr>
-
+                            </div>
+                        </div>
                     @empty
-                        <tr>
-                            <td colspan="4" class="text-center text-secondary py-4">
-                                Tidak ada detail produk.
-                            </td>
-                        </tr>
+                        <div class="dp-muted text-center py-3">Tidak ada detail produk.</div>
                     @endforelse
-                </tbody>
-            </table>
-        </div>
 
-        <div class="total-box mt-3 pt-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <span class="text-secondary">Total Pesanan</span>
-                <span class="fs-4 fw-bold price">
-                    Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
-                </span>
+                    <div class="dp-row">
+                        <div class="dp-muted">Subtotal</div>
+                        <div>Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</div>
+                    </div>
+
+                    <div class="dp-row">
+                        <div class="dp-grand">Grand Total</div>
+                        <div class="dp-grand">Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</div>
+                    </div>
+                </div>
+
+                {{-- BAYAR MIDTRANS --}}
+                @if ($pesanan->metode_pembayaran === 'Midtrans' && !$sudahBayar && !$dibatalkan)
+                    <div class="dp-card">
+                        <div class="fw-semibold mb-1">Pembayaran</div>
+                        <div class="dp-muted mb-3">Lanjutkan pembayaran untuk menyelesaikan pesanan.</div>
+
+                        <form action="{{ route('pesanans.bayar', $pesanan->id_pesanan) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="dp-btn">Bayar Sekarang</button>
+                        </form>
+                    </div>
+                @endif
+
+                {{-- CASH --}}
+                @if ($pesanan->metode_pembayaran === 'Cash' && !$sudahBayar && !$dibatalkan)
+                    <div class="dp-card">
+                        <div class="fw-semibold mb-1">Pembayaran Cash</div>
+                        <div class="dp-muted">Silakan lakukan pembayaran langsung kepada kasir.</div>
+                    </div>
+                @endif
+
             </div>
         </div>
 
     </div>
-
-    {{-- ================= PEMBAYARAN ================= --}}
-    @if ($pesanan->metode_pembayaran === 'Midtrans' && $pesanan->status_pembayaran !== 'Dibayar')
-        <div class="content-card p-4 mb-4">
-            <h5 class="mb-1">Pembayaran</h5>
-            <p class="text-secondary small mb-3">
-                Lanjutkan pembayaran untuk menyelesaikan pesanan.
-            </p>
-
-            <form action="{{ route('pesanans.bayar', $pesanan->id_pesanan) }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-moza px-4">
-                    💳 Bayar Sekarang
-                </button>
-            </form>
-        </div>
-    @endif
-
-    {{-- ================= INFORMASI CASH ================= --}}
-    @if ($pesanan->metode_pembayaran === 'Cash')
-        <div class="content-card p-4 mb-4">
-            <h5 class="mb-1">Pembayaran Cash</h5>
-            <p class="text-secondary mb-0">
-                Silakan lakukan pembayaran langsung kepada kasir.
-            </p>
-        </div>
-    @endif
-
 @endsection
 
 {{-- MIDTRANS SNAP --}}

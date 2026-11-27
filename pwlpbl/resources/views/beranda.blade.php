@@ -151,7 +151,7 @@
         .slide-2 {
             background-image:
                 linear-gradient(90deg, rgba(232, 117, 26, 0.92), rgba(232, 117, 26, 0.55), rgba(232, 117, 26, 0.08)),
-                url('{{ asset('images/tape-bakar-topping-keju.jpeg') }}');
+                url('{{ asset('images/pizza.jpg') }}');
             background-position: left center;
         }
 
@@ -1215,8 +1215,81 @@
 
         <div class="nav-actions">
             @if (session('role') === 'pembeli')
-                <a href="{{ route('pesanans.index') }}" class="login-link">Pesanan Saya</a>
-                <a href="{{ route('profil.show') }}" class="login-link">Profil</a>
+                <div class="rh-dd">
+                    <button type="button" class="login-link rh-dd-btn" aria-haspopup="true" aria-expanded="false">
+                        Profil ▾
+                    </button>
+                    <div class="rh-dd-menu" role="menu">
+                        <a href="{{ route('profil.show') }}" role="menuitem">Profil Saya</a>
+                        <a href="{{ route('pesanans.index') }}" role="menuitem">Riwayat Pesanan Saya</a>
+                    </div>
+                </div>
+                <style>
+                    .nav-actions {
+                        position: relative;
+                    }
+
+                    .rh-dd {
+                        position: relative;
+                        display: inline-block;
+                    }
+
+                    .rh-dd-btn {
+                        background: none;
+                        border: 0;
+                        cursor: pointer;
+                        font-family: inherit;
+                    }
+
+                    .rh-dd-menu {
+                        display: none;
+                        position: absolute;
+                        right: 0;
+                        top: 100%;
+                        margin-top: 8px;
+                        min-width: 200px;
+                        background: #FFFBF0;
+                        border: 1px solid rgba(139, 26, 16, 0.15);
+                        border-radius: 12px;
+                        padding: 6px;
+                        z-index: 9999;
+                        box-shadow: 0 8px 24px rgba(43, 27, 20, 0.12);
+                        flex-direction: column;
+                    }
+
+                    .rh-dd-menu.open {
+                        display: flex;
+                    }
+
+                    .rh-dd-menu a {
+                        padding: 10px 12px;
+                        border-radius: 8px;
+                        color: #8B1A10;
+                        font-weight: 600;
+                        text-decoration: none;
+                        white-space: nowrap;
+                    }
+
+                    .rh-dd-menu a:hover {
+                        background: #FDF0C4;
+                    }
+                </style>
+                <script>
+                    (function() {
+                        var wrap = document.querySelector('.rh-dd');
+                        var btn = wrap.querySelector('.rh-dd-btn');
+                        var menu = wrap.querySelector('.rh-dd-menu');
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            var open = menu.classList.toggle('open');
+                            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                        });
+                        document.addEventListener('click', function() {
+                            menu.classList.remove('open');
+                            btn.setAttribute('aria-expanded', 'false');
+                        });
+                    })();
+                </script>
                 <form action="{{ route('logout') }}" method="POST" style="margin:0;">
                     @csrf
                     <button type="submit" class="login-link"
@@ -1228,9 +1301,6 @@
                 </a>
             @endif
 
-            <a href="#menu" class="order-btn">
-                Order Now
-            </a>
         </div>
 
     </header>
@@ -1331,10 +1401,6 @@
                 @endforeach
             </div>
 
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Cari menu favorit kamu..."
-                    onkeyup="searchProducts()">
-            </div>
 
         </div>
 
@@ -1351,7 +1417,13 @@
                         @foreach ($items as $product)
                             @php
                                 if (!empty($product->image)) {
-                                    if (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://', 'data:'])) {
+                                    if (
+                                        \Illuminate\Support\Str::startsWith($product->image, [
+                                            'http://',
+                                            'https://',
+                                            'data:',
+                                        ])
+                                    ) {
                                         $srcFoto = $product->image;
                                     } else {
                                         $srcFoto = asset(ltrim($product->image, '/'));
