@@ -1,6 +1,6 @@
 @extends('dashboard.admin')
 
-@section('title', 'Analisis Keputusan')
+@section('title', 'Pelanggan Setia')
 
 @section('content')
 
@@ -9,9 +9,9 @@
     {{-- JUDUL HALAMAN --}}
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
-            <h3 class="fw-bold mb-1">Analisis Keputusan</h3>
+            <h3 class="fw-bold mb-1">Pelanggan Setia</h3>
             <p class="text-secondary mb-0">
-                Perangkingan pelanggan menggunakan metode AHP dan SAW
+                Daftar pelanggan yang paling sering kembali berdasarkan riwayat belanja
             </p>
         </div>
     </div>
@@ -25,7 +25,7 @@
 
                 <div class="col-md-4">
                     <label for="bulan" class="form-label fw-semibold">
-                        Periode Analisis
+                        Pilih Bulan
                     </label>
 
                     <input type="month"
@@ -108,7 +108,7 @@
 
                     <div>
                         <h5 class="fw-bold mb-1">
-                            Pelanggan Peringkat Pertama
+                            Pelanggan Paling Setia
                         </h5>
 
                         <h4 class="mb-1">
@@ -116,7 +116,7 @@
                         </h4>
 
                         <span class="text-secondary">
-                            Nilai akhir:
+                            Skor:
                             <strong>
                                 {{ number_format($pemenang->nilai_akhir, 4) }}
                             </strong>
@@ -134,16 +134,16 @@
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                 <div>
                     <h5 class="fw-bold mb-1">
-                        Hasil Perangkingan Pelanggan
+                        Peringkat Pelanggan
                     </h5>
                     <small class="text-secondary">
-                        Berdasarkan perhitungan AHP dan SAW
+                        Dinilai dari jumlah pesanan, total belanja, dan seberapa baru pelanggan belanja
                     </small>
                 </div>
 
                 <a href="{{ route('admin.analisis.detail', ['bulan' => $bulan]) }}"
                    class="btn btn-outline-secondary">
-                    Detail Perhitungan
+                    Lihat Cara Perhitungan
                 </a>
             </div>
 
@@ -158,7 +158,7 @@
                             <th>Jumlah Pesanan</th>
                             <th>Total Belanja</th>
                             <th>Terakhir Belanja</th>
-                            <th>Nilai Akhir</th>
+                            <th>Skor</th>
                             <th>Peringkat</th>
                         </tr>
                     </thead>

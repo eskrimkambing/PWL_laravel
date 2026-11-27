@@ -141,14 +141,14 @@ Route::middleware('role:admin')->group(function () {
     ])->name('admin.pesanans.updateStatusPembayaran');
 
 
-    // ANALISIS KEPUTUSAN
+    // PELANGGAN SETIA
 
-    Route::get('/admin/analisis-keputusan', [
+    Route::get('/admin/pelanggan-setia', [
         AnalisisKeputusanController::class,
         'index'
     ])->name('admin.analisis.index');
 
-    Route::get('/admin/analisis-keputusan/detail', [
+    Route::get('/admin/pelanggan-setia/detail', [
         AnalisisKeputusanController::class,
         'detail'
     ])->name('admin.analisis.detail');
