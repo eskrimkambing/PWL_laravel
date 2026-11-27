@@ -52,5 +52,12 @@ class Pesanan extends Model
             'id_pesanan'
         );
     }
+     public function getNomorHarianAttribute(): int
+    {
+        return static::whereDate('created_at', $this->created_at->toDateString())
+            ->where('id_pesanan', '<=', $this->id_pesanan)
+            ->count();
+    }
 }
+
 

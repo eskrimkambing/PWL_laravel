@@ -251,7 +251,7 @@
 
                                 {{-- ID PESANAN --}}
                                 <td>
-                                    #{{ $pembayaran->id_pesanan }}
+                                    #{{ $pembayaran->nomor_harian }}
                                 </td>
 
                                 {{-- EMAIL PELANGGAN --}}
